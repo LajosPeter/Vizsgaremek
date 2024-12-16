@@ -1,2 +1,2 @@
 Vizsgaremek 
-Lajos Péter & Szabó András
+<p>Lajos Péter & Szabó András
