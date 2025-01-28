@@ -23,6 +23,7 @@ magasan képzett munkaerő és minőségi eszközök!
 Cisco partnerek vagyunk 5 éve
 ```
 ### Tulajdonos
+- Lajos Péter
 - Szabó Anrás
 
 ### Cég szakmai története
