@@ -69,3 +69,73 @@ Az Avaloni Bentlakásos Gimnázium online elérhető, és szívesen látják az 
 
 
 ## Megrendelés
+
+Az Avalon bentlakásos Gimnázium megbízott minket, hogy a  négy telephelyre tervezzün meg és telepítsük az eszközöket és configuráljuk a hálózatot: "Gimnázium", "Iroda", "Bentlakásos kollégium", "Sportpálya". A Gimnáziumba ``FIXME`` . Az Irodába ``FIXME``. A Sportpálya telephelyen csak kettő számítógépre van szükség hogy tudják vezetni a diákok részvételét az órán és a sporteszközök leltárának vezetésére. Az utolsó telephelyen a Bentlakásos kollégiumban szeretnének WiFi lefedést a diákoknak és ezen kívűl az Gimnáziumi feladatok elvégzésére egy könyvtárat gépekkel felszerelve a diákok számára. Feladatunk továbbá egy olyan átfogó hálózatbiztonsági megoldás kifejlesztése, amely biztosítja a hálózat védelmét és a szerverek folyamatos rendelkezésre állását. Az gimnáziumnak weboldalra is szüksége van és igény, hogy ne IP címmel kelljen hozzá férni a webhelyeikhez azért, hogy ne kelljen megjegyezni az IP címeket. Emelett megbízhatóan integrálniuk kell a meglévő bérelt adattároló szervert a rendszerükbe.
+
+Fontos az is, hogy a címkiosztás úgy történjen, hogy mind a jelenlegi, mind a jövőbeli címzési protokollokat támogassa, ezáltal biztosítva a megfelelő jövőbeli fejlesztés lehetőségét és a kollégiumi hallgatók vezeték nélküli hálózaton keresztül férjenek hozzá az internethez.
+
+
+4 site:
+    Gimánzium
+    Iroda
+    Bentlakásos kollégium
+    Sportpálya : A megrendelő azt kérte hogy legyen a hálózat jövőbiztos ezért a sportpályán ipv6-os IP címeket használtunk teszt jelleggel jövőbeli bővítések tesztelése képpen.
+    + Amazontól bérelt fájlmegosztó szerver
+
+## Tervezet
+
+
+### Alaprajz 
+
+# fixme
+
+
+### Igényfelmérés elemzése
+
+
+
+### Topológia
+
+### Eszköz lista
+
+# fixme
+
+## Hálózati tervezet
+
+
+
+
+### IP címek
+
+
+
+
+
+## Szerverek és felhőszolgáltatás
+
+
+1_Címtár_pl_ Active Directory
+
+2_DNS
+
+3_DHCP
+
+4_Fájl_és_nyomtató_megosztás
+
+5_Kliens_számítógépekre automatizált_szoftvertelepítés
+
+6_Automatizált_mentés
+
+7_HTTP_HTTPS
+
+Oprendszerek - Windows Linux Debian
+
+Felépitése
+
+
+
+
+
+
+
+## Megrendelés
