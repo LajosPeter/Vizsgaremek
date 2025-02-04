@@ -70,17 +70,22 @@ Az Avaloni Bentlakásos Gimnázium online elérhető, és szívesen látják az 
 
 ## Megrendelés
 
-Az Avalon bentlakásos Gimnázium megbízott minket, hogy a  négy telephelyre tervezzün meg és telepítsük az eszközöket és configuráljuk a hálózatot: "Gimnázium", "Iroda", "Bentlakásos kollégium", "Sportpálya". A Gimnáziumba ``FIXME`` . Az Irodába ``FIXME``. A Sportpálya telephelyen csak kettő számítógépre van szükség hogy tudják vezetni a diákok részvételét az órán és a sporteszközök leltárának vezetésére. Az utolsó telephelyen a Bentlakásos kollégiumban szeretnének WiFi lefedést a diákoknak és ezen kívűl az Gimnáziumi feladatok elvégzésére egy könyvtárat gépekkel felszerelve a diákok számára. Feladatunk továbbá egy olyan átfogó hálózatbiztonsági megoldás kifejlesztése, amely biztosítja a hálózat védelmét és a szerverek folyamatos rendelkezésre állását. Az gimnáziumnak weboldalra is szüksége van és igény, hogy ne IP címmel kelljen hozzá férni a webhelyeikhez azért, hogy ne kelljen megjegyezni az IP címeket. Emelett megbízhatóan integrálniuk kell a meglévő bérelt adattároló szervert a rendszerükbe.
+Az Avalon bentlakásos Gimnázium megbízott minket, hogy a  négy telephelyre tervezzün meg és telepítsük az eszközöket és configuráljuk a hálózatot: "Gimnázium", "Tankerület", "Bentlakásos kollégium", "Sportpálya".  
+A Gimnáziumba ``FIXME`` minden egyes alkalmazottnak van külön IP cím alapján működő telefonja és az igazgatónak, igazgató helyettesnek és a gazdasági osztálynak van saját nyomtatója. Három tanári teremet is ki kell alakítani ahol termenként 10 gépet kell elhelyezni telefonnal. Emellett igény, hogy a teljes épületben legyen WiFi lefedettség a tanárok számára. Emelett fontos, hogy autómatikusan kapják meg az IP címeket a hálózatban a számítógépek és legyen egy helyi tárhely is a bérelt szervereken kívül a fontosabb adatok tárolására.   . 
+A Tankerületben ``FIXME`` ezen a telephelyen csak csoport vezetőknek van IP cím alapján működő telefonjuk és 2 darab nyomtató található az irodában és a rendszergazdának és a Kancellár és Kancellár helyettest biztonság technikailag le kell választani a többi felhasználótol. Emellett WiFi lefedés kell az irodában. 
+A Sportpálya telephelyen csak kettő számítógépre van szükség hogy tudják vezetni a diákok részvételét az órán és a sporteszközök leltárának vezetésére. Az utolsó telephelyen a Bentlakásos kollégiumban szeretnének WiFi lefedést a diákoknak. Feladat továbbá egy olyan átfogó hálózatbiztonsági megoldás kifejlesztése, amely biztosítja a hálózat védelmét és a szerverek folyamatos rendelkezésre állását. Az gimnáziumnak weboldalra is szüksége van és igény, hogy ne IP címmel kelljen hozzá férni a webhelyeikhez azért, hogy ne kelljen megjegyezni az IP címeket. Emelett megbízhatóan integrálniuk kell a meglévő bérelt adattároló szervert a rendszerükbe. Ezen felül egy telefon központot is ki kell alakítani a Gimnázium  és a Tankerület számára.
 
 Fontos az is, hogy a címkiosztás úgy történjen, hogy mind a jelenlegi, mind a jövőbeli címzési protokollokat támogassa, ezáltal biztosítva a megfelelő jövőbeli fejlesztés lehetőségét és a kollégiumi hallgatók vezeték nélküli hálózaton keresztül férjenek hozzá az internethez.
 
 
+
 4 site:
     Gimánzium
-    Iroda
+    Tankerület
     Bentlakásos kollégium
     Sportpálya : A megrendelő azt kérte hogy legyen a hálózat jövőbiztos ezért a sportpályán ipv6-os IP címeket használtunk teszt jelleggel jövőbeli bővítések tesztelése képpen.
     + Amazontól bérelt fájlmegosztó szerver
+    + Telefonközpont
 
 ## Tervezet
 
@@ -92,6 +97,10 @@ Fontos az is, hogy a címkiosztás úgy történjen, hogy mind a jelenlegi, mind
 
 ### Igényfelmérés elemzése
 
+#### Hálózati igényfelmérés elemzése
+
+
+#### Szerver & Felhőszolgáltatási igényfelmérés elemzése
 
 
 ### Topológia
