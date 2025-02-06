@@ -94,6 +94,18 @@ Fontos az is, hogy a címkiosztás úgy történjen, hogy mind a jelenlegi, mind
 
 ### Alaprajz 
 
+#### Gimnázium
+
+
+#### Tankerület
+
+#### Bentlakásos kollégium
+
+#### Sportpálya
+
+
+> Az Amazontól bérelt szerverekhez ``nincs fizikai hozzáférés`` ezért nem tudunk alaprajz tervezetet biztosítani.
+
 # fixme
 
 
