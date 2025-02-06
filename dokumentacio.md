@@ -104,7 +104,7 @@ Fontos az is, hogy a címkiosztás úgy történjen, hogy mind a jelenlegi, mind
 #### Sportpálya
 
 
-> Az Amazontól bérelt szerverekhez ``nincs fizikai hozzáférés`` ezért nem tudunk alaprajz tervezetet biztosítani.
+> Az Amazontól bérelt szerverekhez és a Telefonközponthoz ``nincs fizikai hozzáférés`` ezért nem tudunk alaprajz tervezetet biztosítani.
 
 # fixme
 
