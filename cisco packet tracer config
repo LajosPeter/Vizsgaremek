@@ -356,11 +356,20 @@ int range fa0/20-21
 switchport access trunk
 channel-group 2 mode desirable
 exit
-
-
-
-
-
+int range fa 0/2-12
+switchport access vlan 203
+exit
+int fa 0/13
+switchport access vlan 201
+exit
+int range fa 0/2-13
+switchport voice vlan 202
+exit
+int range fa0/14-17 
+sh
+exit
+int fa 0/1
+switchport access vlan 203
 
 
 # sw-gim-02-mgmt
@@ -389,13 +398,14 @@ spanning-tree vlan 203 root secondary
 spanning-tree vlan 204 root secondary 
 spanning-tree vlan 205 root secondary 
 spanning-tree vlan 220 root secondary 
-int range fa 0/3-4, fa0/6-17, fa0/20-22
+int range fa 0/3-14, fa0/17                
 spanning-tree bpduguard enable
 switchport mode access
 switchport port-security
 switchport port-security mac-address sticky
 switchport port-security violation restrict
-witchport port-security maximum 2
+switchport port-security maximum 2
+switchport voice vlan 202
 exit
 int range fa 0/2, fa0/15
 spanning-tree bpduguard enable
@@ -405,9 +415,24 @@ switchport port-security mac-address sticky
 switchport port-security violation restrict
 witchport port-security maximum 1
 exit
-int range fa0/1, fa0/5
+int range fa0/1, fa0/16, fa0/20-22
 spanning-tree bpduguard enable
 switchport mode access
+exit
+int range fa0/20-22
+sh
+exit
+int range fa0/2-13
+switchport access vlan 203
+exit
+int range fa 0/14-15
+switchport access vlan 201
+exit
+int fa 0/17
+switchport access vlan 204
+exit
+int range fa0/1, fa0/16
+switchport access vlan 203
 exit
 
 
@@ -433,13 +458,14 @@ int vlan 200
 no sh
 ip address 10.2.0.194 255.255.255.0
 exit
-int range fa 0/2, fa0/5-19
+int range fa 0/2, fa0/5-20
 spanning-tree bpduguard enable
 switchport mode access
 switchport port-security
 switchport port-security mac-address sticky
 switchport port-security violation restrict
 witchport port-security maximum 2
+switchport voice vlan 202
 exit
 int range fa 0/3-4, fa0/6
 spanning-tree bpduguard enable
@@ -447,11 +473,25 @@ switchport mode access
 switchport port-security
 switchport port-security mac-address sticky
 switchport port-security violation restrict
-witchport port-security maximum 1
+switchport port-security maximum 1
 exit
 int fa 0/1
 spanning-tree bpduguard enable
 switchport mode access
+switchport access vlan 203
+exit
+int fa 0/2
+switchport access vlan 200 
+exit
+int fa 0/3
+switchport access vlan 220 
+exit
+int range fa 0/4-9
+switchport access vlan 205 
+exit
+int range fa 0/10-20
+switchport access vlan 203 
+exit
 
 
 # ssw-gim-01
