@@ -84,15 +84,41 @@ exit
 en 
 conf t
 hostname sw-kol-1-mgmt
+vlan 300 
+name %KOL_TANAR%
+exit
+vlan 301 
+name %KOL_DIAK%
+exit
 vlan 330 
 name %KOL_SWMAN%
+exit
 int vlan 330 
 ip address 10.3.30.192 255.255.255.0
 no sh 
 exit
+int range gig0/1, gig6/1, gig7/1, gig8/1, gig9/1
+switchport mode trunk
+int gig5/1
+switchport mode access
+switchport access vlan 330
 
 
-# wlc-kol-01-mgmt
+
+# wlc-kol-01-mgmt FIXME
+Username:cis$coIT
+Password:cis$coIT
+System Name: wlc-kol-01-mgmt
+Country : Netherlands
+Timezone: Amsterdam, Berlin, Rome, Vienna
+Management IP address: 10.3.30.193
+Subnet mask: 255.255.255.0
+Default Gateway: 10.3.30.1
+Management VLAN ID: 330
+Employee Network:
+    WPA2 Personal
+    Passphrase:cis$coIT
+    Confirm Passphrase: cisco1234
 
 
 
@@ -109,43 +135,278 @@ interface GigabitEthernet2/0
 ip address 195.228.6.13 255.255.255.252
 no shutdown
 exit
+interface GigabitEthernet3/0
+ip address 195.228.2.1 255.255.255.224
+no sh
+exit
+
+VALAMIÉRT NEM JÓ A ROUTEREK KÖZÖTTI KAPCSOLAT
 
 # rtr-gim-01
 en 
 conf t
 hostname rtr-gim-01
+int g0/0
+ip address 195.228.2.16 255.255.255.224 
+no sh
+ex
+int g3/0
+ip address 10.2.255.1 255.255.255.252
+no sh
+ex
+int g2/0
+ip address 10.2.255.5 255.255.255.252
+no sh
+ex
 
 
 # rtr-gim-02
 en 
 conf t
 hostname rtr-gim-02
-
+int g0/0/0
+ip address 10.2.255.2 255.255.255.252
+no sh
+ex
+int g0/0/2
+ip address 10.2.255.9 255.255.255.252
+no sh
+int gig0/0/1.200
+encapsulation dot1Q 200
+description %GIM_RG%
+ip address 10.2.0.2 255.255.255.0
+ip helper-address 10.2.20.16
+standby version 2
+standby 200 ip 10.2.0.1 
+standby 200 priority 150
+standby 200 preempt
+exit
+int gig0/0/1.201
+encapsulation dot1Q 201
+description %GIM_VEZ%
+ip address 10.2.1.2 255.255.255.0
+ip helper-address 10.2.20.16
+standby version 2
+standby 201 ip 10.2.1.1 
+standby 201 priority 150
+standby 201 preempt
+exit
+int gig0/0/1.203
+encapsulation dot1Q 203
+description %GIM_TANAR%
+ip address 10.2.3.2 255.255.255.0
+ip helper-address 10.2.20.16
+standby version 2
+standby 203 ip 10.2.3.1 
+standby 203 priority 150
+standby 203 preempt
+exit
+int gig0/0/1.204
+encapsulation dot1Q 204
+description %GIM_PORTA%
+ip address 10.2.4.2 255.255.255.0
+ip helper-address 10.2.20.16
+standby version 2
+standby 204 ip 10.2.4.1 
+standby 204 priority 150
+standby 204 preempt
+exit
+int gig0/0/1.205
+encapsulation dot1Q 205
+description %GIM_GO%
+ip address 10.2.5.2 255.255.255.0
+ip helper-address 10.2.20.16
+standby version 2
+standby 205 ip 10.2.5.1 
+standby 205 priority 150
+standby 205 preempt
+exit
+int gig0/0/1.220
+encapsulation dot1Q 220
+description %GIM_SERVER%
+ip address 10.2.20.2 255.255.255.0
+standby version 2
+standby 220 ip 10.2.20.1 
+standby 220 priority 150
+standby 220 preempt
+exit
 
 # rtr-gim-03
 en 
 conf t
 hostname rtr-gim-03
+int g0/0/0
+ip address 10.2.255.6 255.255.255.252
+no sh
+ex
+int g0/0/2
+ip address 10.2.255.10 255.255.255.252
+no sh
+int g0/0/1 
+no sh
+exit
+int gig0/0/1.200
+encapsulation dot1Q 200
+description %GIM_RG%
+ip address 10.2.0.2 255.255.255.0
+ip helper-address 10.2.20.16
+standby version 2
+standby 200 ip 10.2.0.1 
+standby 200 priority 120
+exit
+int gig0/0/1.201
+encapsulation dot1Q 201
+description %GIM_VEZ%
+ip address 10.2.1.2 255.255.255.0
+ip helper-address 10.2.20.16
+standby version 2
+standby 201 ip 10.2.1.1 
+standby 201 priority 120
+exit
+int gig0/0/1.203
+encapsulation dot1Q 203
+description %GIM_TANAR%
+ip address 10.2.3.3 255.255.255.0
+ip helper-address 10.2.20.16
+standby version 2
+standby 203 ip 10.2.3.1 
+standby 203 priority 120
+exit
+int gig0/0/1.204
+encapsulation dot1Q 204
+description %GIM_PORTA%
+ip address 10.2.4.3 255.255.255.0
+ip helper-address 10.2.20.16
+standby version 2
+standby 204 ip 10.2.4.1 
+standby 204 priority 120
+exit
+int gig0/0/1.205
+encapsulation dot1Q 205
+description %GIM_GO%
+ip address 10.2.5.3 255.255.255.0
+ip helper-address 10.2.20.16
+standby version 2
+standby 205 ip 10.2.5.1 
+standby 205 priority 120
+exit
+int gig0/0/1.220
+encapsulation dot1Q 220
+description %GIM_SERVER%
+ip address 10.2.20.3 255.255.255.0
+standby version 2
+standby 220 ip 10.2.20.1 
+standby 220 priority 120
+exit
+
 
 # sw-gim-01-mgmt
 en 
 conf t
 hostname sw-gim-01-mgmt
+spanning-tree mode rapid-pvst
+vtp mode server
+vtp domain gim
+vtp password cisco
+vlan 200
+name GIM_RG
+vlan 201
+name GIM_VEZ
+vlan 202
+name GIM_TEL
+vlan 203
+name GIM_TANAR
+vlan 204
+name GIM_PORTA
+vlan 205
+name GIM_GO
+vlan 220
+name GIM_SERVER
+exit
+int vlan 200
+no sh
+ip address 10.2.0.192 255.255.255.0
+exit
+int g0/1
+switchport access trunk
+exit
+int range fa0/18-19
+switchport access trunk
+channel-group 1 mode active
+exit
+int range fa0/20-21
+switchport access trunk
+channel-group 2 mode desirable
+exit
+
 
 # sw-gim-02-mgmt
 en 
 conf t
 hostname sw-gim-02-mgmt
+vtp mode client
+spanning-tree mode rapid-pvst
+int range fa0/18-19
+switchport access trunk
+channel-group 1 mode passive
+exit
+int range fa0/23-24
+switchport access trunk
+channel-group 3 mode active
+exit
+vtp password cisco
+vtp domain gim
+int vlan 200
+no sh
+ip address 10.2.0.193 255.255.255.0
+exit
+
+
 
 # sw-gim-03-mgmt
 en 
 conf t
 hostname sw-gim-03-mgmt
+vtp mode client
+spanning-tree mode rapid-pvst
+int g0/1
+switchport access trunk
+int range fa0/20-21
+switchport access trunk
+channel-group 2 mode auto
+exit
+int range fa0/23-24
+switchport access trunk
+channel-group 3 mode passive
+exit
+vtp password cisco
+vtp domain gim
+int vlan 200
+no sh
+ip address 10.2.0.194 255.255.255.0
+exit
+
 
 # ssw-gim-01
 en 
 conf t
 hostname ssw-gim-01
+
+# srv-gim-01
+ip cím: 10.2.20.16
+mask: 255.255.255.0
+default gateway: 10.2.20.1
+
+Services: 
+- DHCP
+| Pool Name              | Default Gateway | DNS server | Start IP Address | Subnet Mask | Maximum Users | TFTP server |
+| :---------------- | :------: | :------: | :------: | :------: | :------: | :------: |
+| GIM_RG | 10.2.0.1 | - | 10.2.0.65 | 255.255.255.0 | 63 | - |
+| GIM_VEZ | 10.2.1.1 | - | 10.2.1.65 | 255.255.255.0 | 63 | - |
+| GIM_TANAR | 10.2.3.1 | - | 10.2.3.65 | 255.255.255.0 | 63 | - |
+| GIM_PORTA | 10.2.4.1 | - | 10.2.4.65 | 255.255.255.0 | 63 | - |
+| GIM_GO | 10.2.5.1 | - | 10.2.5.65 | 255.255.255.0 | 63 | - |
+
 
 
 
