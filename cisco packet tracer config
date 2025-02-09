@@ -1,3 +1,5 @@
+EZEN A ROUTEREN NINCS IPV6
+
 # rtr-telekom-core-01
 en 
 conf t
@@ -493,11 +495,14 @@ int range fa 0/10-20
 switchport access vlan 203 
 exit
 
+MEG KELL CSINÁLNI AZ IP TELEFONT
 
 # ssw-gim-01
 en 
 conf t
 hostname ssw-gim-01
+int fa0/0
+ip address 10.2.2.1
 
 # srv-gim-01
 ip cím: 10.2.20.16
