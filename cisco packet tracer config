@@ -2,6 +2,17 @@
 en 
 conf t
 hostname rtr-telekom-core-01
+interface GigabitEthernet0/0
+ip address 195.228.6.1 255.255.255.252
+no shutdown
+exit
+interface GigabitEthernet2/0
+ip address 195.228.6.5 255.255.255.252
+no shutdown
+exit
+
+
+
 
 
 # rtr-sp-01
@@ -21,7 +32,17 @@ hostname sw-sp-01-mgmt
 # rtr-telekom-core-02
 en 
 conf t
-hostname rtr-telekom-core-01
+hostname rtr-telekom-core-02
+nterface GigabitEthernet1/0
+ip address 195.228.6.2 255.255.255.252
+no shutdown
+exit
+interface GigabitEthernet0/0
+ip address 195.228.6.9 255.255.255.252
+no shutdown
+exit
+
+
 
 # rtr-kol-01
 en 
@@ -43,8 +64,14 @@ hostname sw-kol-1-mgmt
 en 
 conf t
 hostname rtr-telekom-core-03
-
-
+interface GigabitEthernet0/0
+ip address 195.228.6.6 255.255.255.252
+no shutdown
+exit
+interface GigabitEthernet2/0
+ip address 195.228.6.13 255.255.255.252
+no shutdown
+exit
 
 # rtr-gim-01
 en 
@@ -89,6 +116,16 @@ hostname ssw-gim-01
 en 
 conf t
 hostname rtr-telekom-core-04
+interface GigabitEthernet0/0
+ip address 195.228.6.10 255.255.255.252
+no shutdown
+exit
+interface GigabitEthernet2/0
+ip address 195.228.6.14 255.255.255.252
+no shutdown
+exit
+
+
 
 
 # fw-dc-01
