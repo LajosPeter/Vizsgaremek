@@ -1,1 +1,165 @@
+# rtr-telekom-core-01
+en 
+conf t
+hostname rtr-telekom-core-01
+
+
+# rtr-sp-01
+en 
+conf t
+hostname rtr-sp-01
+
+
+# sw-sp-01-mgmt
+en 
+conf t
+hostname sw-sp-01-mgmt
+
+
+
+
+# rtr-telekom-core-02
+en 
+conf t
+hostname rtr-telekom-core-01
+
+# rtr-kol-01
+en 
+conf t
+hostname rtr-kol-01
+
+# sw-kol-1-mgmt
+en 
+conf t
+hostname sw-kol-1-mgmt
+
+
+# wlc-kol-01-mgmt
+
+
+
+
+# rtr-telekom-core-03
+en 
+conf t
+hostname rtr-telekom-core-03
+
+
+
+# rtr-gim-01
+en 
+conf t
+hostname rtr-gim-01
+
+
+# rtr-gim-02
+en 
+conf t
+hostname rtr-gim-02
+
+
+# rtr-gim-03
+en 
+conf t
+hostname rtr-gim-03
+
+# sw-gim-01-mgmt
+en 
+conf t
+hostname sw-gim-01-mgmt
+
+# sw-gim-02-mgmt
+en 
+conf t
+hostname sw-gim-02-mgmt
+
+# sw-gim-03-mgmt
+en 
+conf t
+hostname sw-gim-03-mgmt
+
+# ssw-gim-01
+en 
+conf t
+hostname ssw-gim-01
+
+
+
+# rtr-telekom-core-04
+en 
+conf t
+hostname rtr-telekom-core-04
+
+
+# fw-dc-01
+en 
+conf t
+hostname fw-dc-01
+
+# sw-dc-01
+en 
+conf t
+hostname sw-dc-01
+
+
+# rtr-tank-01
+en 
+conf t
+hostname rtr-tank-01
+
+# rtr-tank-02
+en 
+conf t
+hostname rtr-tank-02
+
+
+# rtr-tank-03
+en 
+conf t
+hostname rtr-tank-03
+
+# ssw-tank-01
+en
+conf t
+hostname ssw-tank-01
+
+
+
+# sw-tank-01-mgmt
+en 
+conf t
+hostname sw-tank-01-mgmt
+
+# sw-tank-02-mgmt
+en 
+conf t
+hostname sw-tank-02-mgmt
+
+
+# sw-tank-03-mgmt
+en 
+conf t
+hostname sw-tank-03-mgmt
+
+
+# sw-tank-04-mgmt
+en 
+conf t
+hostname sw-tank-04-mgmt
+
+
+# sw-tank-05-mgmt
+en 
+conf t
+hostname sw-tank-05-mgmt
+
+# sw-tank-06-mgmt
+en 
+conf t
+hostname sw-tank-06-mgmt
+
+
+
+
+
 
