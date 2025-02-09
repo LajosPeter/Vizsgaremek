@@ -81,6 +81,9 @@ Az utolsó telephelyen a Bentlakásos kollégiumban ``FIXME`` szeretnének WiFi 
 
 Fontos az is, hogy a címkiosztás úgy történjen, hogy mind a jelenlegi, mind a jövőbeli címzési protokollokat támogassa, ezáltal biztosítva a megfelelő jövőbeli fejlesztés lehetőségét és a kollégiumi hallgatók vezeték nélküli hálózaton keresztül férjenek hozzá az internethez.
 
+# FIXME
+> Megrendelés újra írása a fizikai tervezet elkészülése miatt és pontosítani a kritériákon
+
 
 
 4 site:
