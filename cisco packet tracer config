@@ -41,6 +41,11 @@ interface GigabitEthernet0/0
 ip address 195.228.6.9 255.255.255.252
 no shutdown
 exit
+interface GigabitEthernet3/0
+ip address 195.228.3.1 255.255.255.0
+ip address 195.228.3.1 255.255.255.224
+no sh
+exit
 
 
 
@@ -48,11 +53,43 @@ exit
 en 
 conf t
 hostname rtr-kol-01
+interface GigabitEthernet0/0
+ip address 195.228.3.16 255.255.255.224
+no sh
+exit
+int GigabitEthernet 8/0
+no sh
+exit
+int gigabitEthernet 8/0.300
+description %KOL_TANAR%
+encapsulation dot1Q 300
+ip address 10.3.0.1 255.255.255.0
+exit
+int gigabitEthernet 8/0.301
+description %KOL_DIAK%
+encapsulation dot1Q 301
+ip address 10.3.1.1 255.255.255.0
+exit
+int gigabitEthernet 8/0.330
+description %KOL_SWMAN%
+encapsulation dot1Q 330
+ip address 10.3.30.1 255.255.255.0
+exit
+
+
+
+
 
 # sw-kol-1-mgmt
 en 
 conf t
 hostname sw-kol-1-mgmt
+vlan 330 
+name %KOL_SWMAN%
+int vlan 330 
+ip address 10.3.30.192 255.255.255.0
+no sh 
+exit
 
 
 # wlc-kol-01-mgmt
