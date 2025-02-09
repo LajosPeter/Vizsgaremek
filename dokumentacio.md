@@ -11,7 +11,7 @@
 
 ### A vállalkozás alapadatai
 
-- **Név**:Bartok IT Solution (kft)
+- **Név**:Bartok IT Solution Kft.
 - **Székhely/telephely**: Nádor u. 14-12, Budapest, 1046
 - **Működés kezdete**: 2013. január. 1. 
 - **Jegyzett tőke**: 29.000.000 Ft
@@ -88,8 +88,8 @@ Fontos az is, hogy a címkiosztás úgy történjen, hogy mind a jelenlegi, mind
     Tankerület
     Bentlakásos kollégium
     Sportpálya : A megrendelő azt kérte hogy legyen a hálózat jövőbiztos ezért a sportpályán ipv6-os IP címeket használtunk teszt jelleggel jövőbeli bővítések tesztelése képpen.
-    + Amazontól bérelt fájlmegosztó szerver
-    + Telefonközpont
+    + Telekom adatközpontban elhelyezett szerverek
+    + helyi IP telefonközpont
 
 ## Tervezet
 
