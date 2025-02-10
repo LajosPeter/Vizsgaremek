@@ -358,7 +358,7 @@ int range fa0/20-21
 switchport access trunk
 channel-group 2 mode desirable
 exit
-int range fa 0/2-12
+int range fa 0/1-12
 switchport access vlan 203
 exit
 int fa 0/13
