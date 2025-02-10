@@ -378,9 +378,11 @@ vlan 204
 name GIM_PORTA
 vlan 205
 name GIM_GO
+```
 vlan 220
 name GIM_SERVER
 exit
+```
 int vlan 200
 no sh
 ip address 10.2.0.192 255.255.255.0
@@ -526,6 +528,7 @@ exit
 int fa 0/2
 switchport access vlan 200 
 exit
+```
 int Gig 0/2
 no sh
 switchport mode trunk
@@ -535,6 +538,7 @@ switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 1
 exit
+```
 int fa 0/3
 switchport access vlan 202 
 exit
