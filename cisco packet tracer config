@@ -304,8 +304,6 @@ standby 220 priority 120
 exit
 
 
-VTP NEM MŰKÖDIK
-
 # sw-gim-01-mgmt
 en 
 conf t
