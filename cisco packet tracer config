@@ -447,13 +447,13 @@ conf t
 hostname sw-gim-03-mgmt
 spanning-tree mode rapid-pvst
 int g0/1
-switchport access trunk
-int range fa0/20-21
-switchport access trunk
+switchport mode trunk
+int range fa0/21-22
+switchport mode trunk
 channel-group 2 mode auto
 exit
 int range fa0/23-24
-switchport access trunk
+switchport mode trunk
 channel-group 3 mode passive
 exit
 vtp domain gim
@@ -469,7 +469,7 @@ switchport mode access
 switchport port-security
 switchport port-security mac-address sticky
 switchport port-security violation restrict
-witchport port-security maximum 2
+switchport port-security maximum 2
 switchport voice vlan 202
 exit
 int range  fa 0/3, fa0/10
