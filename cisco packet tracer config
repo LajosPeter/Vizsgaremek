@@ -832,14 +832,15 @@ int Fa 0/1
 switchport access vlan 103
 spanning-tree bpduguard enable
 exit
-int range fa 0/5-6
+int  fa 0/6
 switchport access vlan 103
+switchport voice 104
 spanning-tree bpduguard enable
 switchport port-security
 switchport port-security mac-address sticky
 switchport port-security violation restrict
-switchport port-security maximum 1
-int range fa0/7-14
+switchport port-security maximum 2
+int range fa0/5, fa0/7-14
 switchport access vlan 103
 spanning-tree bpduguard enable
 switchport port-security
@@ -849,6 +850,7 @@ switchport port-security maximum 1
 int range fa 0/15-24
 spanning-tree bpduguard enable
 sh
+exit
 
 # sw-tank-02-mgmt
 en 
@@ -870,12 +872,15 @@ switchport port-security
 switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 2
+exit
 int fa 0/5
 switchport access vlan 103
 int range fa0/6-24 
 spanning-tree bpduguard enable
 sh
-
+exit
+int range fa 0/6-24, gig0/1-2
+sh
 
 
 # sw-tank-03-mgmt
@@ -905,7 +910,6 @@ exit
 int range fa 0/6-15
 switchport mode access
 switchport access vlan 103
-switchport voice 104
 spanning-tree bpduguard enable
 switchport port-security
 switchport port-security mac-address sticky
@@ -930,8 +934,39 @@ vtp mode client
 vtp password ciscoa
 int range fa 0/1-2, fa 0/4, int Gig 0/1
 switchport mode trunk
-
-
+exit
+int fa 0/5
+switchport mode access
+switchport access vlan 103
+exit
+int fa 0/6
+switchport mode access
+switchport access vlan 103
+switchport voice 104
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 2
+exit
+int range fa 0/7-15
+switchport mode access
+switchport access vlan 103
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 1
+exit
+int range fa 0/16-24
+sh
+exit
+int g0/2 
+switchport mode access
+switchport access vlan 104
+exit
+int fa 0/3 
+sh
 
 # sw-tank-05-mgmt
 en 
