@@ -545,6 +545,9 @@ exit
 int gig0/1
 switchport mode trunk
 exit
+int gig 0/2
+sh
+exit
 
 ```
 int Gig 0/2
@@ -575,6 +578,7 @@ ip cím: 10.2.20.16
 mask: 255.255.255.0
 default gateway: 10.2.20.1
 
+```
 Services: 
 - DHCP
 IP 10.2.20.16 Default gateway 10.2.20.1
@@ -586,7 +590,7 @@ IP 10.2.20.16 Default gateway 10.2.20.1
 | GIM_TANAR | 10.2.3.1 | - | 10.2.3.65 | 255.255.255.0 | 63 | 10.2.20.16 |
 | GIM_PORTA | 10.2.4.1 | - | 10.2.4.65 | 255.255.255.0 | 63 | 10.2.20.16 |
 | GIM_GO | 10.2.5.1 | - | 10.2.5.65 | 255.255.255.0 | 63 | 10.2.20.16 |
-
+```
 
 
 
