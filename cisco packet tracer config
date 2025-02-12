@@ -640,6 +640,8 @@ hostname ssw-gim-01
 int fa0/0
 ip address 10.2.2.1
 
+
+```
 # srv-gim-01
 ip cím: 10.2.20.16
 mask: 255.255.255.0
@@ -658,7 +660,7 @@ IP 10.2.20.16 Default gateway 10.2.20.1
 | GIM_PORTA | 10.2.4.1 | - | 10.2.4.65 | 255.255.255.0 | 63 | 10.2.20.16 |
 | GIM_GO | 10.2.5.1 | - | 10.2.5.65 | 255.255.255.0 | 63 | 10.2.20.16 |
 ```
-
+```
 
 IP default gateway a switcheknek
 
@@ -696,11 +698,36 @@ conf t
 hostname sw-dc-01
 
 
-# srv-dc-01
+# srv-dc-01 - Windows server
+Szolgáltatások : 
+- Címtár_pl_ Active Directory
+
+- DNS
+
+- DHCP
+
+- Fájl_és_nyomtató_megosztás
+
+- Kliens_számítógépekre automatizált_szoftvertelepítés
+
+- Automatizált_mentés
+
+| Pool Name              | Default Gateway | DNS server | Start IP Address | Subnet Mask | Maximum Users | TFTP server |
+| :---------------- | :------: | :------: | :------: | :------: | :------: | :------: |
+| GIM_RG | 10.2.0.1 | - | 10.2.0.65 | 255.255.255.0 | 63 | - |
+| GIM_VEZ | 10.2.1.1 | - | 10.2.1.65 | 255.255.255.0 | 63 | - |
+| GIM_TANAR | 10.2.3.1 | - | 10.2.3.65 | 255.255.255.0 | 63 | - |
+| GIM_PORTA | 10.2.4.1 | - | 10.2.4.65 | 255.255.255.0 | 63 | - |
+| GIM_GO | 10.2.5.1 | - | 10.2.5.65 | 255.255.255.0 | 63 | - |
+| TANK_RG | 10.1.0.1 | - | 10.1.0.65 | 255.255.255.0 | 63 | - |
+| TANK_VEZ | 10.1.1.1 | - | 10.1.1.65 | 255.255.255.0 | 63 | - |
+| TANK_ALK | 10.1.3.1 | - | 10.1.3.65 | 255.255.255.0 | 63 | - |
 
 
-# srv-dc-01
 
+# srv-dc-02 - Linux server
+Szolgáltatások
+- HTTP_HTTPS docker
 
 
 
