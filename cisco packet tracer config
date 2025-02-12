@@ -54,6 +54,7 @@ no sh
 exit
 
 
+IP default gateway a switcheknek
 
 # rtr-kol-01
 en 
@@ -80,7 +81,13 @@ int gigabitEthernet 8/0.330
 description %KOL_SWMAN%
 encapsulation dot1Q 330
 ip address 10.3.30.1 255.255.255.0
+exi
+int gigabitEthernet 8/0.340
+description %KOL_SWMAN%
+encapsulation dot1Q 340 nativ
+ip address 10.3.40.1 255.255.255.0
 exit
+
 
 
 
@@ -99,16 +106,24 @@ exit
 vlan 330 
 name %KOL_SWMAN%
 exit
+vlan 340
+name %KOL_NAT%
+exit
 int vlan 330 
 ip address 10.3.30.192 255.255.255.0
 no sh 
 exit
+default-gateway 10.3.30.1
 int range gig0/1, gig6/1, gig7/1, gig8/1, gig9/1
 switchport mode trunk
+exit
 int gig5/1
 switchport mode access
 switchport access vlan 330
-
+exit
+int range gig0/1, gig6/1, gig7/1, gig8/1, gig9/1
+switchport trunk allowed vlan 300,301,330,340
+exit
 
 
 # wlc-kol-01-mgmt FIXME
@@ -146,7 +161,8 @@ ip address 195.228.2.1 255.255.255.224
 no sh
 exit
 
-VALAMIÉRT NEM JÓ A ROUTEREK KÖZÖTTI KAPCSOLAT
+VALAMIÉRT NEM JÓ A ROUTEREK KÖZÖTTI KAPCSOLAT 
+IP default gateway a switcheknek
 
 # rtr-gim-01
 en 
@@ -249,6 +265,17 @@ standby 205 ip 10.2.5.1
 standby 205 priority 150
 standby 205 preempt
 exit
+int gig0/0/1.240
+encapsulation dot1Q 240 nativ
+description %GIM_NAT%
+ip address 10.2.40.2 255.255.255.0
+standby version 2
+standby 240 ip 10.2.40.1 
+standby 240 priority 150
+standby 240 preempt
+exit
+
+
 
 
 ```
@@ -344,6 +371,14 @@ standby version 2
 standby 205 ip 10.2.5.1 
 standby 205 priority 120
 exit
+int gig0/0/1.240
+encapsulation dot1Q 240 nativ
+description %GIM_NAT%
+ip address 10.2.40.3 255.255.255.0
+standby version 2
+standby 240 ip 10.2.40.1 
+standby 240 priority 120
+exit
 
 
 
@@ -353,18 +388,6 @@ en
 conf t
 hostname sw-gim-01-mgmt
 spanning-tree mode rapid-pvst
-int range fa0/2-17
-spanning-tree bpduguard enable
-switchport mode access
-switchport port-security
-switchport port-security mac-address sticky
-switchport port-security violation restrict
-switchport port-security maximum 2
-exit
-int fa 0/1
-spanning-tree bpduguard enable
-switchport mode access
-exit
 vtp domain gim
 vtp mode server
 vtp password cisco
@@ -382,16 +405,6 @@ vlan 204
 name GIM_PORTA
 vlan 205
 name GIM_GO
-int vlan 200
-no sh
-ip address 10.2.0.192 255.255.255.0
-exit
-spanning-tree vlan 201 root primary 
-spanning-tree vlan 202 root primary 
-spanning-tree vlan 203 root primary 
-spanning-tree vlan 204 root primary 
-spanning-tree vlan 205 root primary 
-spanning-tree vlan 220 root primary 
 int range fa0/18-19
 switchport mode trunk
 channel-group 1 mode active
@@ -399,6 +412,29 @@ exit
 int range fa0/20-21
 switchport mode trunk
 channel-group 2 mode desirable
+exit
+int g0/1 
+switchport mode trunk
+exit
+spanning-tree vlan 201 root primary 
+spanning-tree vlan 202 root primary 
+spanning-tree vlan 203 root primary 
+spanning-tree vlan 204 root primary 
+spanning-tree vlan 205 root primary 
+spanning-tree vlan 240 root primary 
+
+int range fa0/2-17
+spanning-tree bpduguard enable
+switchport mode access
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 2
+exit
+int fa 0/1
+spanning-tree bpduguard enable
+switchport mode access
+switchport access vlan 203
 exit
 int range fa 0/1-12
 switchport access vlan 203
@@ -412,13 +448,24 @@ exit
 int range fa0/14-17 
 sh
 exit
-int fa 0/1
-switchport access vlan 203
+int vlan 200
+ip address 10.2.0.192 255.255.255.0
+no sh
+exit
+default-gateway 10.2.0.1
+int range fa0/20-21, g0/1, fa0/18-19
+switchport trunk native vlan 240
+switchport trunk allowed vlan 200,201,202,203,204,205,240
+exit
+
+
+
 
 ```
 vlan 220
 name GIM_SERVER
 exit
+spanning-tree vlan 220 root primary 
 ```
 
 
@@ -438,16 +485,14 @@ exit
 vtp domain gim
 vtp mode client
 vtp password cisco
-int vlan 200
-no sh
-ip address 10.2.0.193 255.255.255.0
-exit
+
+
 spanning-tree vlan 201 root secondary 
 spanning-tree vlan 202 root secondary 
 spanning-tree vlan 203 root secondary 
 spanning-tree vlan 204 root secondary 
 spanning-tree vlan 205 root secondary 
-spanning-tree vlan 220 root secondary 
+spanning-tree vlan 240 root secondary 
 int range fa 0/3-14, fa0/17                
 spanning-tree bpduguard enable
 switchport mode access
@@ -465,11 +510,14 @@ switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 1
 exit
-int range fa0/1, fa0/16, fa0/20-22
-spanning-tree bpduguard enable
+int range fa0/1, fa0/16
 switchport mode access
+spanning-tree bpduguard enable
+switchport access vlan 203
 exit
 int range fa0/20-22
+switchport mode access
+spanning-tree bpduguard enable
 sh
 exit
 int range fa0/2-13
@@ -484,7 +532,19 @@ exit
 int range fa0/1, fa0/16
 switchport access vlan 203
 exit
+int vlan 200
+ip address 10.2.0.193 255.255.255.0
+no sh
+exit
+default-gateway 10.2.0.1
+int range fa0/18-19, fa0/23-24
+switchport trunk native vlan 240
+switchport trunk allowed vlan 200,201,202,203,204,205,240
+exit
 
+```
+spanning-tree vlan 220 root secondary 
+```
 
 # sw-gim-03-mgmt
 en 
@@ -504,10 +564,8 @@ exit
 vtp domain gim
 vtp mode client
 vtp password cisco
-int vlan 200
-no sh
-ip address 10.2.0.194 255.255.255.0
-exit
+
+
 int range fa 0/2, fa0/4-9, fa0/11-20
 spanning-tree bpduguard enable
 switchport mode access
@@ -547,6 +605,15 @@ switchport mode trunk
 exit
 int gig 0/2
 sh
+exit
+int vlan 200
+ip address 10.2.0.194 255.255.255.0
+no sh
+exit
+default-gateway 10.2.0.1
+int range gig0/1, fa0/23-24, fa0/21-22
+switchport trunk native vlan 240
+switchport trunk allowed vlan 200,201,202,203,204,205,240
 exit
 
 ```
@@ -593,6 +660,7 @@ IP 10.2.20.16 Default gateway 10.2.20.1
 ```
 
 
+IP default gateway a switcheknek
 
 # rtr-telekom-core-04
 en 
@@ -615,7 +683,7 @@ ip address 195.228.1.1 255.255.255.224
 no sh 
 exit
 
-
+SZERVER TELEPHELY MÉG SEMMI
 
 # fw-dc-01
 en 
@@ -632,6 +700,9 @@ hostname sw-dc-01
 
 
 # srv-dc-01
+
+
+
 
 
 # rtr-tank-01
@@ -713,6 +784,25 @@ standby 130 ip 10.1.30.1
 standby 130 priority 150
 standby 130 preempt
 exit
+int Gig 0/1/1.140
+description %TANK_NATALK%
+encapsulation dot1q 140 native
+ip address 10.1.40.2 255.255.255.0
+standby version 2
+standby 140 ip 10.1.40.1 
+standby 140 priority 150
+standby 140 preempt
+exit
+int Gig 0/1/1.150
+description %TANK_NATVEZRG%
+encapsulation dot1q 150 native
+ip address 10.1.50.2 255.255.255.0
+standby version 2
+standby 150 ip 10.1.50.1 
+standby 150 priority 150
+standby 150 preempt
+exit
+
 
 
 
@@ -788,6 +878,26 @@ standby version 2
 standby 130 ip 10.1.30.1 
 standby 130 priority 120
 exit
+int Gig 0/1/1.140
+description %TANK_NATALK%
+encapsulation dot1q 140 native
+ip address 10.1.40.3 255.255.255.0
+standby version 2
+standby 140 ip 10.1.40.1 
+standby 140 priority 120
+exit
+int Gig 0/1/1.150
+description %TANK_NATVEZRG%
+encapsulation dot1q 150 native
+ip address 10.1.50.3 255.255.255.0
+standby version 2
+standby 150 ip 10.1.50.1 
+standby 150 priority 120
+exit
+
+
+
+
 
 ```
 int Gig 0/0/1.120
@@ -825,9 +935,14 @@ exit
 vlan 130
 name TANK_SWMAN
 exit
+vlan 140
+name TANK_NATALK
+exit
 int range fa0/2-4
 switchport mode trunk
 exit
+
+
 int Fa 0/1
 switchport access vlan 103
 spanning-tree bpduguard enable
@@ -851,6 +966,22 @@ int range fa 0/15-24
 spanning-tree bpduguard enable
 sh
 exit
+spanning-tree vlan 103 root primary 
+spanning-tree vlan 104 root primary 
+spanning-tree vlan 130 root primary 
+spanning-tree vlan 140 root primary
+int vlan 130
+ip address 10.1.30.192 255.255.255.0
+no sh
+exit
+default-gateway 10.1.30.1
+int range fa0/2-4
+switchport trunk native vlan 140
+switchport trunk allowed vlan 140,103,104,130
+exit
+
+
+
 
 # sw-tank-02-mgmt
 en 
@@ -862,6 +993,7 @@ vtp password ciscoa
 int range fa 0/1-3
 switchport mode trunk
 exit
+
 spanning-tree mode rapid-pvst
 int fa0/4 
 switchport mode access
@@ -881,6 +1013,21 @@ sh
 exit
 int range fa 0/6-24, gig0/1-2
 sh
+exit
+spanning-tree vlan 103 root secondary 
+spanning-tree vlan 104 root secondary 
+spanning-tree vlan 130 root secondary
+spanning-tree vlan 140 root secondary
+int vlan 130
+ip address 10.1.30.193 255.255.255.0
+no sh
+exit
+default-gateway 10.1.30.1
+int range fa 0/1-3
+switchport trunk native vlan 140
+switchport trunk allowed vlan 140,103,104,130
+exit
+
 
 
 # sw-tank-03-mgmt
@@ -891,8 +1038,9 @@ vtp domain tanka
 vtp mode client
 vtp password ciscoa
 spanning-tree mode rapid-pvst
-int range fa0/1-3
+int range fa0/1-3, Gig0/2
 switchport mode trunk
+
 exit
 int fa 0/4
 sh
@@ -916,11 +1064,16 @@ switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 1
 exit
-int Gig 0/2
-switchport mode trunk
-exit
 int Gig 0/1
 sh
+int vlan 130
+ip address 10.1.30.194 255.255.255.0
+no sh
+exit
+default-gateway 10.1.30.1
+int range fa0/1-3, Gig0/2
+switchport trunk native vlan 140
+switchport trunk allowed vlan 140,103,104,130
 
 
 
@@ -934,6 +1087,7 @@ vtp mode client
 vtp password ciscoa
 int range fa 0/1-2, fa 0/4, int Gig 0/1
 switchport mode trunk
+
 exit
 int fa 0/5
 switchport mode access
@@ -967,6 +1121,17 @@ switchport access vlan 104
 exit
 int fa 0/3 
 sh
+int vlan 130
+ip address 10.1.30.195 255.255.255.0
+no sh
+exit
+default-gateway 10.1.30.1
+int range fa 0/1-2, fa 0/4, int Gig 0/1
+switchport trunk native vlan 140
+switchport trunk allowed vlan 140,103,104,130
+exit
+
+
 
 # sw-tank-05-mgmt
 en 
@@ -985,7 +1150,39 @@ exit
 vlan 102
 name TANK_VRTEL
 exit
+vlan 150
+name TANK_NATVEZRG
+int range fa0/1, Gig0/1
+switchport mode trunk
+exit
 
+spanning-tree vlan 100 root primary 
+spanning-tree vlan 101 root primary 
+spanning-tree vlan 102 root primary
+spanning-tree vlan 150 root primary
+int fa 0/2 
+switchport mode access
+switchport access vlan 100
+switchport voice 102
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 2
+exit
+int range fa 0/3-24, Gig0/2
+switchport mode access
+spanning-tree bpduguard enable
+sh
+int vlan 100
+ip address 10.1.0.192 255.255.255.0
+no sh
+exit
+ip default-gateway 10.1.0.1
+int range fa0/1, Gig0/1
+switchport trunk native vlan 150
+switchport trunk allowed vlan 150,100,101,102
+exit
 
 # sw-tank-06-mgmt
 en 
@@ -995,6 +1192,53 @@ spanning-tree mode rapid-pvst
 vtp domain tankv
 vtp mode client
 vtp password ciscov
+int range fa0/2, Gig0/1
+switchport mode trunk
+exit
+
+int Gig 0/2
+switchport mode access
+switchport access vlan 102
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 1
+exit
+int f0/1
+switchport mode access
+spanning-tree bpduguard enable
+sh
+exit
+int range fa 0/3-04
+switchport access vlan 101
+switchport voice 102
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 2
+exit
+int range fa 0/1, fa0/5-24
+switchport mode access
+spanning-tree bpduguard enable
+sh
+exit
+spanning-tree vlan 100 root secondary 
+spanning-tree vlan 101 root secondary 
+spanning-tree vlan 102 root secondary
+spanning-tree vlan 150 root secondary
+int range g0/1, fa0/2
+switchport trunk native vlan 150
+switchport trunk allowed vlan 150,100,101,102
+exit
+int vlan 100
+ip address 10.1.0.193 255.255.255.0
+no sh
+exit
+ip default-gateway 10.1.0.1
+
+
 
 
 ```
