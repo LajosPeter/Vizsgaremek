@@ -79,7 +79,7 @@ DNS
 
 >Bele kell írni a pontos felhasználókat, mennyiségét és biztonsági technikák minimális jellemzése. 
 
-Az Avalon bentlakásos Gimnázium megbízott minket, hogy a  négy telephelyre tervezzün meg és telepítsük az eszközöket és configuráljuk a hálózatot: "Gimnázium", "Tankerület", "Bentlakásos kollégium", "Sportpálya".  
+Az Avalon bentlakásos Gimnázium megbízott minket, hogy a  négy telephelyre tervezzün meg és telepítsük az eszközöket és configuráljuk a hálózatot: "Gimnázium", "Tankerület", "Bentlakásos kollégium", "Sportpálya". Emelett készítsük el a szerver szol
 A Gimnáziumba ``FIXME`` minden egyes alkalmazottnak van külön IP cím alapján működő telefonja. A gazdasági osztálynál 5 alkalmazott található és egy nyomtató. Az igazgató helyettesi irodában 1 alkalmazott és egy nyomtató van.  Az igazgatói irodában, a portán és a rendszergazdánál csak egy alkalmazott található. Három tanári teremet is ki kell alakítani ahol termenként 10 gépet kell elhelyezni telefonnal. Emellett igény, hogy a teljes épületben legyen WiFi lefedettség a tanárok számára. Emelett fontos, hogy autómatikusan kapják meg az IP címeket a hálózatban a számítógépek és csakis a Gimnázium eszközei férhessenek hozzá a hálózathoz. Igény továbbá, hogy el lehessen érni a távoli szervereken a szolgáltatásokat. (Bővebben a Szerverek pontban)
 
 
