@@ -3,10 +3,7 @@ vtp kicserélése vtp version 2 re
 switchek nevének kicserélése mgmt helyett
 jelszó kicserélése 
 ahol ap vagy telefon van ne legyen bpdguard hanem guard root legyen minden portján ki kell adni
-4096 primary cseréje
-8192 secondary cseréje 
 spanning-tree vlan ki kell cserélni, hogy egyben legyen
-spanning-tree vlan 1-4095 priority 4096 8192
 spanning-tree portfast minden porton ahol nincs switch
 
 
@@ -41,10 +38,10 @@ conf t
 hostname rtr-sp-01
 
 
-# sw-sp-01-mgmt
+# sw-sp-01
 en 
 conf t
-hostname sw-sp-01-mgmt
+hostname sw-sp-01
 
 
 
@@ -107,10 +104,10 @@ exit
 
 
 
-# sw-kol-1-mgmt
+# sw-kol-1
 en 
 conf t
-hostname sw-kol-1-mgmt
+hostname sw-kol-1
 vlan 300 
 name %KOL_TANAR%
 exit
@@ -140,7 +137,7 @@ switchport trunk allowed vlan 300,301,330,340
 exit
 
 
-# wlc-kol-01-mgmt FIXME
+# wlc-kol-01 FIXME
 Username:cis$coIT
 Password:cis$coIT
 System Name: wlc-kol-01-mgmt
@@ -402,9 +399,10 @@ en
 conf t
 hostname sw-gim-01
 spanning-tree mode rapid-pvst
+vtp version 2
 vtp domain gim
 vtp mode server
-vtp password cisco
+vtp password 2VqOjiFH
 int gig0/1
 switchport mode trunk
 vlan 200
@@ -496,9 +494,10 @@ int range fa0/23-24
 switchport mode trunk
 channel-group 3 mode active
 exit
-vtp domain gim
+vtp version 2
 vtp mode client
-vtp password cisco
+vtp domain gim
+vtp password 2VqOjiFH
 spanning-tree vlan 1-4095 priority 8192
 
 int range fa 0/3-14, fa0/17                
@@ -567,9 +566,10 @@ int range fa0/23-24
 switchport mode trunk
 channel-group 3 mode passive
 exit
-vtp domain gim
 vtp mode client
-vtp password cisco
+vtp version 2
+vtp domain gim
+vtp password 2VqOjiFH
 
 
 int range fa 0/2, fa0/4-9, fa0/11-20
@@ -943,9 +943,10 @@ hostname ssw-tank-01
 en 
 conf t
 hostname sw-tank-01
+vtp version 2
 vtp domain tanka
 vtp mode server
-vtp password ciscoa
+vtp password JXTBOyTW
 vlan 103
 name TANK_ALK
 exit
@@ -1003,9 +1004,10 @@ exit
 en 
 conf t
 hostname sw-tank-02
-vtp domain tank
+vtp version 2
 vtp mode client
-vtp password ciscoa
+vtp domain tanka
+vtp password JXTBOyTW
 int range fa 0/1-3
 switchport mode trunk
 exit
@@ -1050,9 +1052,10 @@ exit
 en 
 conf t
 hostname sw-tank-03
-vtp domain tanka
+vtp version 2
 vtp mode client
-vtp password ciscoa
+vtp domain tanka
+vtp password JXTBOyTW
 spanning-tree mode rapid-pvst
 int range fa0/1-3, Gig0/2
 switchport mode trunk
@@ -1098,9 +1101,10 @@ en
 conf t
 hostname sw-tank-04
 spanning-tree mode rapid-pvst
-vtp domain tanka
+vtp version 2
 vtp mode client
-vtp password ciscoa
+vtp domain tanka
+vtp password JXTBOyTW
 int range fa 0/1-2, fa 0/4, int Gig 0/1
 switchport mode trunk
 
@@ -1154,9 +1158,10 @@ en
 conf t
 hostname sw-tank-05
 spanning-tree mode rapid-pvst
+vtp version 2
 vtp domain tankv
 vtp mode server
-vtp password ciscov
+vtp password IvYkhCjy
 vlan 100
 name TANK_RG
 exit
@@ -1202,9 +1207,10 @@ en
 conf t
 hostname sw-tank-06
 spanning-tree mode rapid-pvst
-vtp domain tankv
+vtp version 2
 vtp mode client
-vtp password ciscov
+vtp domain tankv
+vtp password IvYkhCjy
 int range fa0/2, Gig0/1
 switchport mode trunk
 exit
