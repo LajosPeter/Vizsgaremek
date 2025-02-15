@@ -1,7 +1,4 @@
 po1 re cseréljem le a etherchannelt
-vtp kicserélése vtp version 2 re
-switchek nevének kicserélése mgmt helyett
-jelszó kicserélése 
 ahol ap vagy telefon van ne legyen bpdguard hanem guard root legyen minden portján ki kell adni
 spanning-tree vlan ki kell cserélni, hogy egyben legyen
 spanning-tree portfast minden porton ahol nincs switch
