@@ -1,7 +1,9 @@
 po1 re cseréljem le a etherchannelt
 ahol ap vagy telefon van ne legyen bpdguard hanem guard root legyen minden portján ki kell adni
 spanning-tree portfast minden porton ahol nincs switch
-
+spanning-tree portfast default 
+Nem kell nativ vlan de biztonság miatt csinálok minden trunk porton engedélyezni kell
+Ha mindegyik switch ismeri a tegelést akkor nem kel natív vlan de ha régebbi eszközökezt 
 
 
 
@@ -98,12 +100,13 @@ exit
 
 
 
+ENNÉL KI KELL CSERÉLNI A PORTOKAT FIXME
 
-
-# sw-kol-1
+# sw-kol-01
 en 
 conf t
-hostname sw-kol-1
+hostname sw-kol-01
+spanning-tree mode rapid-pvst
 vlan 300 
 name %KOL_TANAR%
 exit
@@ -121,15 +124,10 @@ ip address 10.3.30.192 255.255.255.0
 no sh 
 exit
 default-gateway 10.3.30.1
-int range gig0/1, gig6/1, gig7/1, gig8/1, gig9/1
+int range gig0/1, gig6/1, gig5/1 gig7/1, gig8/1, gig9/1
 switchport mode trunk
-exit
-int gig5/1
-switchport mode access
-switchport access vlan 330
-exit
-int range gig0/1, gig6/1, gig7/1, gig8/1, gig9/1
-switchport trunk allowed vlan 300,301,330,340
+switchport trunk native 340
+switchport trunk allowed vlan 300,301,330
 exit
 
 
@@ -168,8 +166,11 @@ ip address 195.228.2.1 255.255.255.224
 no sh
 exit
 
+```
 VALAMIÉRT NEM JÓ A ROUTEREK KÖZÖTTI KAPCSOLAT 
-IP default gateway a switcheknek
+IP default gateway a switcheknek 
+```
+FIXED
 
 # rtr-gim-01
 en 
@@ -188,7 +189,7 @@ ip address 10.2.255.5 255.255.255.252
 no sh
 ex
 
-NEM JÓ  A ROUTING A DHCP SZERVERT NEM ÉRIK EL 
+NEM JÓ  A ROUTING A DHCP SZERVERT NEM ÉRIK EL FIXED
 
 
 # rtr-gim-02
@@ -272,6 +273,8 @@ standby 205 ip 10.2.5.1
 standby 205 priority 150
 standby 205 preempt
 exit
+
+
 int gig0/0/1.240
 encapsulation dot1Q 240 nativ
 description %GIM_NAT%
@@ -401,6 +404,7 @@ vtp mode server
 vtp password 2VqOjiFH
 int gig0/1
 switchport mode trunk
+exit
 vlan 200
 name GIM_RG
 vlan 201
@@ -431,29 +435,26 @@ switchport mode trunk
 exit
 spanning-tree vlan 1-4095 priority 4096
 
-int range fa0/2-17
-spanning-tree bpduguard enable
+int range fa0/2-12
 switchport mode access
 switchport port-security
 switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 2
-exit
-int fa 0/1
-spanning-tree bpduguard enable
-switchport mode access
-switchport access vlan 203
-exit
-int range fa 0/1-12
-switchport access vlan 203
-exit
-int fa 0/13
-switchport access vlan 201
-exit
-int range fa 0/2-13
 switchport voice vlan 202
 exit
-int range fa0/14-17 
+int fa 0/1
+switchport mode access
+switchport access vlan 203
+spanning-tree bpduguard enable
+exit
+int range fa 0/2-11
+switchport access vlan 203
+exit
+int fa 0/12
+switchport access vlan 201
+exit
+int range fa0/13-17
 sh
 exit
 int vlan 200
@@ -463,7 +464,7 @@ exit
 default-gateway 10.2.0.1
 int range fa0/20-21, g0/1, fa0/18-19
 switchport trunk native vlan 240
-switchport trunk allowed vlan 200,201,202,203,204,205,220,240
+switchport trunk allowed vlan 200,201,202,203,204,205,220
 exit
 
 
@@ -523,6 +524,9 @@ switchport mode access
 spanning-tree bpduguard enable
 sh
 exit
+
+SZERINTEM ROSSZ A KIOSZTÁS OTTHON MEGNÉZEM FIXME
+
 int range fa0/2-13
 switchport access vlan 203
 exit
@@ -542,7 +546,7 @@ exit
 default-gateway 10.2.0.1
 int range fa0/18-19, fa0/23-24
 switchport trunk native vlan 240
-switchport trunk allowed vlan 200,201,202,203,204,205,220,240
+switchport trunk allowed vlan 200,201,202,203,204,205,220
 exit
 
 
