@@ -745,7 +745,7 @@ int g0/0
 ip address 192.228.1.16 255.255.255.224
 no sh
 exit
-int Gig1/0
+int Gig0/2
 ip address 10.1.255.1 255.255.255.252
 no sh
 exit
@@ -754,11 +754,11 @@ exit
 en 
 conf t
 hostname rtr-tank-02
-int Se0/0/0
+int Gig0/2
 ip address 10.1.255.2 255.255.255.252
 no sh
 exit
-int Gig0/2
+int Fa0/0/2
 ip address 10.1.255.5 255.255.255.252
 no sh
 exit
@@ -793,6 +793,8 @@ standby 101 ip 10.1.1.1
 standby 101 priority 150
 standby 101 preempt
 exit
+
+
 int Gig 0/1.103
 description %TANK_ALK%
 encapsulation dot1q 103
@@ -834,7 +836,7 @@ standby 140 ip 10.1.40.1
 standby 140 priority 150
 standby 140 preempt
 exit
-int Gig 0/1.150
+int Gig 0/0.150
 description %TANK_NATVEZRG%
 encapsulation dot1q 150 native
 ip address 10.1.50.2 255.255.255.0
@@ -852,7 +854,7 @@ exit
 en 
 conf t
 hostname rtr-tank-03
-int Gig0/2
+int fa0/0/2
 ip address 10.1.255.6 255.255.255.252
 no sh
 exit
@@ -882,6 +884,24 @@ standby version 2
 standby 101 ip 10.1.1.1 
 standby 101 priority 120
 exit
+int Gig 0/0.120
+description %TANK_SERVER%
+encapsulation dot1q 120
+ip address 10.1.20.2 255.255.255.0
+standby version 2
+standby 120 ip 10.1.20.1 
+standby 120 priority 120
+exit
+int Gig 0/0.150
+description %TANK_NATVEZRG%
+encapsulation dot1q 150 native
+ip address 10.1.50.3 255.255.255.0
+standby version 2
+standby 150 ip 10.1.50.1 
+standby 150 priority 120
+exit
+
+
 
 int Gig 0/1.103
 description %TANK_ALK%
@@ -896,14 +916,7 @@ standby version 2
 standby 103 ip 10.1.3.1 
 standby 103 priority 120
 exit
-int Gig 0/0.120
-description %TANK_RG%
-encapsulation dot1q 120
-ip address 10.1.20.2 255.255.255.0
-standby version 2
-standby 120 ip 10.1.20.1 
-standby 120 priority 120
-exit
+
 int Gig 0/1.130
 description %TANK_SWMAN%
 encapsulation dot1q 130
@@ -920,16 +933,6 @@ standby version 2
 standby 140 ip 10.1.40.1 
 standby 140 priority 120
 exit
-int Gig 0/0.150
-description %TANK_NATVEZRG%
-encapsulation dot1q 150 native
-ip address 10.1.50.3 255.255.255.0
-standby version 2
-standby 150 ip 10.1.50.1 
-standby 150 priority 120
-exit
-
-
 
 
 # ssw-tank-01
@@ -950,8 +953,8 @@ vtp password JXTBOyTW
 vlan 103
 name TANK_ALK
 exit
-vlan 104 TANK_ALK
-name TANK_ALK
+vlan 104 
+name TANK_ALKTEL
 exit
 vlan 130
 name TANK_SWMAN
@@ -994,7 +997,7 @@ exit
 default-gateway 10.1.30.1
 int range fa0/2-4
 switchport trunk native vlan 140
-switchport trunk allowed vlan 140,103,104,130
+switchport trunk allowed vlan 103,104,130
 exit
 
 
@@ -1033,9 +1036,6 @@ exit
 int range fa 0/6-24, gig0/1-2
 sh
 exit
-
-
-
 int vlan 130
 ip address 10.1.30.193 255.255.255.0
 no sh
@@ -1043,7 +1043,7 @@ exit
 default-gateway 10.1.30.1
 int range fa 0/1-3
 switchport trunk native vlan 140
-switchport trunk allowed vlan 140,103,104,130
+switchport trunk allowed vlan 103,104,130
 exit
 
 
@@ -1092,7 +1092,7 @@ exit
 default-gateway 10.1.30.1
 int range fa0/1-3, Gig0/2
 switchport trunk native vlan 140
-switchport trunk allowed vlan 140,103,104,130
+switchport trunk allowed vlan 103,104,130
 
 
 
@@ -1148,7 +1148,7 @@ exit
 default-gateway 10.1.30.1
 int range fa 0/1-2, fa 0/4, int Gig 0/1
 switchport trunk native vlan 140
-switchport trunk allowed vlan 140,103,104,130
+switchport trunk allowed vlan 103,104,130
 exit
 
 
@@ -1188,7 +1188,14 @@ switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 2
 exit
-int range fa 0/3-24, Gig0/2
+int Gig 0/2
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 2
+exit
+int range fa 0/3-24
 switchport mode access
 spanning-tree bpduguard enable
 sh
@@ -1197,9 +1204,9 @@ ip address 10.1.0.192 255.255.255.0
 no sh
 exit
 ip default-gateway 10.1.0.1
-int range fa0/1, Gig0/1
+int range fa0/1, Gig0/1, Gig0/2
 switchport trunk native vlan 150
-switchport trunk allowed vlan 150,100,101,102
+switchport trunk allowed vlan 100,101,102
 exit
 
 # sw-tank-06
@@ -1230,7 +1237,7 @@ switchport mode access
 spanning-tree bpduguard enable
 sh
 exit
-int range fa 0/3-04
+int range fa 0/3-4
 switchport access vlan 101
 switchport voice 102
 spanning-tree bpduguard enable
@@ -1246,7 +1253,7 @@ sh
 exit
 int range g0/1, fa0/2
 switchport trunk native vlan 150
-switchport trunk allowed vlan 150,100,101,102
+switchport trunk allowed vlan 100,101,102
 exit
 int vlan 100
 ip address 10.1.0.193 255.255.255.0
