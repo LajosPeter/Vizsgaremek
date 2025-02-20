@@ -13,7 +13,7 @@ EZEN A ROUTEREN NINCS IPV6 IPV6 config kell
 en 
 conf t
 hostname rtr-telekom-core-01
-interface GigabitEthernet0/0
+interface Se0/0/0
 ip address 195.228.6.1 255.255.255.252
 no shutdown
 exit
@@ -22,7 +22,7 @@ ip address 195.228.6.5 255.255.255.252
 no shutdown
 exit
 ipv6 unicast-routing
-interface Gig3/0
+interface Gig0/0
 ipv6 enable
 no sh
 
@@ -48,15 +48,15 @@ hostname sw-sp-01
 en 
 conf t
 hostname rtr-telekom-core-02
-nterface GigabitEthernet1/0
+nterface Se0/0/0
 ip address 195.228.6.2 255.255.255.252
 no shutdown
 exit
-interface GigabitEthernet0/0
+interface Se0/0/1
 ip address 195.228.6.9 255.255.255.252
 no shutdown
 exit
-interface GigabitEthernet3/0
+interface GigabitEthernet0/0
 ip address 195.228.3.1 255.255.255.0
 ip address 195.228.3.1 255.255.255.224
 no sh
@@ -153,15 +153,15 @@ Employee Network:
 en 
 conf t
 hostname rtr-telekom-core-03
-interface GigabitEthernet0/0
+interface Se0/0/1
 ip address 195.228.6.6 255.255.255.252
 no shutdown
 exit
-interface GigabitEthernet2/0
+interface Se0/0/0
 ip address 195.228.6.13 255.255.255.252
 no shutdown
 exit
-interface GigabitEthernet3/0
+interface GigabitEthernet0/0
 ip address 195.228.2.1 255.255.255.224
 no sh
 exit
@@ -190,7 +190,7 @@ no sh
 ex
 
 NEM JÓ  A ROUTING A DHCP SZERVERT NEM ÉRIK EL FIXED
-
+Ki kell venni az 220 ki kell venni és át kell rakni a rtr-gim-03-ra 
 
 # rtr-gim-02
 en 
@@ -289,7 +289,7 @@ exit
 
 
 ```
-int gig0/0/1.220
+int fa0/0/0.220
 encapsulation dot1Q 220
 description %GIM_SERVER%
 ip address 10.2.20.2 255.255.255.0
@@ -390,7 +390,15 @@ standby 240 ip 10.2.40.1
 standby 240 priority 120
 exit
 
-
+int fa0/0/0.220
+encapsulation dot1Q 220
+description %GIM_SERVER%
+ip address 10.2.20.2 255.255.255.0
+standby version 2
+standby 220 ip 10.2.20.1 
+standby 220 priority 150
+standby 220 preempt
+exit
 
 
 # sw-gim-01
@@ -419,9 +427,6 @@ vlan 205
 name GIM_GO
 vlan 240
 name GIM_NAT
-vlan 220
-name GIM_SERVER
-exit
 int range fa0/18-19
 switchport mode trunk
 channel-group 1 mode active
@@ -464,7 +469,7 @@ exit
 default-gateway 10.2.0.1
 int range fa0/20-21, g0/1, fa0/18-19
 switchport trunk native vlan 240
-switchport trunk allowed vlan 200,201,202,203,204,205,220
+switchport trunk allowed vlan 200,201,202,203,204,205
 exit
 
 
@@ -546,7 +551,7 @@ exit
 default-gateway 10.2.0.1
 int range fa0/18-19, fa0/23-24
 switchport trunk native vlan 240
-switchport trunk allowed vlan 200,201,202,203,204,205,220
+switchport trunk allowed vlan 200,201,202,203,204,205
 exit
 
 
@@ -610,17 +615,7 @@ int gig0/1
 switchport mode trunk
 exit
 
-SZERVER VISSZAKÖTÉSE FIXME
 
-int gig 0/2
-no sh
-switchport mode trunk
-spanning-tree bpduguard enable
-switchport port-security
-switchport port-security mac-address sticky
-switchport port-security violation restrict
-switchport port-security maximum 1
-exit
 int vlan 200
 ip address 10.2.0.194 255.255.255.0
 no sh
@@ -628,7 +623,7 @@ exit
 default-gateway 10.2.0.1
 int range gig0/1, fa0/23-24, fa0/21-22
 switchport trunk native vlan 240
-switchport trunk allowed vlan 200,201,202,203,204,205,220,240
+switchport trunk allowed vlan 200,201,202,203,204,205,240
 exit
 
 ```
@@ -683,19 +678,19 @@ IP default gateway a switcheknek
 en 
 conf t
 hostname rtr-telekom-core-04
-interface GigabitEthernet0/0
+interface Se0/0/1
 ip address 195.228.6.10 255.255.255.252
 no shutdown
 exit
-interface GigabitEthernet2/0
+interface Se0/0/0
 ip address 195.228.6.14 255.255.255.252
 no shutdown
 exit
-interface eth9/0
+interface Gig0/0
 no sh
 ip address 195.228.5.1 255.255.255.224
 ex
-int gig 3/0
+int Gig 0/1
 ip address 195.228.1.1 255.255.255.224
 no sh 
 exit
