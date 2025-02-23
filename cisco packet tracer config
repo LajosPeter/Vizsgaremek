@@ -502,7 +502,7 @@ vtp domain gim
 vtp password 2VqOjiFH
 spanning-tree vlan 1-4095 priority 8192
 
-int range fa 0/3-14, fa0/17                
+int range fa 0/3-13, fa0/16                
 spanning-tree bpduguard enable
 switchport mode access
 switchport port-security
@@ -524,24 +524,25 @@ switchport mode access
 spanning-tree bpduguard enable
 switchport access vlan 203
 exit
-int range fa0/20-22
+int range fa0/17, fa0/20-22, gig0/1-2
 switchport mode access
+switchport *
 spanning-tree bpduguard enable
 sh
 exit
 
-SZERINTEM ROSSZ A KIOSZTÁS OTTHON MEGNÉZEM FIXME
+SZERINTEM ROSSZ A KIOSZTÁS OTTHON MEGNÉZEM FIXED
 
-int range fa0/2-13
+int range fa0/2-12
 switchport access vlan 203
 exit
-int range fa 0/14-15
+int range fa 0/13-14
 switchport access vlan 201
 exit
-int fa 0/17
+int fa 0/16
 switchport access vlan 204
 exit
-int range fa0/1, fa0/16
+int range fa0/1, fa0/15
 switchport access vlan 203
 exit
 int vlan 200
@@ -625,6 +626,11 @@ int range gig0/1, fa0/23-24, fa0/21-22
 switchport trunk native vlan 240
 switchport trunk allowed vlan 200,201,202,203,204,205,240
 exit
+int gig0/2
+switchport mode access
+spanning-tree bpduguard enable
+sh
+
 
 ```
 int Gig 0/2
