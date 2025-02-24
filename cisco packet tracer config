@@ -166,11 +166,7 @@ ip address 195.228.2.1 255.255.255.224
 no sh
 exit
 
-```
-VALAMIÉRT NEM JÓ A ROUTEREK KÖZÖTTI KAPCSOLAT 
-IP default gateway a switcheknek 
-```
-FIXED
+
 
 # rtr-gim-01
 en 
@@ -189,8 +185,8 @@ ip address 10.2.255.5 255.255.255.252
 no sh
 ex
 
-NEM JÓ  A ROUTING A DHCP SZERVERT NEM ÉRIK EL FIXED
-Ki kell venni az 220 ki kell venni és át kell rakni a rtr-gim-03-ra 
+
+Ki kell venni az 220 ki kell venni áttettem de subinterfacen nem működik ki kell törölni a 220 vlant
 
 # rtr-gim-02
 en 
@@ -287,6 +283,7 @@ exit
 
 
 
+Ez nem jó mert nem tud subinterfacet
 
 ```
 int fa0/0/0.220
