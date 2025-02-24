@@ -4,7 +4,7 @@ spanning-tree portfast minden porton ahol nincs switch
 spanning-tree portfast default 
 Nem kell nativ vlan de biztonság miatt csinálok minden trunk porton engedélyezni kell
 Ha mindegyik switch ismeri a tegelést akkor nem kel natív vlan de ha régebbi eszközökezt 
-A routerek 2911 nem tudom bővíteni portokkal
+
 
 
 EZEN A ROUTEREN NINCS IPV6 IPV6 config kell
