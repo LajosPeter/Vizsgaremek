@@ -4,7 +4,7 @@ spanning-tree portfast minden porton ahol nincs switch
 spanning-tree portfast default 
 Nem kell nativ vlan de biztonság miatt csinálok minden trunk porton engedélyezni kell
 Ha mindegyik switch ismeri a tegelést akkor nem kel natív vlan de ha régebbi eszközökezt 
-
+A routerek 2911 nem tudom bővíteni portokkal
 
 
 EZEN A ROUTEREN NINCS IPV6 IPV6 config kell
@@ -17,7 +17,7 @@ interface Se0/0/0
 ip address 195.228.6.1 255.255.255.252
 no shutdown
 exit
-interface GigabitEthernet0/0
+interface Se0/0/1
 ip address 195.228.6.5 255.255.255.252
 no shutdown
 exit
@@ -288,7 +288,7 @@ exit
 Ez nem jó mert nem tud subinterfacet
 
 ```
-int fa0/0/0.220
+int gig0/3/0.220
 encapsulation dot1Q 220
 description %GIM_SERVER%
 ip address 10.2.20.2 255.255.255.0
@@ -389,7 +389,7 @@ standby 240 ip 10.2.40.1
 standby 240 priority 120
 exit
 
-int fa0/0/0.220
+int Gig0/3/0.220
 encapsulation dot1Q 220
 description %GIM_SERVER%
 ip address 10.2.20.2 255.255.255.0
@@ -465,14 +465,15 @@ int vlan 200
 ip address 10.2.0.192 255.255.255.0
 no sh
 exit
-default-gateway 10.2.0.1
+
 int range fa0/20-21, g0/1, fa0/18-19
 switchport trunk native vlan 240
 switchport trunk allowed vlan 200,201,202,203,204,205
 exit
 
-
-
+```
+default-gateway 10.2.0.1
+```
 
 ```
 vlan 220
@@ -525,13 +526,9 @@ switchport access vlan 203
 exit
 int range fa0/17, fa0/20-22, gig0/1-2
 switchport mode access
-switchport *
 spanning-tree bpduguard enable
 sh
 exit
-
-SZERINTEM ROSSZ A KIOSZTÁS OTTHON MEGNÉZEM FIXED
-
 int range fa0/2-12
 switchport access vlan 203
 exit
@@ -548,12 +545,15 @@ int vlan 200
 ip address 10.2.0.193 255.255.255.0
 no sh
 exit
-default-gateway 10.2.0.1
 int range fa0/18-19, fa0/23-24
 switchport trunk native vlan 240
 switchport trunk allowed vlan 200,201,202,203,204,205
 exit
 
+
+```
+default-gateway 10.2.0.1
+```
 
 
 # sw-gim-03
@@ -741,7 +741,7 @@ Szolgáltatások
 en 
 conf t
 hostname rtr-tank-01
-int g0/0
+int g0/1
 ip address 192.228.1.16 255.255.255.224
 no sh
 exit
@@ -758,7 +758,7 @@ int Gig0/2
 ip address 10.1.255.2 255.255.255.252
 no sh
 exit
-int Fa0/0/2
+int Gig0/3/0
 ip address 10.1.255.5 255.255.255.252
 no sh
 exit
@@ -854,7 +854,7 @@ exit
 en 
 conf t
 hostname rtr-tank-03
-int fa0/0/2
+int Gig0/3/0
 ip address 10.1.255.6 255.255.255.252
 no sh
 exit
