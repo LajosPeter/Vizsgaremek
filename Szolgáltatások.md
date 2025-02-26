@@ -2,14 +2,12 @@ https://www.lsoft.hu/wp-content/uploads/2023/10/IBF-1-0043-IT-szolgaltataskatalo
 innen fel lehet e használni a címeket?
 
 
-# Szolgáltatások
-
-
-Szolgáltatási igény felmérése telephelyenként 
+# A feladat leírása
 
 >Bele kell írni a pontos felhasználókat, mennyiségét és biztonsági technikák minimális jellemzése. 
 
-Az Avalon bentlakásos Gimnázium megbízott minket, hogy a  négy telephelyre tervezzün meg és telepítsük az eszközöket és configuráljuk a hálózatot: "Gimnázium", "Tankerület", "Bentlakásos kollégium", "Sportpálya". Emelett készítsük el a szerver szol
+Az Avalon bentlakásos Gimnázium megbízott minket, hogy a  négy telephelyre tervezzün meg és telepítsük az eszközöket és configuráljuk a hálózatot: "Gimnázium", "Tankerület", "Bentlakásos kollégium", "Sportpálya". Emelett készítsük el a szerver szolgáltatást.
+
 A Gimnáziumba ``FIXME`` minden egyes alkalmazottnak van külön IP cím alapján működő telefonja. A gazdasági osztálynál 5 alkalmazott található és egy nyomtató. Az igazgató helyettesi irodában 1 alkalmazott és egy nyomtató van.  Az igazgatói irodában, a portán és a rendszergazdánál csak egy alkalmazott található. Három tanári teremet is ki kell alakítani ahol termenként 10 gépet kell elhelyezni telefonnal. Emellett igény, hogy a teljes épületben legyen WiFi lefedettség a tanárok számára. Emelett fontos, hogy autómatikusan kapják meg az IP címeket a hálózatban a számítógépek és csakis a Gimnázium eszközei férhessenek hozzá a hálózathoz. Igény továbbá, hogy el lehessen érni a távoli szervereken a szolgáltatásokat. (Bővebben a Szerverek pontban)
 
 
@@ -25,7 +23,15 @@ A Servereknél a a gimnáziumban
 Az gimnáziumnak weboldalra is szüksége van és igény, hogy ne IP címmel kelljen hozzá férni a webhelyeikhez azért, hogy ne kelljen megjegyezni az IP címeket. Emelett megbízhatóan integrálniuk kell a meglévő bérelt adattároló szervert a rendszerükbe. Ezen felül egy telefon központot is ki kell alakítani a Gimnázium  és a Tankerület számára.
 
 Fontos az is, hogy a címkiosztás úgy történjen, hogy mind a jelenlegi, mind a jövőbeli címzési protokollokat támogassa, ezáltal biztosítva a megfelelő jövőbeli fejlesztés lehetőségét.
-  A szolgáltatási környezet felmérése
+
+
+
+
+Szolgáltatási igény felmérése telephelyenként 
+
+
+  
+A szolgáltatási környezet felmérése - fizikiai tervezet
 A tervezést megalapozó adatok
 Szervezeti és létszám adatok
 
