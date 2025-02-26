@@ -69,6 +69,7 @@ A tervezést megalapozó adatok
 
 
 Katalógus adatok 
+
 Üzleti szolgáltatás katalógus
     E-mail
     VoIP
