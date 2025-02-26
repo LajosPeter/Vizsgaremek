@@ -42,10 +42,22 @@ Fontos az is, hogy a címkiosztás úgy történjen, hogy mind a jelenlegi, mind
   
 # A szolgáltatási környezet felmérése - fizikiai tervezet
 
+"Gimnázium"
+
+
+"Tankerület"
+
+
+"Bentlakásos kollégium"
+
+
+"Sportpálya"
+
+
 
 
 A tervezést megalapozó adatok
-Szervezeti és létszám adatok
+    Szervezeti és létszám adatok
 
 
 
