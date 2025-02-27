@@ -10,24 +10,45 @@ Ha mindegyik switch ismeri a tegelést akkor nem kel natív vlan de ha régebbi 
 EZEN A ROUTEREN NINCS IPV6 IPV6 config kell
 
 # rtr-telekom-core-01
-en 
-conf t
+
+### Konfiguracio
+```
+enable 
+conf terminal
 hostname rtr-telekom-core-01
+
 interface Se0/0/0
 ip address 195.228.6.1 255.255.255.252
 no shutdown
 exit
+
 interface Se0/0/1
 ip address 195.228.6.5 255.255.255.252
 no shutdown
 exit
+
 ipv6 unicast-routing
 interface Gig0/0
 ipv6 enable
-no sh
+no shutdown
 exit
+```
+### Show parancsok
 
+```
+rtr-telekom-core-01#show ip route
 
+[...]
+
+Gateway of last resort is not set
+
+     195.228.6.0/24 is variably subnetted, 4 subnets, 2 masks
+C       195.228.6.0/30 is directly connected, Serial0/0/0
+L       195.228.6.1/32 is directly connected, Serial0/0/0
+C       195.228.6.4/30 is directly connected, Serial0/0/1
+L       195.228.6.5/32 is directly connected, Serial0/0/1
+
+```
 
 
 # rtr-sp-01
@@ -45,95 +66,219 @@ hostname sw-sp-01
 
 
 # rtr-telekom-core-02
-en 
-conf t
+
+### Konfiguracio
+
+```
+enable
+configure terminal
 hostname rtr-telekom-core-02
+
 interface Se0/0/0
 ip address 195.228.6.2 255.255.255.252
 no shutdown
 exit
+
 interface Se0/0/1
 ip address 195.228.6.9 255.255.255.252
 no shutdown
 exit
+
 interface GigabitEthernet0/0
 ip address 195.228.3.1 255.255.255.0
 ip address 195.228.3.1 255.255.255.224
 no sh
 exit
+```
 
+### Show parancsok
+
+```
+rtr-telekom-core-02#show ip route
+
+[...]
+
+Gateway of last resort is not set
+
+     195.228.3.0/24 is variably subnetted, 2 subnets, 2 masks
+C       195.228.3.0/27 is directly connected, GigabitEthernet0/0
+L       195.228.3.1/32 is directly connected, GigabitEthernet0/0
+     195.228.6.0/24 is variably subnetted, 4 subnets, 2 masks
+C       195.228.6.0/30 is directly connected, Serial0/0/0
+L       195.228.6.2/32 is directly connected, Serial0/0/0
+C       195.228.6.8/30 is directly connected, Serial0/0/1
+L       195.228.6.9/32 is directly connected, Serial0/0/1
+```
 
 IP default gateway a switcheknek
 
 # rtr-kol-01
-en 
-conf t
+
+### Konfiguracio
+
+```
+enable
+configure terminal
 hostname rtr-kol-01
+
 interface GigabitEthernet0/0
 ip address 195.228.3.16 255.255.255.224
 no sh
 exit
+
 int GigabitEthernet 0/1
 no sh
 exit
+
 int gigabitEthernet 0/1.300
 description %KOL_TANAR%
 encapsulation dot1Q 300
 ip address 10.3.0.1 255.255.255.0
 exit
+
 int gigabitEthernet 0/1.301
 description %KOL_DIAK%
 encapsulation dot1Q 301
 ip address 10.3.1.1 255.255.255.0
 exit
+
 int gigabitEthernet 0/1.330
 description %KOL_SWMAN%
 encapsulation dot1Q 330
 ip address 10.3.30.1 255.255.255.0
 exit
+
 int gigabitEthernet 0/1.340
 description %KOL_NAT%
 encapsulation dot1Q 340 nativ
 ip address 10.3.40.1 255.255.255.0
 exit
+```
+### Show parancsok
 
+```
+rtr-kol-01#show ip route
 
+[...]
 
+Gateway of last resort is not set
+
+     10.0.0.0/8 is variably subnetted, 8 subnets, 2 masks
+C       10.3.0.0/24 is directly connected, GigabitEthernet0/1.300
+L       10.3.0.1/32 is directly connected, GigabitEthernet0/1.300
+C       10.3.1.0/24 is directly connected, GigabitEthernet0/1.301
+L       10.3.1.1/32 is directly connected, GigabitEthernet0/1.301
+C       10.3.30.0/24 is directly connected, GigabitEthernet0/1.330
+L       10.3.30.1/32 is directly connected, GigabitEthernet0/1.330
+C       10.3.40.0/24 is directly connected, GigabitEthernet0/1.340
+L       10.3.40.1/32 is directly connected, GigabitEthernet0/1.340
+     195.228.3.0/24 is variably subnetted, 2 subnets, 2 masks
+C       195.228.3.0/27 is directly connected, GigabitEthernet0/0
+L       195.228.3.16/32 is directly connected, GigabitEthernet0/0
+```
+
+```
+rtr-kol-01#show interfaces gigabitEthernet 0/1.300
+GigabitEthernet0/1.300 is up, line protocol is up (connected)
+    [...]
+  Internet address is 10.3.0.1/24 
+    [...]
+  Encapsulation 802.1Q Virtual LAN, Vlan ID 300
+    [...]   
+
+rtr-kol-01#show interfaces gigabitEthernet 0/1.301
+GigabitEthernet0/1.301 is up, line protocol is up (connected)
+    [...]
+  Internet address is 10.3.1.1/24
+    [...]
+  Encapsulation 802.1Q Virtual LAN, Vlan ID 301
+    [...]
+
+rtr-kol-01#show interfaces gigabitEthernet 0/1.330
+GigabitEthernet0/1.330 is up, line protocol is up (connected)
+    [...]
+  Internet address is 10.3.30.1/24
+    [...]
+  Encapsulation 802.1Q Virtual LAN, Vlan ID 330
+    [...]
+
+rtr-kol-01#show interfaces gigabitEthernet 0/1.340
+GigabitEthernet0/1.340 is up, line protocol is up (connected)
+    [...]
+  Internet address is 10.3.40.1/24
+    [...]
+  Encapsulation 802.1Q Virtual LAN, Vlan ID 340
+    [...]
+
+rtr-kol-01#show interfaces gigabitEthernet 0/0
+GigabitEthernet0/0 is up, line protocol is up (connected)
+    [...]
+  Internet address is 195.228.3.16/27
+    [...]
+```
 
 ENNÉL KI KELL CSERÉLNI A PORTOKAT FIXME
 
 # sw-kol-01
-en 
-conf t
+
+### Konfiguracio
+
+```
+enable
+config terminal
 hostname sw-kol-01
 spanning-tree mode rapid-pvst
+
 vlan 300 
 name %KOL_TANAR%
 exit
+
 vlan 301 
 name %KOL_DIAK%
 exit
+
 vlan 330 
 name %KOL_SWMAN%
 exit
+
 vlan 340
 name %KOL_NAT%
 exit
+
 int vlan 330 
 ip address 10.3.30.192 255.255.255.0
+default-gateway 10.3.30.1
 no sh 
 exit
+
 int range gig0/1, gig6/1, gig5/1, gig7/1, gig8/1, gig9/1
 switchport mode trunk
 switchport trunk native vlan 340
 switchport trunk allowed vlan 300,301,330
 exit
+```
+
+### Show parancsok
 
 ```
-default-gateway 10.3.30.1
+sw-kol-01#show vlan brief
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Gig2/1, Gig3/1, Gig4/1
+300  %KOL_TANAR%                      active    Gig1/1
+301  %KOL_DIAK%                       active    
+330  %KOL_SWMAN%                      active    
+340  %KOL_NAT%                        active    
+1002 fddi-default                     active    
+1003 token-ring-default               active    
+1004 fddinet-default                  active    
+1005 trnet-default                    active 
 ```
+
 
 # wlc-kol-01 FIXME
+```
 Username:cis$coIT
 Password:cis$coIT
 System Name: wlc-kol-01-mgmt
@@ -147,50 +292,99 @@ Employee Network:
     WPA2 Personal
     Passphrase:cis$coIT
     Confirm Passphrase: cisco1234
-
-
-
+```
 
 # rtr-telekom-core-03
-en 
-conf t
+
+### Konfiguracio
+
+```
+enable
+config terminal
 hostname rtr-telekom-core-03
+
 interface Se0/0/1
 ip address 195.228.6.6 255.255.255.252
 no shutdown
 exit
+
 interface Se0/0/0
 ip address 195.228.6.13 255.255.255.252
 no shutdown
 exit
+
 interface GigabitEthernet0/0
 ip address 195.228.2.1 255.255.255.224
 no sh
 exit
+```
+### Show parancsok
+
+```
+rtr-telekom-core-03#show ip route
+
+[...]
+
+Gateway of last resort is not set
+
+     195.228.2.0/24 is variably subnetted, 2 subnets, 2 masks
+C       195.228.2.0/27 is directly connected, GigabitEthernet0/0
+L       195.228.2.1/32 is directly connected, GigabitEthernet0/0
+     195.228.6.0/24 is variably subnetted, 4 subnets, 2 masks
+C       195.228.6.4/30 is directly connected, Serial0/0/1
+L       195.228.6.6/32 is directly connected, Serial0/0/1
+C       195.228.6.12/30 is directly connected, Serial0/0/0
+L       195.228.6.13/32 is directly connected, Serial0/0/0
+
+```
 
 
 
 # rtr-gim-01
-en 
-conf t
+
+### Konfiguracio
+
+```
+enable
+config terminal
 hostname rtr-gim-01
+
 int g0/0
 ip address 195.228.2.16 255.255.255.224 
 no sh
-ex
+exit
+
 int g0/1
 ip address 10.2.255.1 255.255.255.252
 no sh
-ex
+exit
+
 int g0/2
 ip address 10.2.255.5 255.255.255.252
 no sh
-ex
+exit
+```
 
+### Show parancsok
+
+```
+rtr-gim-01#show ip route
+
+[...]
+
+Gateway of last resort is not set
+
+     195.228.2.0/24 is variably subnetted, 2 subnets, 2 masks
+C       195.228.2.0/27 is directly connected, GigabitEthernet0/0
+L       195.228.2.16/32 is directly connected, GigabitEthernet0/0
+```
 
 Ki kell venni az 220 ki kell venni áttettem de subinterfacen nem működik ki kell törölni a 220 vlant
 
 # rtr-gim-02
+
+
+```
 en 
 conf t
 hostname rtr-gim-02
@@ -282,7 +476,7 @@ standby 240 ip 10.2.40.1
 standby 240 priority 150
 standby 240 preempt
 exit
-
+```
 
 
 Ez nem jó mert nem tud subinterfacet
