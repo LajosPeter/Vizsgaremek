@@ -1,0 +1,1270 @@
+po1 re cseréljem le a etherchannelt
+ahol ap vagy telefon van ne legyen bpdguard hanem guard root legyen minden portján ki kell adni
+spanning-tree portfast minden porton ahol nincs switch
+spanning-tree portfast default 
+Nem kell nativ vlan de biztonság miatt csinálok minden trunk porton engedélyezni kell
+Ha mindegyik switch ismeri a tegelést akkor nem kel natív vlan de ha régebbi eszközökezt 
+
+
+
+EZEN A ROUTEREN NINCS IPV6 IPV6 config kell
+
+# rtr-telekom-core-01
+en 
+conf t
+hostname rtr-telekom-core-01
+interface Se0/0/0
+ip address 195.228.6.1 255.255.255.252
+no shutdown
+exit
+interface Se0/0/1
+ip address 195.228.6.5 255.255.255.252
+no shutdown
+exit
+ipv6 unicast-routing
+interface Gig0/0
+ipv6 enable
+no sh
+exit
+
+
+
+
+# rtr-sp-01
+en 
+conf t
+hostname rtr-sp-01
+
+
+# sw-sp-01
+en 
+conf t
+hostname sw-sp-01
+
+
+
+
+# rtr-telekom-core-02
+en 
+conf t
+hostname rtr-telekom-core-02
+interface Se0/0/0
+ip address 195.228.6.2 255.255.255.252
+no shutdown
+exit
+interface Se0/0/1
+ip address 195.228.6.9 255.255.255.252
+no shutdown
+exit
+interface GigabitEthernet0/0
+ip address 195.228.3.1 255.255.255.0
+ip address 195.228.3.1 255.255.255.224
+no sh
+exit
+
+
+IP default gateway a switcheknek
+
+# rtr-kol-01
+en 
+conf t
+hostname rtr-kol-01
+interface GigabitEthernet0/0
+ip address 195.228.3.16 255.255.255.224
+no sh
+exit
+int GigabitEthernet 0/1
+no sh
+exit
+int gigabitEthernet 0/1.300
+description %KOL_TANAR%
+encapsulation dot1Q 300
+ip address 10.3.0.1 255.255.255.0
+exit
+int gigabitEthernet 0/1.301
+description %KOL_DIAK%
+encapsulation dot1Q 301
+ip address 10.3.1.1 255.255.255.0
+exit
+int gigabitEthernet 0/1.330
+description %KOL_SWMAN%
+encapsulation dot1Q 330
+ip address 10.3.30.1 255.255.255.0
+exit
+int gigabitEthernet 0/1.340
+description %KOL_NAT%
+encapsulation dot1Q 340 nativ
+ip address 10.3.40.1 255.255.255.0
+exit
+
+
+
+
+ENNÉL KI KELL CSERÉLNI A PORTOKAT FIXME
+
+# sw-kol-01
+en 
+conf t
+hostname sw-kol-01
+spanning-tree mode rapid-pvst
+vlan 300 
+name %KOL_TANAR%
+exit
+vlan 301 
+name %KOL_DIAK%
+exit
+vlan 330 
+name %KOL_SWMAN%
+exit
+vlan 340
+name %KOL_NAT%
+exit
+int vlan 330 
+ip address 10.3.30.192 255.255.255.0
+no sh 
+exit
+int range gig0/1, gig6/1, gig5/1, gig7/1, gig8/1, gig9/1
+switchport mode trunk
+switchport trunk native vlan 340
+switchport trunk allowed vlan 300,301,330
+exit
+
+```
+default-gateway 10.3.30.1
+```
+
+# wlc-kol-01 FIXME
+Username:cis$coIT
+Password:cis$coIT
+System Name: wlc-kol-01-mgmt
+Country : Netherlands
+Timezone: Amsterdam, Berlin, Rome, Vienna
+Management IP address: 10.3.30.193
+Subnet mask: 255.255.255.0
+Default Gateway: 10.3.30.1
+Management VLAN ID: 330
+Employee Network:
+    WPA2 Personal
+    Passphrase:cis$coIT
+    Confirm Passphrase: cisco1234
+
+
+
+
+# rtr-telekom-core-03
+en 
+conf t
+hostname rtr-telekom-core-03
+interface Se0/0/1
+ip address 195.228.6.6 255.255.255.252
+no shutdown
+exit
+interface Se0/0/0
+ip address 195.228.6.13 255.255.255.252
+no shutdown
+exit
+interface GigabitEthernet0/0
+ip address 195.228.2.1 255.255.255.224
+no sh
+exit
+
+
+
+# rtr-gim-01
+en 
+conf t
+hostname rtr-gim-01
+int g0/0
+ip address 195.228.2.16 255.255.255.224 
+no sh
+ex
+int g0/1
+ip address 10.2.255.1 255.255.255.252
+no sh
+ex
+int g0/2
+ip address 10.2.255.5 255.255.255.252
+no sh
+ex
+
+
+Ki kell venni az 220 ki kell venni áttettem de subinterfacen nem működik ki kell törölni a 220 vlant
+
+# rtr-gim-02
+en 
+conf t
+hostname rtr-gim-02
+int g0/0
+ip address 10.2.255.2 255.255.255.252
+no sh
+ex
+int g0/2
+ip address 10.2.255.9 255.255.255.252
+no sh
+int gig0/1.200
+encapsulation dot1Q 200
+description %GIM_RG%
+ip address 10.2.0.2 255.255.255.0
+
+
+ip helper-address FIXME
+
+
+standby version 2
+standby 200 ip 10.2.0.1 
+standby 200 priority 150
+standby 200 preempt
+exit
+int gig0/0/1.201
+encapsulation dot1Q 201
+description %GIM_VEZ%
+ip address 10.2.1.2 255.255.255.0
+
+
+ip helper-address FIXME
+
+
+standby version 2
+standby 201 ip 10.2.1.1 
+standby 201 priority 150
+standby 201 preempt
+exit
+int gig0/0/1.203
+encapsulation dot1Q 203
+description %GIM_TANAR%
+ip address 10.2.3.2 255.255.255.0
+
+
+ip helper-address FIXME
+
+
+standby version 2
+standby 203 ip 10.2.3.1 
+standby 203 priority 150
+standby 203 preempt
+exit
+int gig0/0/1.204
+encapsulation dot1Q 204
+description %GIM_PORTA%
+ip address 10.2.4.2 255.255.255.0
+
+
+ip helper-address FIXME
+
+
+standby version 2
+standby 204 ip 10.2.4.1 
+standby 204 priority 150
+standby 204 preempt
+exit
+int gig0/0/1.205
+encapsulation dot1Q 205
+description %GIM_GO%
+ip address 10.2.5.2 255.255.255.0
+
+
+ip helper-address FIXME
+
+
+standby version 2
+standby 205 ip 10.2.5.1 
+standby 205 priority 150
+standby 205 preempt
+exit
+
+
+int gig0/0/1.240
+encapsulation dot1Q 240 nativ
+description %GIM_NAT%
+ip address 10.2.40.2 255.255.255.0
+standby version 2
+standby 240 ip 10.2.40.1 
+standby 240 priority 150
+standby 240 preempt
+exit
+
+
+
+Ez nem jó mert nem tud subinterfacet
+
+```
+int gig0/3/0.220
+encapsulation dot1Q 220
+description %GIM_SERVER%
+ip address 10.2.20.2 255.255.255.0
+standby version 2
+standby 220 ip 10.2.20.1 
+standby 220 priority 150
+standby 220 preempt
+exit
+```
+
+
+# rtr-gim-03
+en 
+conf t
+hostname rtr-gim-03
+int g0/0
+ip address 10.2.255.6 255.255.255.252
+no sh
+ex
+int g0/2
+ip address 10.2.255.10 255.255.255.252
+no sh
+int g0/1 
+no sh
+exit
+int gig0/0/1.200
+encapsulation dot1Q 200
+description %GIM_RG%
+ip address 10.2.0.3 255.255.255.0
+
+
+ip helper-address FIXME
+
+
+standby version 2
+standby 200 ip 10.2.0.1 
+standby 200 priority 120
+exit
+int gig0/0/1.201
+encapsulation dot1Q 201
+description %GIM_VEZ%
+ip address 10.2.1.3 255.255.255.0
+
+
+ip helper-address FIXME
+
+
+standby version 2
+standby 201 ip 10.2.1.1 
+standby 201 priority 120
+exit
+int gig0/0/1.203
+encapsulation dot1Q 203
+description %GIM_TANAR%
+ip address 10.2.3.3 255.255.255.0
+
+
+ip helper-address FIXME
+
+
+standby version 2
+standby 203 ip 10.2.3.1 
+standby 203 priority 120
+exit
+int gig0/0/1.204
+encapsulation dot1Q 204
+description %GIM_PORTA%
+ip address 10.2.4.3 255.255.255.0
+
+
+ip helper-address FIXME
+
+
+standby version 2
+standby 204 ip 10.2.4.1 
+standby 204 priority 120
+exit
+int gig0/0/1.205
+encapsulation dot1Q 205
+description %GIM_GO%
+ip address 10.2.5.3 255.255.255.0
+
+
+ip helper-address FIXME
+
+
+
+standby version 2
+standby 205 ip 10.2.5.1 
+standby 205 priority 120
+exit
+int gig0/0/1.240
+encapsulation dot1Q 240 nativ
+description %GIM_NAT%
+ip address 10.2.40.3 255.255.255.0
+standby version 2
+standby 240 ip 10.2.40.1 
+standby 240 priority 120
+exit
+
+int Gig0/3/0.220
+encapsulation dot1Q 220
+description %GIM_SERVER%
+ip address 10.2.20.2 255.255.255.0
+standby version 2
+standby 220 ip 10.2.20.1 
+standby 220 priority 150
+standby 220 preempt
+exit
+
+
+# sw-gim-01
+en 
+conf t
+hostname sw-gim-01
+spanning-tree mode rapid-pvst
+vtp version 2
+vtp domain gim
+vtp mode server
+vtp password 2VqOjiFH
+int gig0/1
+switchport mode trunk
+exit
+vlan 200
+name GIM_RG
+vlan 201
+name GIM_VEZ
+vlan 202
+name GIM_TEL
+vlan 203
+name GIM_TANAR
+vlan 204
+name GIM_PORTA
+vlan 205
+name GIM_GO
+vlan 240
+name GIM_NAT
+int range fa0/18-19
+switchport mode trunk
+channel-group 1 mode active
+exit
+int range fa0/20-21
+switchport mode trunk
+channel-group 2 mode desirable
+exit
+int g0/1 
+switchport mode trunk
+exit
+spanning-tree vlan 1-4095 priority 4096
+
+int range fa0/2-12
+switchport mode access
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 2
+switchport voice vlan 202
+exit
+int fa 0/1
+switchport mode access
+switchport access vlan 203
+spanning-tree bpduguard enable
+exit
+int range fa 0/2-11
+switchport access vlan 203
+exit
+int fa 0/12
+switchport access vlan 201
+exit
+int range fa0/13-17
+sh
+exit
+int vlan 200
+ip address 10.2.0.192 255.255.255.0
+no sh
+exit
+
+int range fa0/20-21, g0/1, fa0/18-19
+switchport trunk native vlan 240
+switchport trunk allowed vlan 200,201,202,203,204,205
+exit
+
+```
+default-gateway 10.2.0.1
+```
+
+```
+vlan 220
+name GIM_SERVER
+exit
+spanning-tree vlan 220 root primary 
+```
+
+
+# sw-gim-02
+en 
+conf t
+hostname sw-gim-02
+spanning-tree mode rapid-pvst
+int range fa0/18-19
+switchport mode trunk
+channel-group 1 mode passive
+exit
+int range fa0/23-24
+switchport mode trunk
+channel-group 3 mode active
+exit
+vtp version 2
+vtp mode client
+vtp domain gim
+vtp password 2VqOjiFH
+spanning-tree vlan 1-4095 priority 8192
+
+int range fa 0/3-13, fa0/16                
+spanning-tree bpduguard enable
+switchport mode access
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 2
+switchport voice vlan 202
+exit
+int range fa 0/2, fa0/15
+spanning-tree bpduguard enable
+switchport mode access
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 1
+exit
+int range fa0/1, fa0/16
+switchport mode access
+spanning-tree bpduguard enable
+switchport access vlan 203
+exit
+int range fa0/17, fa0/20-22, gig0/1-2
+switchport mode access
+spanning-tree bpduguard enable
+sh
+exit
+int range fa0/2-12
+switchport access vlan 203
+exit
+int range fa 0/13-14
+switchport access vlan 201
+exit
+int fa 0/16
+switchport access vlan 204
+exit
+int range fa0/1, fa0/15
+switchport access vlan 203
+exit
+int vlan 200
+ip address 10.2.0.193 255.255.255.0
+no sh
+exit
+int range fa0/18-19, fa0/23-24
+switchport trunk native vlan 240
+switchport trunk allowed vlan 200,201,202,203,204,205
+exit
+
+
+```
+default-gateway 10.2.0.1
+```
+
+
+# sw-gim-03
+en 
+conf t
+hostname sw-gim-03
+spanning-tree mode rapid-pvst
+int g0/1
+switchport mode trunk
+int range fa0/21-22
+switchport mode trunk
+channel-group 2 mode auto
+exit
+int range fa0/23-24
+switchport mode trunk
+channel-group 3 mode passive
+exit
+vtp mode client
+vtp version 2
+vtp domain gim
+vtp password 2VqOjiFH
+
+
+int range fa 0/2, fa0/4-9, fa0/11-20
+spanning-tree bpduguard enable
+switchport mode access
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 2
+switchport voice vlan 202
+exit
+int range  fa 0/3, fa0/10
+spanning-tree bpduguard enable
+switchport mode access
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 1
+exit
+int fa 0/1
+spanning-tree bpduguard enable
+switchport mode access
+switchport access vlan 203
+exit
+int fa 0/2
+switchport access vlan 200 
+exit
+int fa 0/3
+switchport access vlan 202 
+exit
+int range fa 0/5-10
+switchport access vlan 205 
+exit
+int range fa 0/11-20
+switchport access vlan 203 
+exit
+int gig0/1
+switchport mode trunk
+exit
+
+
+int vlan 200
+ip address 10.2.0.194 255.255.255.0
+no sh
+exit
+default-gateway 10.2.0.1
+int range gig0/1, fa0/23-24, fa0/21-22
+switchport trunk native vlan 240
+switchport trunk allowed vlan 200,201,202,203,204,205,240
+exit
+int gig0/2
+switchport mode access
+spanning-tree bpduguard enable
+sh
+
+
+```
+int Gig 0/2
+no sh
+switchport mode trunk
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 1
+exit
+```
+
+
+
+
+MEG KELL CSINÁLNI AZ IP TELEFONT
+
+# ssw-gim-01
+en 
+conf t
+hostname ssw-gim-01
+int fa0/0
+ip address 10.2.2.1
+
+Szerver visszarakása FIXME 
+
+```
+# srv-gim-01
+ip cím: 10.2.20.16
+mask: 255.255.255.0
+default gateway: 10.2.20.1
+
+DHCP
+
+| Pool Name              | Default Gateway | DNS server | Start IP Address | Subnet Mask | Maximum Users | TFTP server |
+| :---------------- | :------: | :------: | :------: | :------: | :------: | :------: |
+| GIM_RG | 10.2.0.1 | 10.2.20.16 | 10.2.0.65 | 255.255.255.0 | 63 | 10.2.20.16 |
+| GIM_VEZ | 10.2.1.1 | 10.2.20.16 | 10.2.1.65 | 255.255.255.0 | 63 | 10.2.20.16 |
+| GIM_TANAR | 10.2.3.1 | 10.2.20.16 | 10.2.3.65 | 255.255.255.0 | 63 | 10.2.20.16 |
+| GIM_PORTA | 10.2.4.1 | 10.2.20.16 | 10.2.4.65 | 255.255.255.0 | 63 | 10.2.20.16 |
+| GIM_GO | 10.2.5.1 | 10.2.20.16 | 10.2.5.65 | 255.255.255.0 | 63 | 10.2.20.16 |
+
+TFTP, DNS
+
+```
+
+IP default gateway a switcheknek
+
+# rtr-telekom-core-04
+en 
+conf t
+hostname rtr-telekom-core-04
+interface Se0/0/1
+ip address 195.228.6.10 255.255.255.252
+no shutdown
+exit
+interface Se0/0/0
+ip address 195.228.6.14 255.255.255.252
+no shutdown
+exit
+interface Gig0/0
+no sh
+ip address 195.228.5.1 255.255.255.224
+ex
+int Gig 0/1
+ip address 195.228.1.1 255.255.255.224
+no sh 
+exit
+
+SZERVER TELEPHELY MÉG SEMMI
+
+# fw-dc-01
+en 
+conf t
+hostname fw-dc-01
+
+# sw-dc-01
+en 
+conf t
+hostname sw-dc-01
+
+
+# srv-dc-01 - Windows server
+Szolgáltatások : 
+- Címtár_pl_ Active Directory
+
+- DNS
+
+
+- Fájl_és_nyomtató_megosztás
+
+- Kliens_számítógépekre automatizált_szoftvertelepítés
+
+- Automatizált_mentés
+
+
+
+
+
+# srv-dc-02 - Linux server
+Szolgáltatások
+- HTTP_HTTPS docker
+
+
+
+
+# rtr-tank-01
+en 
+conf t
+hostname rtr-tank-01
+int g0/1
+ip address 192.228.1.16 255.255.255.224
+no sh
+exit
+int Gig0/2
+ip address 10.1.255.1 255.255.255.252
+no sh
+exit
+
+# rtr-tank-02
+en 
+conf t
+hostname rtr-tank-02
+int Gig0/2
+ip address 10.1.255.2 255.255.255.252
+no sh
+exit
+int Gig0/3/0
+ip address 10.1.255.5 255.255.255.252
+no sh
+exit
+int Gig 0/0
+no sh
+exit
+int Gig 0/0.100
+description %TANK_RG%
+encapsulation dot1q 100
+ip address 10.1.0.2 255.255.255.0
+
+
+ip helper-address FIXME
+
+
+standby version 2
+standby 100 ip 10.1.0.1 
+standby 100 priority 150
+standby 100 preempt
+exit
+int Gig 0/0.101
+description %TANK_VEZ%
+encapsulation dot1q 101
+ip address 10.1.1.2 255.255.255.0
+
+
+ip helper-address FIXME
+
+
+standby version 2
+standby 101 ip 10.1.1.1 
+standby 101 priority 150
+standby 101 preempt
+exit
+
+
+int Gig 0/1.103
+description %TANK_ALK%
+encapsulation dot1q 103
+ip address 10.1.3.2 255.255.255.0
+
+
+ip helper-address FIXME
+
+
+standby version 2
+standby 103 ip 10.1.3.1 
+standby 103 priority 150
+standby 103 preempt
+exit
+int Gig 0/0.120
+description %TANK_RG%
+encapsulation dot1q 120
+ip address 10.1.20.2 255.255.255.0
+standby version 2
+standby 120 ip 10.1.20.1 
+standby 120 priority 150
+standby 120 preempt
+exit
+int Gig 0/1.130
+description %TANK_SWMAN%
+encapsulation dot1q 130
+ip address 10.1.30.2 255.255.255.0
+standby version 2
+standby 130 ip 10.1.30.1 
+standby 130 priority 150
+standby 130 preempt
+exit
+int Gig 0/1.140
+description %TANK_NATALK%
+encapsulation dot1q 140 native
+ip address 10.1.40.2 255.255.255.0
+standby version 2
+standby 140 ip 10.1.40.1 
+standby 140 priority 150
+standby 140 preempt
+exit
+int Gig 0/0.150
+description %TANK_NATVEZRG%
+encapsulation dot1q 150 native
+ip address 10.1.50.2 255.255.255.0
+standby version 2
+standby 150 ip 10.1.50.1 
+standby 150 priority 150
+standby 150 preempt
+exit
+
+
+
+
+
+# rtr-tank-03
+en 
+conf t
+hostname rtr-tank-03
+int Gig0/3/0
+ip address 10.1.255.6 255.255.255.252
+no sh
+exit
+int Gig 0/0.100
+description %TANK_RG%
+encapsulation dot1q 100
+ip address 10.1.0.3 255.255.255.0
+
+
+ip helper-address FIXME
+
+
+standby version 2
+standby 100 ip 10.1.0.1 
+standby 100 priority 120
+exit
+int Gig 0/0.101
+description %TANK_VEZ%
+encapsulation dot1q 101
+ip address 10.1.1.3 255.255.255.0
+
+
+ip helper-address FIXME
+
+
+standby version 2
+standby 101 ip 10.1.1.1 
+standby 101 priority 120
+exit
+int Gig 0/0.120
+description %TANK_SERVER%
+encapsulation dot1q 120
+ip address 10.1.20.2 255.255.255.0
+standby version 2
+standby 120 ip 10.1.20.1 
+standby 120 priority 120
+exit
+int Gig 0/0.150
+description %TANK_NATVEZRG%
+encapsulation dot1q 150 native
+ip address 10.1.50.3 255.255.255.0
+standby version 2
+standby 150 ip 10.1.50.1 
+standby 150 priority 120
+exit
+
+
+
+int Gig 0/1.103
+description %TANK_ALK%
+encapsulation dot1q 103
+ip address 10.1.3.3 255.255.255.0
+
+
+ip helper-address FIXME
+
+
+standby version 2
+standby 103 ip 10.1.3.1 
+standby 103 priority 120
+exit
+
+int Gig 0/1.130
+description %TANK_SWMAN%
+encapsulation dot1q 130
+ip address 10.1.30.3 255.255.255.0
+standby version 2
+standby 130 ip 10.1.30.1 
+standby 130 priority 120
+exit
+int Gig 0/1.140
+description %TANK_NATALK%
+encapsulation dot1q 140 native
+ip address 10.1.40.3 255.255.255.0
+standby version 2
+standby 140 ip 10.1.40.1 
+standby 140 priority 120
+exit
+
+
+# ssw-tank-01
+en
+conf t
+hostname ssw-tank-01
+
+
+
+# sw-tank-01
+en 
+conf t
+hostname sw-tank-01
+vtp version 2
+vtp domain tanka
+vtp mode server
+vtp password JXTBOyTW
+vlan 103
+name TANK_ALK
+exit
+vlan 104 
+name TANK_ALKTEL
+exit
+vlan 130
+name TANK_SWMAN
+exit
+vlan 140
+name TANK_NATALK
+exit
+int range fa0/1-3
+switchport mode trunk
+exit
+spanning-tree vlan 1-4095 priority 4096
+
+int Fa 0/4
+switchport access vlan 103
+spanning-tree bpduguard enable
+exit
+int  fa 0/6
+switchport access vlan 103
+switchport voice 104
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 2
+int range fa0/5, fa0/7-15
+switchport access vlan 103
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 1
+int range fa 0/16-24
+spanning-tree bpduguard enable
+sh
+exit
+int vlan 130
+ip address 10.1.30.192 255.255.255.0
+no sh
+exit
+default-gateway 10.1.30.1
+int range fa0/2-4
+switchport trunk native vlan 140
+switchport trunk allowed vlan 103,104,130
+exit
+
+
+
+
+# sw-tank-02
+en 
+conf t
+hostname sw-tank-02
+vtp version 2
+vtp mode client
+vtp domain tanka
+vtp password JXTBOyTW
+int range fa 0/1-3
+switchport mode trunk
+exit
+
+spanning-tree vlan 1-4095 priority  8192
+spanning-tree mode rapid-pvst
+int fa0/4 
+switchport mode access
+switchport access vlan 103
+switchport voice 104
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 2
+exit
+int fa 0/5
+switchport access vlan 103
+int range fa0/6-24 
+spanning-tree bpduguard enable
+sh
+exit
+int range fa 0/6-24, gig0/1-2
+sh
+exit
+int vlan 130
+ip address 10.1.30.193 255.255.255.0
+no sh
+exit
+default-gateway 10.1.30.1
+int range fa 0/1-3
+switchport trunk native vlan 140
+switchport trunk allowed vlan 103,104,130
+exit
+
+
+
+# sw-tank-03
+en 
+conf t
+hostname sw-tank-03
+vtp version 2
+vtp mode client
+vtp domain tanka
+vtp password JXTBOyTW
+spanning-tree mode rapid-pvst
+int range fa0/1-3, Gig0/1
+switchport mode trunk
+
+exit
+int fa 0/4
+switchport mode access
+switchport access vlan 103
+switchport voice 104
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 2
+exit
+int fa 0/5
+
+int range fa 0/5-14
+switchport mode access
+switchport access vlan 103
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 1
+exit
+int Gig 0/2
+sh
+int vlan 130
+ip address 10.1.30.194 255.255.255.0
+no sh
+exit
+default-gateway 10.1.30.1
+int range fa0/1-3, Gig0/1
+switchport trunk native vlan 140
+switchport trunk allowed vlan 103,104,130
+
+
+
+# sw-tank-04
+en 
+conf t
+hostname sw-tank-04
+spanning-tree mode rapid-pvst
+vtp version 2
+vtp mode client
+vtp domain tanka
+vtp password JXTBOyTW
+int range fa 0/1-3, int Gig 0/1
+switchport mode trunk
+exit
+int fa 0/4
+switchport mode access
+switchport access vlan 103
+exit
+int fa 0/5
+switchport mode access
+switchport access vlan 103
+switchport voice 104
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 2
+exit
+int range fa 0/6-14
+switchport mode access
+switchport access vlan 103
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 1
+exit
+int range fa 0/15-24
+sh
+exit
+int vlan 130
+ip address 10.1.30.195 255.255.255.0
+no sh
+exit
+default-gateway 10.1.30.1
+int range fa 0/1-3, int Gig 0/1-2
+switchport trunk native vlan 140
+switchport trunk allowed vlan 103,104,130
+exit
+
+
+
+# sw-tank-05
+en 
+conf t
+hostname sw-tank-05
+spanning-tree mode rapid-pvst
+vtp version 2
+vtp domain tankv
+vtp mode server
+vtp password IvYkhCjy
+vlan 100
+name TANK_RG
+exit
+vlan 101
+name TANK_VEZ
+exit
+vlan 102
+name TANK_VRTEL
+exit
+vlan 120
+name %TANK_VRTEL%
+exit
+vlan 150
+name TANK_NATVEZRG
+exit
+int range fa0/1, Gig0/1-2
+switchport mode trunk
+exit
+
+spanning-tree vlan 1-4095 priority 4096 
+int fa 0/2 
+switchport mode access
+switchport access vlan 100
+switchport voice 102
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 2
+exit
+int Gig 0/2
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 1
+exit
+int range fa 0/3-24
+switchport mode access
+spanning-tree bpduguard enable
+sh
+int vlan 100
+ip address 10.1.0.192 255.255.255.0
+no sh
+exit
+ip default-gateway 10.1.0.1
+int range fa0/1, Gig0/1-2
+switchport trunk native vlan 150
+switchport trunk allowed vlan 100,101,102,120
+exit
+
+# sw-tank-06
+en 
+conf t
+hostname sw-tank-06
+spanning-tree mode rapid-pvst
+vtp version 2
+vtp mode client
+vtp domain tankv
+vtp password IvYkhCjy
+int range fa0/1, Gig0/1
+switchport mode trunk
+exit
+
+spanning-tree vlan 1-4095 priority 8192
+int Gig 0/2
+switchport mode access
+switchport access vlan 102
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 1
+exit
+int range fa 0/2-3
+switchport access vlan 101
+switchport voice 102
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 2
+exit
+int range fa0/4-24
+switchport mode access
+spanning-tree bpduguard enable
+sh
+exit
+int range Gig0/1, Gig0/2
+switchport trunk native vlan 150
+switchport trunk allowed vlan 100,101,102
+exit
+int vlan 100
+ip address 10.1.0.193 255.255.255.0
+no sh
+exit
+ip default-gateway 10.1.0.1
+
+
+
+
+# srv-tank-01
+ip address 
+
+| Pool Name              | Default Gateway | DNS server | Start IP Address | Subnet Mask | Maximum Users | TFTP server |
+| :---------------- | :------: | :------: | :------: | :------: | :------: | :------: |
+| TANK_RG | 10.1.0.1 | - | 10.1.0.65 | 255.255.255.0 | 63 | - |
+| TANK_VEZ | 10.1.1.1 | - | 10.1.1.65 | 255.255.255.0 | 63 | - |
+| TANK_ALK | 10.1.3.1 | - | 10.1.3.65 | 255.255.255.0 | 63 | - |
+
+
+
+
+
