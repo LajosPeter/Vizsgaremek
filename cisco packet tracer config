@@ -566,10 +566,6 @@ switchport trunk native vlan 240
 switchport trunk allowed vlan 200,201,202,203,204,205
 exit
 
-```
-default-gateway 10.2.0.1
-```
-
 
 # sw-gim-02
 en 
