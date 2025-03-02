@@ -26,7 +26,20 @@ interface Gig0/0
 ipv6 enable
 no sh
 exit
+router ospf 6
+router-id 6.6.6.1
+passive-interface Gig0/0
+network 195.228.6.0	0.0.0.3 area 6
+network 195.228.6.4	0.0.0.3 area 6
 
+network ```IPV6``` area 6
+
+
+ip ospf authentication message-digest
+exit
+int range se0/0/0-1
+ip ospf message-digest-key 1 md5 lOLpFsanK7
+exit
 
 
 
@@ -61,6 +74,20 @@ ip address 195.228.3.1 255.255.255.0
 ip address 195.228.3.1 255.255.255.224
 no sh
 exit
+router ospf 6
+router-id 6.6.6.2
+passive-interface Gig0/0
+network 195.228.6.0	0.0.0.3 area 6
+network 195.228.6.8	0.0.0.3 area 6
+network 195.228.3.0	0.0.0.31  area 6
+ip ospf authentication message-digest
+exit
+int range se0/0/0-1
+ip ospf message-digest-key 1 md5 lOLpFsanK7
+exit
+
+
+
 
 
 IP default gateway a switcheknek
@@ -166,6 +193,17 @@ exit
 interface GigabitEthernet0/0
 ip address 195.228.2.1 255.255.255.224
 no sh
+exit
+router ospf 6
+router-id 6.6.6.3
+passive-interface Gig0/0
+network 195.228.6.4	0.0.0.3 area 6
+network 195.228.6.12 0.0.0.3 area 6
+network 195.228.2.0	0.0.0.31 area 6
+ip ospf authentication message-digest
+exit
+int range se0/0/0-1
+ip ospf message-digest-key 1 md5 lOLpFsanK7
 exit
 
 
@@ -771,6 +809,23 @@ int Gig 0/1
 ip address 195.228.1.1 255.255.255.224
 no sh 
 exit
+router ospf 6
+router-id 6.6.6.4
+passive-interface Gig0/0
+passive-interface Gig0/1
+network 195.228.6.8	0.0.0.3 area 6
+network 195.228.6.12 0.0.0.3 area 6
+network 195.228.5.0	0.0.0.31 area 6
+network 195.228.1.0	0.0.0.31 area 6
+ip ospf authentication message-digest
+exit
+int range se0/0/0-1
+ip ospf message-digest-key 1 md5 lOLpFsanK7
+exit
+
+
+
+
 
 SZERVER TELEPHELY MÉG SEMMI
 
