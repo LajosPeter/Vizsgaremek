@@ -635,9 +635,6 @@ switchport trunk allowed vlan 200,201,202,203,204,205
 exit
 
 
-```
-default-gateway 10.2.0.1
-```
 
 
 # sw-gim-03
@@ -704,7 +701,6 @@ int vlan 200
 ip address 10.2.0.194 255.255.255.0
 no sh
 exit
-default-gateway 10.2.0.1
 int range gig0/1, fa0/23-24, fa0/21-22
 switchport trunk native vlan 240
 switchport trunk allowed vlan 200,201,202,203,204,205,240
