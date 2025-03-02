@@ -7,7 +7,7 @@ Ha mindegyik switch ismeri a tegelést akkor nem kel natív vlan de ha régebbi 
 
 
 
-EZEN A ROUTEREN NINCS IPV6 IPV6 config kell
+EZEN A ROUTEREN IPV6 config kell
 
 # rtr-telekom-core-01
 
@@ -32,6 +32,22 @@ interface Gig0/0
 ipv6 enable
 no shutdown
 exit
+
+router ospf 6
+router-id 6.6.6.1
+passive-interface Gig0/0
+network 195.228.6.0	0.0.0.3 area 6
+network 195.228.6.4	0.0.0.3 area 6
+
+network ```IPV6``` area 6
+
+
+ip ospf authentication message-digest
+exit
+int range se0/0/0-1
+ip ospf message-digest-key 1 md5 lOLpFsanK7
+exit
+
 ```
 ### Show parancsok
 
@@ -89,6 +105,20 @@ ip address 195.228.3.1 255.255.255.0
 ip address 195.228.3.1 255.255.255.224
 no sh
 exit
+
+router ospf 6
+router-id 6.6.6.2
+passive-interface Gig0/0
+network 195.228.6.0	0.0.0.3 area 6
+network 195.228.6.8	0.0.0.3 area 6
+network 195.228.3.0	0.0.0.31  area 6
+ip ospf authentication message-digest
+exit
+int range se0/0/0-1
+ip ospf message-digest-key 1 md5 lOLpFsanK7
+exit
+
+
 ```
 
 ### Show parancsok
@@ -247,7 +277,6 @@ exit
 
 int vlan 330 
 ip address 10.3.30.192 255.255.255.0
-default-gateway 10.3.30.1
 no sh 
 exit
 
@@ -317,6 +346,20 @@ interface GigabitEthernet0/0
 ip address 195.228.2.1 255.255.255.224
 no sh
 exit
+
+router ospf 6
+router-id 6.6.6.3
+passive-interface Gig0/0
+network 195.228.6.4	0.0.0.3 area 6
+network 195.228.6.12 0.0.0.3 area 6
+network 195.228.2.0	0.0.0.31 area 6
+ip ospf authentication message-digest
+exit
+
+int range se0/0/0-1
+ip ospf message-digest-key 1 md5 lOLpFsanK7
+exit
+
 ```
 ### Show parancsok
 
@@ -363,6 +406,22 @@ int g0/2
 ip address 10.2.255.5 255.255.255.252
 no sh
 exit
+
+ip route 0.0.0.0 0.0.0.0 195.228.2.1
+router ospf 2
+router-id 2.2.2.1
+passive-interface Gig0/0
+default-information originate
+network 195.228.2.0 0.0.0.31 area 2
+network 10.2.255.0 0.0.0.3 area 2
+network 10.2.255.4 0.0.0.3 area 2
+ip ospf authentication message-digest
+exit
+int range g0/1-2
+ip ospf message-digest-key 1 md5 eiaA8Qsp1i
+exit
+
+
 ```
 
 ### Show parancsok
@@ -399,11 +458,7 @@ int gig0/1.200
 encapsulation dot1Q 200
 description %GIM_RG%
 ip address 10.2.0.2 255.255.255.0
-
-
-ip helper-address FIXME
-
-
+ip helper-address 10.2.20.1
 standby version 2
 standby 200 ip 10.2.0.1 
 standby 200 priority 150
@@ -413,11 +468,7 @@ int gig0/0/1.201
 encapsulation dot1Q 201
 description %GIM_VEZ%
 ip address 10.2.1.2 255.255.255.0
-
-
-ip helper-address FIXME
-
-
+ip helper-address 10.2.20.1
 standby version 2
 standby 201 ip 10.2.1.1 
 standby 201 priority 150
@@ -427,11 +478,7 @@ int gig0/0/1.203
 encapsulation dot1Q 203
 description %GIM_TANAR%
 ip address 10.2.3.2 255.255.255.0
-
-
-ip helper-address FIXME
-
-
+ip helper-address 10.2.20.1
 standby version 2
 standby 203 ip 10.2.3.1 
 standby 203 priority 150
@@ -441,11 +488,7 @@ int gig0/0/1.204
 encapsulation dot1Q 204
 description %GIM_PORTA%
 ip address 10.2.4.2 255.255.255.0
-
-
-ip helper-address FIXME
-
-
+ip helper-address 10.2.20.1
 standby version 2
 standby 204 ip 10.2.4.1 
 standby 204 priority 150
@@ -455,18 +498,12 @@ int gig0/0/1.205
 encapsulation dot1Q 205
 description %GIM_GO%
 ip address 10.2.5.2 255.255.255.0
-
-
-ip helper-address FIXME
-
-
+ip helper-address 10.2.20.1
 standby version 2
 standby 205 ip 10.2.5.1 
 standby 205 priority 150
 standby 205 preempt
 exit
-
-
 int gig0/0/1.240
 encapsulation dot1Q 240 nativ
 description %GIM_NAT%
@@ -476,12 +513,7 @@ standby 240 ip 10.2.40.1
 standby 240 priority 150
 standby 240 preempt
 exit
-```
 
-
-Ez nem jó mert nem tud subinterfacet
-
-```
 int gig0/3/0.220
 encapsulation dot1Q 220
 description %GIM_SERVER%
@@ -491,10 +523,56 @@ standby 220 ip 10.2.20.1
 standby 220 priority 150
 standby 220 preempt
 exit
+int gig0/3/0.221
+encapsulation dot1Q 221
+description %GIM_SERVER%
+ip address 10.2.21.2 255.255.255.0
+standby version 2
+standby 221 ip 10.2.21.1 
+standby 221 priority 150
+standby 221 preempt
+exit
+int gig0/3/0.241
+encapsulation dot1Q 241 native
+description %GIM_SERVER_NAT%
+ip address 10.2.41.2 255.255.255.0
+standby version 2
+standby 241 ip 10.2.41.1 
+standby 241 priority 150
+standby 241 preempt
+exit
+
+router ospf 2
+router-id 2.2.2.2
+passive-interface Gig0/1, Gig0/3/0
+network 10.2.255.0 0.0.0.3 area 2
+network 10.2.255.8 0.0.0.3 area 2
+network 10.2.0.0 0.0.0.255 area 2
+network 10.2.1.0 0.0.0.255 area 2
+
+```
+network 10.2.2.0 0.0.0.255 area 2
+```
+
+network 10.2.3.0 0.0.0.255 area 2
+network 10.2.4.0 0.0.0.255 area 2
+network 10.2.5.0 0.0.0.255 area 2
+network 10.2.20.0 0.0.0.255 area 2
+network 10.2.21.0 0.0.0.255 area 2
+network 10.2.40.0 0.0.0.255 area 2
+network 10.2.41.0 0.0.0.255 area 2
+ip ospf authentication message-digest
+exit
+int range gig0/0, gig0/2
+ip ospf message-digest-key 1 md5 eiaA8Qsp1i
+exit
+
 ```
 
 
+
 # rtr-gim-03
+```
 en 
 conf t
 hostname rtr-gim-03
@@ -512,11 +590,7 @@ int gig0/0/1.200
 encapsulation dot1Q 200
 description %GIM_RG%
 ip address 10.2.0.3 255.255.255.0
-
-
-ip helper-address FIXME
-
-
+ip helper-address 10.2.20.1
 standby version 2
 standby 200 ip 10.2.0.1 
 standby 200 priority 120
@@ -525,11 +599,7 @@ int gig0/0/1.201
 encapsulation dot1Q 201
 description %GIM_VEZ%
 ip address 10.2.1.3 255.255.255.0
-
-
 ip helper-address FIXME
-
-
 standby version 2
 standby 201 ip 10.2.1.1 
 standby 201 priority 120
@@ -538,11 +608,7 @@ int gig0/0/1.203
 encapsulation dot1Q 203
 description %GIM_TANAR%
 ip address 10.2.3.3 255.255.255.0
-
-
-ip helper-address FIXME
-
-
+ip helper-address 10.2.20.1
 standby version 2
 standby 203 ip 10.2.3.1 
 standby 203 priority 120
@@ -551,11 +617,7 @@ int gig0/0/1.204
 encapsulation dot1Q 204
 description %GIM_PORTA%
 ip address 10.2.4.3 255.255.255.0
-
-
-ip helper-address FIXME
-
-
+ip helper-address 10.2.20.1
 standby version 2
 standby 204 ip 10.2.4.1 
 standby 204 priority 120
@@ -564,12 +626,7 @@ int gig0/0/1.205
 encapsulation dot1Q 205
 description %GIM_GO%
 ip address 10.2.5.3 255.255.255.0
-
-
-ip helper-address FIXME
-
-
-
+ip helper-address 10.2.20.1
 standby version 2
 standby 205 ip 10.2.5.1 
 standby 205 priority 120
@@ -589,12 +646,52 @@ description %GIM_SERVER%
 ip address 10.2.20.2 255.255.255.0
 standby version 2
 standby 220 ip 10.2.20.1 
-standby 220 priority 150
-standby 220 preempt
+standby 220 priority 120
 exit
+int Gig0/3/0.221
+encapsulation dot1Q 221
+description %GIM_SERVER%
+ip address 10.2.21.2 255.255.255.0
+standby version 2
+standby 221 ip 10.2.21.1 
+standby 221 priority 120
+exit
+int Gig0/3/0.241
+encapsulation dot1Q 241 native
+description %GIM_SERVER_NAT%
+ip address 10.2.41.2 255.255.255.0
+standby version 2
+standby 241 ip 10.2.20.1 
+standby 241 priority 120
+exit
+router ospf 2
+router-id 2.2.2.3
+passive-interface Gig0/1, Gig0/3/0
+network 10.2.255.0 0.0.0.3 area 2
+network 10.2.255.8 0.0.0.3 area 2
+network 10.2.0.0 0.0.0.255 area 2
+network 10.2.1.0 0.0.0.255 area 2
 
+```
+network 10.2.2.0 0.0.0.255 area 2
+```
+
+network 10.2.3.0 0.0.0.255 area 2
+network 10.2.4.0 0.0.0.255 area 2
+network 10.2.5.0 0.0.0.255 area 2
+network 10.2.20.0 0.0.0.255 area 2
+network 10.2.21.0 0.0.0.255 area 2
+network 10.2.40.0 0.0.0.255 area 2
+network 10.2.41.0 0.0.0.255 area 2
+ip ospf authentication message-digest
+exit
+int range gig0/0, gig0/2
+ip ospf message-digest-key 1 md5 eiaA8Qsp1i
+exit
+```
 
 # sw-gim-01
+```
 en 
 conf t
 hostname sw-gim-01
@@ -664,20 +761,12 @@ int range fa0/20-21, g0/1, fa0/18-19
 switchport trunk native vlan 240
 switchport trunk allowed vlan 200,201,202,203,204,205
 exit
-
-```
-default-gateway 10.2.0.1
 ```
 
-```
-vlan 220
-name GIM_SERVER
-exit
-spanning-tree vlan 220 root primary 
-```
 
 
 # sw-gim-02
+```
 en 
 conf t
 hostname sw-gim-02
@@ -743,14 +832,13 @@ int range fa0/18-19, fa0/23-24
 switchport trunk native vlan 240
 switchport trunk allowed vlan 200,201,202,203,204,205
 exit
+```
 
 
-```
-default-gateway 10.2.0.1
-```
 
 
 # sw-gim-03
+```
 en 
 conf t
 hostname sw-gim-03
@@ -814,7 +902,6 @@ int vlan 200
 ip address 10.2.0.194 255.255.255.0
 no sh
 exit
-default-gateway 10.2.0.1
 int range gig0/1, fa0/23-24, fa0/21-22
 switchport trunk native vlan 240
 switchport trunk allowed vlan 200,201,202,203,204,205,240
@@ -824,19 +911,7 @@ switchport mode access
 spanning-tree bpduguard enable
 sh
 
-
 ```
-int Gig 0/2
-no sh
-switchport mode trunk
-spanning-tree bpduguard enable
-switchport port-security
-switchport port-security mac-address sticky
-switchport port-security violation restrict
-switchport port-security maximum 1
-exit
-```
-
 
 
 
@@ -849,31 +924,31 @@ hostname ssw-gim-01
 int fa0/0
 ip address 10.2.2.1
 
-Szerver visszarakása FIXME 
 
-```
 # srv-gim-01
+```
 ip cím: 10.2.20.16
 mask: 255.255.255.0
 default gateway: 10.2.20.1
+```
 
 DHCP
 
 | Pool Name              | Default Gateway | DNS server | Start IP Address | Subnet Mask | Maximum Users | TFTP server |
 | :---------------- | :------: | :------: | :------: | :------: | :------: | :------: |
-| GIM_RG | 10.2.0.1 | 10.2.20.16 | 10.2.0.65 | 255.255.255.0 | 63 | 10.2.20.16 |
-| GIM_VEZ | 10.2.1.1 | 10.2.20.16 | 10.2.1.65 | 255.255.255.0 | 63 | 10.2.20.16 |
-| GIM_TANAR | 10.2.3.1 | 10.2.20.16 | 10.2.3.65 | 255.255.255.0 | 63 | 10.2.20.16 |
-| GIM_PORTA | 10.2.4.1 | 10.2.20.16 | 10.2.4.65 | 255.255.255.0 | 63 | 10.2.20.16 |
-| GIM_GO | 10.2.5.1 | 10.2.20.16 | 10.2.5.65 | 255.255.255.0 | 63 | 10.2.20.16 |
+| GIM_RG | 10.2.0.1 | 10.2.20.16 | 10.2.0.64 | 255.255.255.0 | 64 | 10.2.20.16 |
+| GIM_VEZ | 10.2.1.1 | 10.2.20.16 | 10.2.1.64 | 255.255.255.0 | 64 | 10.2.20.16 |
+| GIM_TANAR | 10.2.3.1 | 10.2.20.16 | 10.2.3.64 | 255.255.255.0 | 64 | 10.2.20.16 |
+| GIM_PORTA | 10.2.4.1 | 10.2.20.16 | 10.2.4.64 | 255.255.255.0 | 64 | 10.2.20.16 |
+| GIM_GO | 10.2.5.1 | 10.2.20.16 | 10.2.5.64 | 255.255.255.0 | 64 | 10.2.20.16 |
 
 TFTP, DNS
 
-```
 
-IP default gateway a switcheknek
+
 
 # rtr-telekom-core-04
+```
 en 
 conf t
 hostname rtr-telekom-core-04
@@ -881,18 +956,39 @@ interface Se0/0/1
 ip address 195.228.6.10 255.255.255.252
 no shutdown
 exit
+
 interface Se0/0/0
 ip address 195.228.6.14 255.255.255.252
 no shutdown
 exit
+
 interface Gig0/0
 no sh
 ip address 195.228.5.1 255.255.255.224
 ex
+
 int Gig 0/1
 ip address 195.228.1.1 255.255.255.224
 no sh 
 exit
+
+router ospf 6
+router-id 6.6.6.4
+passive-interface Gig0/0
+passive-interface Gig0/1
+network 195.228.6.8	0.0.0.3 area 6
+network 195.228.6.12 0.0.0.3 area 6
+network 195.228.5.0	0.0.0.31 area 6
+network 195.228.1.0	0.0.0.31 area 6
+ip ospf authentication message-digest
+exit
+
+int range se0/0/0-1
+ip ospf message-digest-key 1 md5 lOLpFsanK7
+exit
+```
+
+
 
 SZERVER TELEPHELY MÉG SEMMI
 
@@ -932,56 +1028,73 @@ Szolgáltatások
 
 
 # rtr-tank-01
+```
 en 
 conf t
 hostname rtr-tank-01
+
 int g0/1
 ip address 192.228.1.16 255.255.255.224
 no sh
 exit
+
 int Gig0/2
 ip address 10.1.255.1 255.255.255.252
 no sh
 exit
 
+ip route 0.0.0.0 0.0.0.0 195.228.1.1
+
+router ospf 1
+router-id 1.1.1.1
+passive-interface Gig0/1
+default-information originate
+network 195.228.1.0 0.0.0.31 area 1
+network 10.1.255.0 0.0.0.3 area 1
+ip ospf authentication message-digest
+exit
+
+int g0/2
+ip ospf message-digest-key 1 md5 iOIasQ18nh
+```
+
+
 # rtr-tank-02
+```
 en 
 conf t
 hostname rtr-tank-02
+
 int Gig0/2
 ip address 10.1.255.2 255.255.255.252
 no sh
 exit
+
 int Gig0/3/0
 ip address 10.1.255.5 255.255.255.252
 no sh
 exit
+
 int Gig 0/0
 no sh
 exit
+
 int Gig 0/0.100
 description %TANK_RG%
 encapsulation dot1q 100
 ip address 10.1.0.2 255.255.255.0
-
-
-ip helper-address FIXME
-
-
+ip helper-address 10.1.20.16
 standby version 2
 standby 100 ip 10.1.0.1 
 standby 100 priority 150
 standby 100 preempt
 exit
+
 int Gig 0/0.101
 description %TANK_VEZ%
 encapsulation dot1q 101
 ip address 10.1.1.2 255.255.255.0
-
-
-ip helper-address FIXME
-
-
+ip helper-address 10.1.20.16
 standby version 2
 standby 101 ip 10.1.1.1 
 standby 101 priority 150
@@ -993,16 +1106,14 @@ int Gig 0/1.103
 description %TANK_ALK%
 encapsulation dot1q 103
 ip address 10.1.3.2 255.255.255.0
-
-
-ip helper-address FIXME
-
-
+ip helper-address 10.1.20.16
 standby version 2
 standby 103 ip 10.1.3.1 
 standby 103 priority 150
 standby 103 preempt
 exit
+
+
 int Gig 0/0.120
 description %TANK_RG%
 encapsulation dot1q 120
@@ -1012,6 +1123,7 @@ standby 120 ip 10.1.20.1
 standby 120 priority 150
 standby 120 preempt
 exit
+
 int Gig 0/1.130
 description %TANK_SWMAN%
 encapsulation dot1q 130
@@ -1021,6 +1133,7 @@ standby 130 ip 10.1.30.1
 standby 130 priority 150
 standby 130 preempt
 exit
+
 int Gig 0/1.140
 description %TANK_NATALK%
 encapsulation dot1q 140 native
@@ -1030,6 +1143,7 @@ standby 140 ip 10.1.40.1
 standby 140 priority 150
 standby 140 preempt
 exit
+
 int Gig 0/0.150
 description %TANK_NATVEZRG%
 encapsulation dot1q 150 native
@@ -1040,44 +1154,67 @@ standby 150 priority 150
 standby 150 preempt
 exit
 
+router ospf 1
+router-id 1.1.1.2
+passive-interface Gig0/1
+passive-interface Gig0/0
+network 10.1.255.0 0.0.0.3 area 1
+network 10.1.255.4 0.0.0.3 area 1
+network 10.1.0.0 0.0.0.255 area 1
+network 10.1.1.0 0.0.0.255 area 1
+network 10.1.3.0 0.0.0.255 area 1
+network 10.1.20.0 0.0.0.255 area 1
+network 10.1.30.0 0.0.0.255 area 1
+network 10.1.40.0 0.0.0.255 area 1
+network 10.1.50.0 0.0.0.255 area 1
 
 
+```
+network 10.1.2.0 0.0.0.255 area 1
+network 10.1.4.0 0.0.0.255 area 1
+```
+
+ip ospf authentication message-digest
+exit
+
+int range g0/2, Gig0/3/0
+ip ospf message-digest-key 1 md5 iOIasQ18nh
+exit
+
+```
 
 
 # rtr-tank-03
+```
 en 
 conf t
 hostname rtr-tank-03
+
 int Gig0/3/0
 ip address 10.1.255.6 255.255.255.252
 no sh
 exit
+
 int Gig 0/0.100
 description %TANK_RG%
 encapsulation dot1q 100
 ip address 10.1.0.3 255.255.255.0
-
-
-ip helper-address FIXME
-
-
+ip helper-address 10.1.20.16
 standby version 2
 standby 100 ip 10.1.0.1 
 standby 100 priority 120
 exit
+
 int Gig 0/0.101
 description %TANK_VEZ%
 encapsulation dot1q 101
 ip address 10.1.1.3 255.255.255.0
-
-
-ip helper-address FIXME
-
-
+ip helper-address 10.1.20.16
 standby version 2
 standby 101 ip 10.1.1.1 
 standby 101 priority 120
 exit
+
 int Gig 0/0.120
 description %TANK_SERVER%
 encapsulation dot1q 120
@@ -1086,6 +1223,7 @@ standby version 2
 standby 120 ip 10.1.20.1 
 standby 120 priority 120
 exit
+
 int Gig 0/0.150
 description %TANK_NATVEZRG%
 encapsulation dot1q 150 native
@@ -1095,17 +1233,11 @@ standby 150 ip 10.1.50.1
 standby 150 priority 120
 exit
 
-
-
 int Gig 0/1.103
 description %TANK_ALK%
 encapsulation dot1q 103
 ip address 10.1.3.3 255.255.255.0
-
-
-ip helper-address FIXME
-
-
+ip helper-address 10.1.20.16
 standby version 2
 standby 103 ip 10.1.3.1 
 standby 103 priority 120
@@ -1119,6 +1251,7 @@ standby version 2
 standby 130 ip 10.1.30.1 
 standby 130 priority 120
 exit
+
 int Gig 0/1.140
 description %TANK_NATALK%
 encapsulation dot1q 140 native
@@ -1127,6 +1260,34 @@ standby version 2
 standby 140 ip 10.1.40.1 
 standby 140 priority 120
 exit
+
+router ospf 1
+router-id 1.1.1.3
+passive-interface Gig0/1
+passive-interface Gig0/0
+network 10.1.255.0 0.0.0.3 area 1
+network 10.1.255.4 0.0.0.3 area 1
+network 10.1.0.0 0.0.0.255 area 1
+network 10.1.1.0 0.0.0.255 area 1
+network 10.1.3.0 0.0.0.255 area 1
+network 10.1.20.0 0.0.0.255 area 1
+network 10.1.30.0 0.0.0.255 area 1
+network 10.1.40.0 0.0.0.255 area 1
+network 10.1.50.0 0.0.0.255 area 1
+
+
+```
+network 10.1.2.0 0.0.0.255 area 1
+network 10.1.4.0 0.0.0.255 area 1
+```
+
+ip ospf authentication message-digest
+exit
+
+int range g0/2, Gig0/3/0
+ip ospf message-digest-key 1 md5 iOIasQ18nh
+exit
+```
 
 
 # ssw-tank-01
@@ -1137,6 +1298,7 @@ hostname ssw-tank-01
 
 
 # sw-tank-01
+```
 en 
 conf t
 hostname sw-tank-01
@@ -1188,16 +1350,16 @@ int vlan 130
 ip address 10.1.30.192 255.255.255.0
 no sh
 exit
-default-gateway 10.1.30.1
 int range fa0/2-4
 switchport trunk native vlan 140
 switchport trunk allowed vlan 103,104,130
 exit
-
+```
 
 
 
 # sw-tank-02
+```
 en 
 conf t
 hostname sw-tank-02
@@ -1234,15 +1396,15 @@ int vlan 130
 ip address 10.1.30.193 255.255.255.0
 no sh
 exit
-default-gateway 10.1.30.1
 int range fa 0/1-3
 switchport trunk native vlan 140
 switchport trunk allowed vlan 103,104,130
 exit
-
+```
 
 
 # sw-tank-03
+```
 en 
 conf t
 hostname sw-tank-03
@@ -1282,14 +1444,14 @@ int vlan 130
 ip address 10.1.30.194 255.255.255.0
 no sh
 exit
-default-gateway 10.1.30.1
 int range fa0/1-3, Gig0/1
 switchport trunk native vlan 140
 switchport trunk allowed vlan 103,104,130
-
+```
 
 
 # sw-tank-04
+```
 en 
 conf t
 hostname sw-tank-04
@@ -1331,15 +1493,15 @@ int vlan 130
 ip address 10.1.30.195 255.255.255.0
 no sh
 exit
-default-gateway 10.1.30.1
 int range fa 0/1-3, int Gig 0/1-2
 switchport trunk native vlan 140
 switchport trunk allowed vlan 103,104,130
 exit
-
+```
 
 
 # sw-tank-05
+```
 en 
 conf t
 hostname sw-tank-05
@@ -1393,13 +1555,14 @@ int vlan 100
 ip address 10.1.0.192 255.255.255.0
 no sh
 exit
-ip default-gateway 10.1.0.1
 int range fa0/1, Gig0/1-2
 switchport trunk native vlan 150
 switchport trunk allowed vlan 100,101,102,120
 exit
+```
 
 # sw-tank-06
+```
 en 
 conf t
 hostname sw-tank-06
@@ -1444,19 +1607,21 @@ int vlan 100
 ip address 10.1.0.193 255.255.255.0
 no sh
 exit
-ip default-gateway 10.1.0.1
-
-
+```
 
 
 # srv-tank-01
-ip address 
+```
+ip address 10.1.20.16
+mask: 255.255.255.0
+default gateway: 10.1.20.1
+```
 
 | Pool Name              | Default Gateway | DNS server | Start IP Address | Subnet Mask | Maximum Users | TFTP server |
 | :---------------- | :------: | :------: | :------: | :------: | :------: | :------: |
-| TANK_RG | 10.1.0.1 | - | 10.1.0.65 | 255.255.255.0 | 63 | - |
-| TANK_VEZ | 10.1.1.1 | - | 10.1.1.65 | 255.255.255.0 | 63 | - |
-| TANK_ALK | 10.1.3.1 | - | 10.1.3.65 | 255.255.255.0 | 63 | - |
+| TANK_RG | 10.1.0.1 | 10.1.20.16 | 10.1.0.64 | 255.255.255.0 | 64 | 10.1.20.16 |
+| TANK_VEZ | 10.1.1.1 | 10.1.20.16| 10.1.1.64 | 255.255.255.0 | 64 | 10.1.20.16 |
+| TANK_ALK | 10.1.3.1 | 10.1.20.16 | 10.1.3.64 | 255.255.255.0 | 64 | 10.1.20.16 |
 
 
 
