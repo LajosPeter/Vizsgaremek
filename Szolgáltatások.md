@@ -1,5 +1,5 @@
 https://www.lsoft.hu/wp-content/uploads/2023/10/IBF-1-0043-IT-szolgaltataskatalogus-publikus.pdf
-innen fel lehet e használni a címeket?
+innen fel lehet e használni a címeket igen lehet bgy
 
 
 # Szolgáltatások
