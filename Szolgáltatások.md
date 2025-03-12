@@ -33,7 +33,7 @@ Katalógus adatok
 Üzleti szolgáltatás katalógus
 ## E-mail 
 
-A megrendelő cég egy e-mail szolgáltatást kért tőlünk, amely megbízható, biztonságos, és támogatja a vállalati kommunikációt. Ezt mi egy központi e-mail szerverrel tudtuk megoldani ami felhő alapú tárolásra alkalmas így nem kell az alkalmazottaknak a helyi gépen tárhelyet biztosítani.
+A megrendelő cég egy e-mail szolgáltatást kért tőlünk, amely megbízható, biztonságos, és támogatja a vállalati kommunikációt. Ezt mi egy központi e-mail szerverrel tudtuk megoldani ami felhő alapú tárolásra alkalmas így nem kell az alkalmazottaknak a helyi gépen tárhelyet biztosítani. Minden alkalmazottnak biztosítunk egy céges e-mail címet illetve egyéb e-mail címeket is igény esetén.
 
 ### Szolgáltatás részletes leírása:
 
@@ -110,6 +110,8 @@ Az igényfelmérés alapján a vállalat egy biztonságos és megbízható fájl
 
 ## Adatbázisszolgáltatás (mariandb)
 
+Az igényfelmérés alapján a megbízó cég kért tőlünk a pénzügyi illetve egyéb információk átlátható tárolására alkalmas szolgáltatást. Cégünk egy adatbázis szolgáltatást nyújt aminek a segítségével a megbízó cég képes jogosultsághoz kötve hozzáférni az adatokhoz és átláthatóan egy adatbázisban tárolni az adatokat.
+
 ### Szolgáltatás részletes leírása:
 - A szolgáltatás célja egy megbízható, nagy teljesítményű MariaDB adatbázis-szerver biztosítása, amely támogatja az alkalmazásokat, szolgáltatásokat ésadatokat
 
@@ -136,6 +138,8 @@ Az igényfelmérés alapján a vállalat egy biztonságos és megbízható fájl
 
 ## Backupmentés
 
+A megbízó cég megbízott minket azzal hogy esetleges emberi vagy technikai hibák esetén ne vesszen el nekik semmi adat így cégünk konfigurált egy olyan szolgáltatást ami meghatározott időnként készít egy biztonsági mentést a fontos illetve a cég által meghatározott adatokról.
+
 ### Szolgáltatás részletes leírása:
 - A szolgáltatás célja az üzletileg kritikus adatok rendszeres mentése az előbb említett FTP szerverre, biztosítva az adatok visszaállíthatóságát egy esetleges adatvesztés esetén
 
@@ -156,6 +160,8 @@ Az igényfelmérés alapján a vállalat egy biztonságos és megbízható fájl
  
 ## VPN tunnel
 
+A válalat megbízott minket egy olyan szolgáltatással ami leheővé teszi számukra hogy a külső szervereket illetve a telephelyeket összekötő útvonal biztonságos és titkos maradjon. Mi ezt egy úgynevezett IPSecVPN nevezetű szolgáltatással tudjuk megoldani ami számukra a lehető legmegfelelőbb megoldást nyújtja.
+
 ### Szolgáltatás részletes leírása:
 -A szolgáltatás célja biztonságos és titkosított távoli hozzáférés biztosítása a telephelyek hálózatai között illetve lehetővé teszi a felhasználók számára, hogy külső helyszínekről biztonságosan csatlakozzanak a belső rendszerekhez
 
@@ -175,6 +181,8 @@ Az igényfelmérés alapján a vállalat egy biztonságos és megbízható fájl
 - 99,9% (max. szolg. kiesés 8,76 óra/év) Egyszerre maximum 43,8 perc
 
 ## Webszerver
+
+A megbízó cég az igényfelmérés során megemlítette hogy saját weboldalt szeretne fentartani pár darab al oldallal együtt. Cégünk egy webszerver szolgáltatást nyújt hogy teljesítsük a megbízó cég kérését és egy fix ip-című webszervert hozunk létre számukra ami igényel egy úgynevezett DNS névfordítást ami lehetővé teszi hogy URL alapján megtalálják a cég honlapját bárhonnan.
 
 ### Szolgáltatás részletes leírása:
 - A szolgáltatás célja egy megbízható webszerver biztosítása, amely támogatja a belső weboldalakat.
