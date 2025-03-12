@@ -1,5 +1,5 @@
 https://www.lsoft.hu/wp-content/uploads/2023/10/IBF-1-0043-IT-szolgaltataskatalogus-publikus.pdf
-innen fel lehet e használni a címeket igen lehet bgy
+innen fel lehet e használni a címeket igen lehet 
 
 
 # Szolgáltatások
@@ -33,6 +33,7 @@ Katalógus adatok
 Üzleti szolgáltatás katalógus
 ## E-mail 
 
+A megrendelő cég egy e-mail szolgáltatást kért tőlünk, amely megbízható, biztonságos, és támogatja a vállalati kommunikációt. Ezt mi egy központi e-mail szerverrel tudtuk megoldani ami felhő alapú tárolásra alkalmas így nem kell az alkalmazottaknak a helyi gépen tárhelyet biztosítani.
 
 ### Szolgáltatás részletes leírása:
 
@@ -70,6 +71,8 @@ Katalógus adatok
     
 ## VoIP
 
+A megrendelő cég egy megbízható VoIP szolgáltatást igényeltek cégünktől, amely lehetővé teszi a költséghatékony és rugalmas hangkommunikációt. Cégünk egy stabil, kiválló minőségű kommunikációt biztosít és így zökkenőmentesen folyhatnak az üzleti hívások.
+
 ### VoIP rendszer üzemeltetés:
 
 #### Hálózati konfiguráció: 
@@ -85,6 +88,8 @@ Katalógus adatok
 
 
 ## Fájl szerverek (ftp/tftp)
+
+Az igényfelmérés alapján a vállalat egy biztonságos és megbízható fájlok tárolására alkalmas szolgáltatást igényel, amely lehetővé teszi a nagyobb fájlok hatékony átvitelét és tárolását. Ebben cégünk egy FTP szervert konfigurálna ami lehetővé teszi a követelményeknek a teljesítését.
 
 ### Szolgáltatás részletes leírása:
 - A szolgáltatás célja a fájlmegosztás és konfigurációkezelés biztosítása FTP és TFTP szervereken keresztül. Ezek a szerverek lehetőséget nyújtanak a fájlok biztonságos tárolására és gyors elérésére a belső hálózaton keresztül
