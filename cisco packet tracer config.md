@@ -7,7 +7,7 @@ Ha mindegyik switch ismeri a tegelést akkor nem kel natív vlan de ha régebbi 
 
 
 
-EZEN A ROUTEREN IPV6 config kell
+EZEN A ROUTEREN IPV6 config kell és SNAT is az IPv6-ra
 
 # rtr-telekom-core-01
 
@@ -183,7 +183,22 @@ description %KOL_NAT%
 encapsulation dot1Q 340 nativ
 ip address 10.3.40.1 255.255.255.0
 exit
+
+
+int gigabitethernet 0/0
+ip nat outside
+exit
+
+
+int gigabitethernet 0/1
+ip nat inside
+exit
+
+
 ```
+  ^
+  I
+FIXME nem találtam ki milyen nat kell
 ### Show parancsok
 
 ```
@@ -417,9 +432,21 @@ network 10.2.255.0 0.0.0.3 area 2
 network 10.2.255.4 0.0.0.3 area 2
 ip ospf authentication message-digest
 exit
+
 int range g0/1-2
 ip ospf message-digest-key 1 md5 eiaA8Qsp1i
 exit
+
+int range g0/1-2
+ip nat inside
+exit
+
+int g0/0
+ip nat outside
+exit
+
+ip nat inside source static 10.2.255.2 195.228.2.2
+ip nat inside source static 10.2.255.6 195.228.2.3
 
 
 ```
@@ -1094,6 +1121,18 @@ exit
 
 int g0/2
 ip ospf message-digest-key 1 md5 iOIasQ18nh
+exit
+
+int g0/1 
+ip nat outside
+exit
+
+int g0/2
+ip nat inside
+exit
+
+ip nat insie source static 10.1.255.2 195.228.1.1
+
 ```
 
 
