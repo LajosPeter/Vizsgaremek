@@ -1,3 +1,6 @@
+ki kell rakni a telefon központot (nem lehet külön valaminek át kell rajta mennie)
+Le kell tesztelni a szervereket
+Nem kell szórni ospf-fel a voice hálózatokat
 po1 re cseréljem le a etherchannelt
 ahol ap vagy telefon van ne legyen bpdguard hanem guard root legyen minden portján ki kell adni
 spanning-tree portfast minden porton ahol nincs switch
