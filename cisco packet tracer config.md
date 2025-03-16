@@ -197,6 +197,11 @@ int gigabitethernet 0/1
 ip nat inside
 exit
 
+access-list 3 permit 10.3.0.0 0.0.0.255
+access-list 3 permit 10.3.1.0 0.0.0.255
+access-list 3 permit 10.3.2.0 0.0.0.255
+ip nat pool PNATPOOLKOL 195.228.3.4 195.228.3.8 netmask 255.255.255.224
+ip nat inside source list 3 pool PNATPOOLKOL overload
 
 ```
   ^
@@ -448,8 +453,15 @@ int g0/0
 ip nat outside
 exit
 
-ip nat inside source static 10.2.255.2 195.228.2.2
-ip nat inside source static 10.2.255.6 195.228.2.3
+access-list 2 permit 10.2.0.0 0.0.0.255
+access-list 2 permit 10.2.1.0 0.0.0.255
+access-list 2 permit 10.2.3.0 0.0.0.255
+access-list 2 permit 10.2.4.0 0.0.0.255
+access-list 2 permit 10.2.5.0 0.0.0.255
+access-list 2 permit 10.2.20.0 0.0.0.255
+access-list 2 permit 10.2.21.0 0.0.0.255
+ip nat pool PNATPOOLGIM 195.228.3.4 195.228.3.8 netmask 255.255.255.224
+ip nat inside source list 2 pool PNATPOOLGIM overload
 
 
 ```
@@ -1134,7 +1146,13 @@ int g0/2
 ip nat inside
 exit
 
-ip nat insie source static 10.1.255.2 195.228.1.1
+access-list 1 permit 10.1.0.0 0.0.0.255
+access-list 1 permit 10.1.1.0 0.0.0.255
+access-list 1 permit 10.1.3.0 0.0.0.255
+access-list 1 permit 10.1.20.0 0.0.0.255
+access-list 1 permit 10.1.30.0 0.0.0.255
+ip nat pool PNATPOOLTANK 195.228.1.4 195.228.1.8 netmask 255.255.255.224
+ip nat inside source list 1 pool PNATPOOLTANK overload
 
 ```
 
