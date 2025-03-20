@@ -181,12 +181,6 @@ encapsulation dot1Q 330
 ip address 10.3.30.1 255.255.255.0
 exit
 
-int gigabitEthernet 0/1.340
-description %KOL_NAT%
-encapsulation dot1Q 340 nativ
-ip address 10.3.40.1 255.255.255.0
-exit
-
 
 int gigabitethernet 0/0
 ip nat outside
@@ -199,7 +193,7 @@ exit
 
 access-list 3 permit 10.3.0.0 0.0.0.255
 access-list 3 permit 10.3.1.0 0.0.0.255
-access-list 3 permit 10.3.2.0 0.0.0.255
+access-list 3 permit 10.3.30.0 0.0.0.255
 ip nat pool PNATPOOLKOL 195.228.3.4 195.228.3.8 netmask 255.255.255.224
 ip nat inside source list 3 pool PNATPOOLKOL overload
 
