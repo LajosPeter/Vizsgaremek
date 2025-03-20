@@ -1,12 +1,12 @@
-ki kell rakni a telefon központot (nem lehet külön valaminek át kell rajta mennie)
+ki kell rakni a telefon központot (nem lehet külön valaminek át kell rajta mennie) jÓ AHOL VAN 
 Le kell tesztelni a szervereket
-Nem kell szórni ospf-fel a voice hálózatokat
-po1 re cseréljem le a etherchannelt
-ahol ap vagy telefon van ne legyen bpdguard hanem guard root legyen minden portján ki kell adni
-spanning-tree portfast minden porton ahol nincs switch
+Nem kell szórni ospf-fel a voice hálózatokat DONE
+po1 re cseréljem le a etherchannelt DONE
+ahol ap vagy telefon van ne legyen bpdguard hanem guard root legyen minden portján ki kell adni DONE
+spanning-tree portfast minden porton ahol nincs switch 
 spanning-tree portfast default 
-Nem kell nativ vlan de biztonság miatt csinálok minden trunk porton engedélyezni kell
-Ha mindegyik switch ismeri a tegelést akkor nem kel natív vlan de ha régebbi eszközökezt 
+Nem kell nativ vlan de biztonság miatt csinálok minden trunk porton engedélyezni kell DONE
+Ha mindegyik switch ismeri a tegelést akkor nem kel natív vlan de ha régebbi eszközökezt DONE
 
 
 
