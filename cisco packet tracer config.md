@@ -1192,26 +1192,6 @@ standby 130 priority 150
 standby 130 preempt
 exit
 
-int Gig 0/1.140
-description %TANK_NATALK%
-encapsulation dot1q 140 native
-ip address 10.1.40.2 255.255.255.0
-standby version 2
-standby 140 ip 10.1.40.1 
-standby 140 priority 150
-standby 140 preempt
-exit
-
-int Gig 0/0.150
-description %TANK_NATVEZRG%
-encapsulation dot1q 150 native
-ip address 10.1.50.2 255.255.255.0
-standby version 2
-standby 150 ip 10.1.50.1 
-standby 150 priority 150
-standby 150 preempt
-exit
-
 router ospf 1
 router-id 1.1.1.2
 passive-interface Gig0/1
@@ -1223,15 +1203,6 @@ network 10.1.1.0 0.0.0.255 area 1
 network 10.1.3.0 0.0.0.255 area 1
 network 10.1.20.0 0.0.0.255 area 1
 network 10.1.30.0 0.0.0.255 area 1
-network 10.1.40.0 0.0.0.255 area 1
-network 10.1.50.0 0.0.0.255 area 1
-
-
-```
-network 10.1.2.0 0.0.0.255 area 1
-network 10.1.4.0 0.0.0.255 area 1
-```
-
 ip ospf authentication message-digest
 exit
 
@@ -1282,15 +1253,6 @@ standby 120 ip 10.1.20.1
 standby 120 priority 120
 exit
 
-int Gig 0/0.150
-description %TANK_NATVEZRG%
-encapsulation dot1q 150 native
-ip address 10.1.50.3 255.255.255.0
-standby version 2
-standby 150 ip 10.1.50.1 
-standby 150 priority 120
-exit
-
 int Gig 0/1.103
 description %TANK_ALK%
 encapsulation dot1q 103
@@ -1310,14 +1272,6 @@ standby 130 ip 10.1.30.1
 standby 130 priority 120
 exit
 
-int Gig 0/1.140
-description %TANK_NATALK%
-encapsulation dot1q 140 native
-ip address 10.1.40.3 255.255.255.0
-standby version 2
-standby 140 ip 10.1.40.1 
-standby 140 priority 120
-exit
 
 router ospf 1
 router-id 1.1.1.3
@@ -1330,15 +1284,6 @@ network 10.1.1.0 0.0.0.255 area 1
 network 10.1.3.0 0.0.0.255 area 1
 network 10.1.20.0 0.0.0.255 area 1
 network 10.1.30.0 0.0.0.255 area 1
-network 10.1.40.0 0.0.0.255 area 1
-network 10.1.50.0 0.0.0.255 area 1
-
-
-```
-network 10.1.2.0 0.0.0.255 area 1
-network 10.1.4.0 0.0.0.255 area 1
-```
-
 ip ospf authentication message-digest
 exit
 
