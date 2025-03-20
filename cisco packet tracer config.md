@@ -490,6 +490,8 @@ ex
 int g0/2
 ip address 10.2.255.9 255.255.255.252
 no sh
+exit
+
 int gig0/1.200
 encapsulation dot1Q 200
 description %GIM_RG%
@@ -500,6 +502,7 @@ standby 200 ip 10.2.0.1
 standby 200 priority 150
 standby 200 preempt
 exit
+
 int gig0/0/1.201
 encapsulation dot1Q 201
 description %GIM_VEZ%
@@ -510,6 +513,7 @@ standby 201 ip 10.2.1.1
 standby 201 priority 150
 standby 201 preempt
 exit
+
 int gig0/0/1.203
 encapsulation dot1Q 203
 description %GIM_TANAR%
@@ -520,6 +524,7 @@ standby 203 ip 10.2.3.1
 standby 203 priority 150
 standby 203 preempt
 exit
+
 int gig0/0/1.204
 encapsulation dot1Q 204
 description %GIM_PORTA%
@@ -530,6 +535,7 @@ standby 204 ip 10.2.4.1
 standby 204 priority 150
 standby 204 preempt
 exit
+
 int gig0/0/1.205
 encapsulation dot1Q 205
 description %GIM_GO%
@@ -539,15 +545,6 @@ standby version 2
 standby 205 ip 10.2.5.1 
 standby 205 priority 150
 standby 205 preempt
-exit
-int gig0/0/1.240
-encapsulation dot1Q 240 nativ
-description %GIM_NAT%
-ip address 10.2.40.2 255.255.255.0
-standby version 2
-standby 240 ip 10.2.40.1 
-standby 240 priority 150
-standby 240 preempt
 exit
 
 int gig0/3/0.220
@@ -559,24 +556,17 @@ standby 220 ip 10.2.20.1
 standby 220 priority 150
 standby 220 preempt
 exit
+
 int gig0/3/0.221
 encapsulation dot1Q 221
-description %GIM_SERVER%
+description %GIM_SERVER_MGMT%
 ip address 10.2.21.2 255.255.255.0
 standby version 2
 standby 221 ip 10.2.21.1 
 standby 221 priority 150
 standby 221 preempt
 exit
-int gig0/3/0.241
-encapsulation dot1Q 241 native
-description %GIM_SERVER_NAT%
-ip address 10.2.41.2 255.255.255.0
-standby version 2
-standby 241 ip 10.2.41.1 
-standby 241 priority 150
-standby 241 preempt
-exit
+
 
 router ospf 2
 router-id 2.2.2.2
@@ -585,18 +575,11 @@ network 10.2.255.0 0.0.0.3 area 2
 network 10.2.255.8 0.0.0.3 area 2
 network 10.2.0.0 0.0.0.255 area 2
 network 10.2.1.0 0.0.0.255 area 2
-
-```
-network 10.2.2.0 0.0.0.255 area 2
-```
-
 network 10.2.3.0 0.0.0.255 area 2
 network 10.2.4.0 0.0.0.255 area 2
 network 10.2.5.0 0.0.0.255 area 2
 network 10.2.20.0 0.0.0.255 area 2
 network 10.2.21.0 0.0.0.255 area 2
-network 10.2.40.0 0.0.0.255 area 2
-network 10.2.41.0 0.0.0.255 area 2
 ip ospf authentication message-digest
 exit
 int range gig0/0, gig0/2
@@ -631,6 +614,7 @@ standby version 2
 standby 200 ip 10.2.0.1 
 standby 200 priority 120
 exit
+
 int gig0/0/1.201
 encapsulation dot1Q 201
 description %GIM_VEZ%
@@ -640,6 +624,7 @@ standby version 2
 standby 201 ip 10.2.1.1 
 standby 201 priority 120
 exit
+
 int gig0/0/1.203
 encapsulation dot1Q 203
 description %GIM_TANAR%
@@ -649,6 +634,7 @@ standby version 2
 standby 203 ip 10.2.3.1 
 standby 203 priority 120
 exit
+
 int gig0/0/1.204
 encapsulation dot1Q 204
 description %GIM_PORTA%
@@ -658,6 +644,7 @@ standby version 2
 standby 204 ip 10.2.4.1 
 standby 204 priority 120
 exit
+
 int gig0/0/1.205
 encapsulation dot1Q 205
 description %GIM_GO%
@@ -667,14 +654,7 @@ standby version 2
 standby 205 ip 10.2.5.1 
 standby 205 priority 120
 exit
-int gig0/0/1.240
-encapsulation dot1Q 240 nativ
-description %GIM_NAT%
-ip address 10.2.40.3 255.255.255.0
-standby version 2
-standby 240 ip 10.2.40.1 
-standby 240 priority 120
-exit
+
 
 int Gig0/3/0.220
 encapsulation dot1Q 220
@@ -686,20 +666,13 @@ standby 220 priority 120
 exit
 int Gig0/3/0.221
 encapsulation dot1Q 221
-description %GIM_SERVER%
+description %GIM_SERVER_MGMT%
 ip address 10.2.21.2 255.255.255.0
 standby version 2
 standby 221 ip 10.2.21.1 
 standby 221 priority 120
 exit
-int Gig0/3/0.241
-encapsulation dot1Q 241 native
-description %GIM_SERVER_NAT%
-ip address 10.2.41.2 255.255.255.0
-standby version 2
-standby 241 ip 10.2.20.1 
-standby 241 priority 120
-exit
+
 router ospf 2
 router-id 2.2.2.3
 passive-interface Gig0/1, Gig0/3/0
@@ -707,18 +680,11 @@ network 10.2.255.0 0.0.0.3 area 2
 network 10.2.255.8 0.0.0.3 area 2
 network 10.2.0.0 0.0.0.255 area 2
 network 10.2.1.0 0.0.0.255 area 2
-
-```
-network 10.2.2.0 0.0.0.255 area 2
-```
-
 network 10.2.3.0 0.0.0.255 area 2
 network 10.2.4.0 0.0.0.255 area 2
 network 10.2.5.0 0.0.0.255 area 2
 network 10.2.20.0 0.0.0.255 area 2
 network 10.2.21.0 0.0.0.255 area 2
-network 10.2.40.0 0.0.0.255 area 2
-network 10.2.41.0 0.0.0.255 area 2
 ip ospf authentication message-digest
 exit
 int range gig0/0, gig0/2
