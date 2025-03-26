@@ -958,11 +958,36 @@ switchport port-security maximum 1
 MEG KELL CSINÁLNI AZ IP TELEFONT
 
 # ssw-gim-01
+```
 en 
 conf t
 hostname ssw-gim-01
 int fa0/0
-ip address 10.2.2.1
+ip address 10.2.2.1 255.255.255.0
+no sh
+exit
+
+ip dhcp excluded-address 10.1.2.0 10.1.2.63
+ip dhcp excluded-address 10.1.2.128 10.1.2.255
+ip dhcp pool VOICE
+network 10.1.2.0 255.255.255.0
+default-router 10.1.2.1
+option 150 ip 10.1.2.1
+exit
+
+telephony-service
+max-dn 39
+max-ephones 39
+ip source-address  10.1.2.1 port 2000
+auto assign 1 to 39
+exit
+
+ephone-dn 1
+number 54001
+ephone-dn 2
+number 54002
+```
+
 
 
 # srv-gim-01
