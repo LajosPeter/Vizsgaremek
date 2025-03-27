@@ -80,6 +80,32 @@ hostname rtr-sp-01
 en 
 conf t
 hostname sw-sp-01
+sdm prefer dual-ipv4-and-ipv6 default
+do reload
+y
+
+en 
+conf t
+vlan 400
+name SP_DESKTOP
+exit
+vlan 430
+name SP_SWMAN
+exit
+vlan 440
+name SP_NAT
+exit
+int vlan 430
+ipv6 address  FIXME
+int g0/1
+switchport mode trunk
+switchport trunk native vlan 440
+switchport trunk allowed vlan 400,430
+exit
+int range f0/1-2
+switchport mode access 
+switchport access vlan 400
+
 
 
 
@@ -1337,10 +1363,68 @@ exit
 ```
 
 
-# ssw-tank-01
+# ssw-tank-01 FIXME
 en
 conf t
 hostname ssw-tank-01
+int fa0/0
+ip address 10.1.4.1 255.255.255.0
+no sh
+exit
+int fa0/1
+ip address 10.1.2.1 255.255.255.0
+no sh
+exit
+
+
+
+ip dhcp excluded-address 10.1.4.0 10.1.4.63
+ip dhcp excluded-address 10.1.4.128 10.1.4.255
+ip dhcp excluded-address 10.1.2.0 10.1.2.63
+ip dhcp excluded-address 10.1.2.128 10.1.2.255
+
+ip dhcp pool VRTEL
+network 10.1.2.0 255.255.255.0
+default-router 10.1.2.1
+option 150 ip 10.1.2.1
+exit
+
+ip dhcp pool ALKTEL
+network 10.1.4.0 255.255.255.0
+default-router 10.1.4.1
+option 150 ip 10.1.4.1
+exit
+
+
+telephony-service
+max-dn 39
+max-ephones 39
+ip source-address  10.1.2.1 port 2000
+auto assign 1 to 39
+exit
+
+ephone-dn 1
+number 54001
+ephone-dn 2
+number 54002
+ephone-dn 3
+number 54003
+ephone-dn 4
+number 54004
+ephone-dn 5
+number 54005
+ephone-dn 6
+number 54006
+ephone-dn 7
+number 54007
+ephone-dn 8
+number 54008
+ephone-dn 9
+number 54009
+ephone-dn 10
+number 54010
+ephone-dn 11
+number 54011
 
 
 
