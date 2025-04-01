@@ -47,8 +47,12 @@ network ```IPV6``` area 6
 
 area 6 authentication message-digest
 exit
-int range se0/0/0-1
-ip ospf message-digest-key 1 md5 lOLpFsanK7
+int se0/0/0
+ip ospf message-digest-key 6 md5 lOLpFsanK7
+exit
+
+int se0/0/1
+ip ospf message-digest-key 6 md5 lOLpFsanK7
 exit
 
 ```
@@ -143,10 +147,12 @@ network 195.228.6.8	0.0.0.3 area 6
 network 195.228.3.0	0.0.0.31  area 6
 area 6 authentication message-digest
 exit
-int range se0/0/0-1
-ip ospf message-digest-key 1 md5 lOLpFsanK7
+int se0/0/0
+ip ospf message-digest-key 6 md5 lOLpFsanK7
 exit
-
+int se0/0/1
+ip ospf message-digest-key 6 md5 lOLpFsanK7
+exit
 
 ```
 
@@ -383,8 +389,12 @@ network 195.228.2.0	0.0.0.31 area 6
 area 6 authentication message-digest
 exit
 
-int range se0/0/0-1
-ip ospf message-digest-key 1 md5 lOLpFsanK7
+int  se0/0/0
+ip ospf message-digest-key 6 md5 lOLpFsanK7
+exit
+
+int  se0/0/1
+ip ospf message-digest-key 6 md5 lOLpFsanK7
 exit
 
 ```
@@ -1090,9 +1100,14 @@ network 195.228.1.0	0.0.0.31 area 6
 area 6 authentication message-digest
 exit
 
-int range se0/0/0-1
-ip ospf message-digest-key 1 md5 lOLpFsanK7
+int  se0/0/0
+ip ospf message-digest-key 6 md5 lOLpFsanK7
 exit
+
+int  se0/0/1
+ip ospf message-digest-key 6 md5 lOLpFsanK7
+exit
+
 ```
 
 
