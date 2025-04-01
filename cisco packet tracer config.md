@@ -1615,6 +1615,9 @@ exit
 ```
 
 
+# ssw-tank-02 FIXME
+
+
 # sw-tank-05
 ```
 en 
@@ -1714,7 +1717,7 @@ switchport mode access
 spanning-tree bpduguard enable
 sh
 exit
-int range Gig0/1, Gig0/2
+int range Gig0/1
 switchport trunk native vlan 150
 switchport trunk allowed vlan 100,101,102
 exit
