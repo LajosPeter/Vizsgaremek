@@ -185,26 +185,10 @@ ip address 195.228.3.16 255.255.255.224
 no sh
 exit
 
-int GigabitEthernet 0/1
-no sh
-exit
-
-int gigabitEthernet 0/1.300
-description %KOL_TANAR%
-encapsulation dot1Q 300
-ip address 10.3.0.1 255.255.255.0
-exit
-
-int gigabitEthernet 0/1.301
-description %KOL_DIAK%
-encapsulation dot1Q 301
+int gigabitEthernet 0/1
+description %KOL_AP%
 ip address 10.3.1.1 255.255.255.0
-exit
-
-int gigabitEthernet 0/1.330
-description %KOL_SWMAN%
-encapsulation dot1Q 330
-ip address 10.3.30.1 255.255.255.0
+no sh
 exit
 
 
