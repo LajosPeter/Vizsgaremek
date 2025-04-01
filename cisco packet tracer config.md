@@ -1215,7 +1215,7 @@ ip address 10.1.255.5 255.255.255.252
 no sh
 exit
 
-int Gig 0/0
+int range Gig 0/0, gig0/1
 no sh
 exit
 
@@ -1303,6 +1303,10 @@ hostname rtr-tank-03
 
 int Gig0/3/0
 ip address 10.1.255.6 255.255.255.252
+no sh
+exit
+
+int range g0/1, g0/0
 no sh
 exit
 
