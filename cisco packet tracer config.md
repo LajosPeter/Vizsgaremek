@@ -45,7 +45,7 @@ network 195.228.6.4	0.0.0.3 area 6
 network ```IPV6``` area 6
 
 
-ip ospf authentication message-digest
+area 6 authentication message-digest
 exit
 int range se0/0/0-1
 ip ospf message-digest-key 1 md5 lOLpFsanK7
@@ -141,7 +141,7 @@ passive-interface Gig0/0
 network 195.228.6.0	0.0.0.3 area 6
 network 195.228.6.8	0.0.0.3 area 6
 network 195.228.3.0	0.0.0.31  area 6
-ip ospf authentication message-digest
+area 6 authentication message-digest
 exit
 int range se0/0/0-1
 ip ospf message-digest-key 1 md5 lOLpFsanK7
@@ -276,7 +276,7 @@ GigabitEthernet0/0 is up, line protocol is up (connected)
 
 ENNÉL KI KELL CSERÉLNI A PORTOKAT FIXME
 
-# sw-kol-01
+# sw-kol-01 teljesen újra
 
 ### Konfiguracio
 
@@ -380,7 +380,7 @@ passive-interface Gig0/0
 network 195.228.6.4	0.0.0.3 area 6
 network 195.228.6.12 0.0.0.3 area 6
 network 195.228.2.0	0.0.0.31 area 6
-ip ospf authentication message-digest
+area 6 authentication message-digest
 exit
 
 int range se0/0/0-1
@@ -442,7 +442,7 @@ default-information originate
 network 195.228.2.0 0.0.0.31 area 2
 network 10.2.255.0 0.0.0.3 area 2
 network 10.2.255.4 0.0.0.3 area 2
-ip ospf authentication message-digest
+area 2 authentication message-digest
 exit
 
 int range g0/1-2
@@ -502,59 +502,67 @@ ip address 10.2.255.9 255.255.255.252
 no sh
 exit
 
+int g0/1
+no sh
+exit
+
 int gig0/1.200
 encapsulation dot1Q 200
 description %GIM_RG%
 ip address 10.2.0.2 255.255.255.0
-ip helper-address 10.2.20.1
+ip helper-address 10.2.20.16
 standby version 2
 standby 200 ip 10.2.0.1 
 standby 200 priority 150
 standby 200 preempt
 exit
 
-int gig0/0/1.201
+int gig0/1.201
 encapsulation dot1Q 201
 description %GIM_VEZ%
 ip address 10.2.1.2 255.255.255.0
-ip helper-address 10.2.20.1
+ip helper-address 10.2.20.16
 standby version 2
 standby 201 ip 10.2.1.1 
 standby 201 priority 150
 standby 201 preempt
 exit
 
-int gig0/0/1.203
+int gig0/1.203
 encapsulation dot1Q 203
 description %GIM_TANAR%
 ip address 10.2.3.2 255.255.255.0
-ip helper-address 10.2.20.1
+ip helper-address 10.2.20.16
 standby version 2
 standby 203 ip 10.2.3.1 
 standby 203 priority 150
 standby 203 preempt
 exit
 
-int gig0/0/1.204
+int gig0/1.204
 encapsulation dot1Q 204
 description %GIM_PORTA%
 ip address 10.2.4.2 255.255.255.0
-ip helper-address 10.2.20.1
+ip helper-address 10.2.20.16
 standby version 2
 standby 204 ip 10.2.4.1 
 standby 204 priority 150
 standby 204 preempt
 exit
 
-int gig0/0/1.205
+int gig0/1.205
 encapsulation dot1Q 205
 description %GIM_GO%
 ip address 10.2.5.2 255.255.255.0
-ip helper-address 10.2.20.1
+ip helper-address 10.2.20.16
 standby version 2
 standby 205 ip 10.2.5.1 
 standby 205 priority 150
 standby 205 preempt
+exit
+
+int g0/3/0
+no sh
 exit
 
 int gig0/3/0.220
@@ -580,7 +588,8 @@ exit
 
 router ospf 2
 router-id 2.2.2.2
-passive-interface Gig0/1, Gig0/3/0
+passive-interface Gig0/1
+passive-interface Gig0/3/0
 network 10.2.255.0 0.0.0.3 area 2
 network 10.2.255.8 0.0.0.3 area 2
 network 10.2.0.0 0.0.0.255 area 2
@@ -590,7 +599,7 @@ network 10.2.4.0 0.0.0.255 area 2
 network 10.2.5.0 0.0.0.255 area 2
 network 10.2.20.0 0.0.0.255 area 2
 network 10.2.21.0 0.0.0.255 area 2
-ip ospf authentication message-digest
+area 2 authentication message-digest
 exit
 int range gig0/0, gig0/2
 ip ospf message-digest-key 1 md5 eiaA8Qsp1i
@@ -615,56 +624,59 @@ no sh
 int g0/1 
 no sh
 exit
-int gig0/0/1.200
+int gig0/1.200
 encapsulation dot1Q 200
 description %GIM_RG%
 ip address 10.2.0.3 255.255.255.0
-ip helper-address 10.2.20.1
+ip helper-address 10.2.20.16
 standby version 2
 standby 200 ip 10.2.0.1 
 standby 200 priority 120
 exit
 
-int gig0/0/1.201
+int gig0/1.201
 encapsulation dot1Q 201
 description %GIM_VEZ%
 ip address 10.2.1.3 255.255.255.0
-ip helper-address FIXME
+ip helper-address 10.2.20.16
 standby version 2
 standby 201 ip 10.2.1.1 
 standby 201 priority 120
 exit
 
-int gig0/0/1.203
+int gig0/1.203
 encapsulation dot1Q 203
 description %GIM_TANAR%
 ip address 10.2.3.3 255.255.255.0
-ip helper-address 10.2.20.1
+ip helper-address 10.2.20.16
 standby version 2
 standby 203 ip 10.2.3.1 
 standby 203 priority 120
 exit
 
-int gig0/0/1.204
+int gig0/1.204
 encapsulation dot1Q 204
 description %GIM_PORTA%
 ip address 10.2.4.3 255.255.255.0
-ip helper-address 10.2.20.1
+ip helper-address 10.2.20.16
 standby version 2
 standby 204 ip 10.2.4.1 
 standby 204 priority 120
 exit
 
-int gig0/0/1.205
+int gig0/1.205
 encapsulation dot1Q 205
 description %GIM_GO%
 ip address 10.2.5.3 255.255.255.0
-ip helper-address 10.2.20.1
+ip helper-address 10.2.20.16
 standby version 2
 standby 205 ip 10.2.5.1 
 standby 205 priority 120
 exit
 
+int g0/3/0
+no sh
+exit
 
 int Gig0/3/0.220
 encapsulation dot1Q 220
@@ -685,7 +697,8 @@ exit
 
 router ospf 2
 router-id 2.2.2.3
-passive-interface Gig0/1, Gig0/3/0
+passive-interface Gig0/1
+passive-interface Gig0/3/0
 network 10.2.255.0 0.0.0.3 area 2
 network 10.2.255.8 0.0.0.3 area 2
 network 10.2.0.0 0.0.0.255 area 2
@@ -695,7 +708,7 @@ network 10.2.4.0 0.0.0.255 area 2
 network 10.2.5.0 0.0.0.255 area 2
 network 10.2.20.0 0.0.0.255 area 2
 network 10.2.21.0 0.0.0.255 area 2
-ip ospf authentication message-digest
+area 2 authentication message-digest
 exit
 int range gig0/0, gig0/2
 ip ospf message-digest-key 1 md5 eiaA8Qsp1i
@@ -1074,7 +1087,7 @@ network 195.228.6.8	0.0.0.3 area 6
 network 195.228.6.12 0.0.0.3 area 6
 network 195.228.5.0	0.0.0.31 area 6
 network 195.228.1.0	0.0.0.31 area 6
-ip ospf authentication message-digest
+area 6 authentication message-digest
 exit
 
 int range se0/0/0-1
@@ -1145,7 +1158,7 @@ passive-interface Gig0/1
 default-information originate
 network 195.228.1.0 0.0.0.31 area 1
 network 10.1.255.0 0.0.0.3 area 1
-ip ospf authentication message-digest
+area 1 authentication message-digest
 exit
 
 int g0/2
@@ -1257,7 +1270,7 @@ network 10.1.1.0 0.0.0.255 area 1
 network 10.1.3.0 0.0.0.255 area 1
 network 10.1.20.0 0.0.0.255 area 1
 network 10.1.30.0 0.0.0.255 area 1
-ip ospf authentication message-digest
+area 1 authentication message-digest
 exit
 
 int range g0/2, Gig0/3/0
@@ -1338,7 +1351,7 @@ network 10.1.1.0 0.0.0.255 area 1
 network 10.1.3.0 0.0.0.255 area 1
 network 10.1.20.0 0.0.0.255 area 1
 network 10.1.30.0 0.0.0.255 area 1
-ip ospf authentication message-digest
+area 1 authentication message-digest
 exit
 
 int range g0/2, Gig0/3/0
