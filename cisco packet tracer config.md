@@ -106,10 +106,14 @@ switchport mode trunk
 switchport trunk native vlan 440
 switchport trunk allowed vlan 400,430
 exit
-int range f0/1-2
+int f0/1
 switchport mode access 
 switchport access vlan 400
-
+exit
+int fa0/2
+switchport mode access 
+switchport access vlan 430
+exit
 
 
 
@@ -175,7 +179,7 @@ C       195.228.6.8/30 is directly connected, Serial0/0/1
 L       195.228.6.9/32 is directly connected, Serial0/0/1
 ```
 
-IP default gateway a switcheknek
+
 
 # rtr-kol-01
 
@@ -1016,25 +1020,25 @@ auto assign 1 to 39
 exit
 
 ephone-dn 1
-number 54001
+number 52201
 ephone-dn 2
-number 54002
+number 52202
 ephone-dn 3
-number 54003
+number 52203
 ephone-dn 4
-number 54004
+number 52204
 ephone-dn 5
-number 54005
+number 52205
 ephone-dn 6
-number 54006
+number 52206
 ephone-dn 7
-number 54007
+number 52207
 ephone-dn 8
-number 54008
+number 52208
 ephone-dn 9
-number 54009
+number 52209
 ephone-dn 10
-number 54010
+number 52210
 ephone-dn 11
 number 54011
 
@@ -1380,6 +1384,7 @@ exit
 
 
 # ssw-tank-01 FIXME
+```
 en
 conf t
 hostname ssw-tank-01
@@ -1387,23 +1392,9 @@ int fa0/0
 ip address 10.1.4.1 255.255.255.0
 no sh
 exit
-int fa0/1
-ip address 10.1.2.1 255.255.255.0
-no sh
-exit
-
-
 
 ip dhcp excluded-address 10.1.4.0 10.1.4.63
 ip dhcp excluded-address 10.1.4.128 10.1.4.255
-ip dhcp excluded-address 10.1.2.0 10.1.2.63
-ip dhcp excluded-address 10.1.2.128 10.1.2.255
-
-ip dhcp pool VRTEL
-network 10.1.2.0 255.255.255.0
-default-router 10.1.2.1
-option 150 ip 10.1.2.1
-exit
 
 ip dhcp pool ALKTEL
 network 10.1.4.0 255.255.255.0
@@ -1411,36 +1402,57 @@ default-router 10.1.4.1
 option 150 ip 10.1.4.1
 exit
 
-
 telephony-service
-max-dn 39
-max-ephones 39
-ip source-address  10.1.2.1 port 2000
-auto assign 1 to 39
+max-dn 4
+max-ephones 4
+ip source-address  10.1.4.1 port 2000
+auto assign 1 to 4
 exit
 
 ephone-dn 1
-number 54001
+number 51401
 ephone-dn 2
-number 54002
+number 51402
 ephone-dn 3
-number 54003
+number 51403
 ephone-dn 4
-number 54004
-ephone-dn 5
-number 54005
-ephone-dn 6
-number 54006
-ephone-dn 7
-number 54007
-ephone-dn 8
-number 54008
-ephone-dn 9
-number 54009
-ephone-dn 10
-number 54010
-ephone-dn 11
-number 54011
+number 51404
+
+```
+
+# ssw-tank-02
+```
+en 
+conf t
+hostname ssw-gim-02
+int fa0/0
+ip address 10.1.2.1 255.255.255.0
+no sh
+exit
+
+ip dhcp excluded-address 10.1.2.0 10.1.2.63
+ip dhcp excluded-address 10.1.2.128 10.1.2.255
+ip dhcp pool VRTEL
+network 10.1.2.0 255.255.255.0
+default-router 10.1.2.1
+option 150 ip 10.1.2.1
+exit
+
+telephony-service
+max-dn 3
+max-ephones 3
+ip source-address  10.1.2.1 port 2000
+auto assign 1 to 3
+exit
+
+ephone-dn 1
+number 51201
+ephone-dn 2
+number 51202
+ephone-dn 3
+number 51203
+
+```
 
 
 
