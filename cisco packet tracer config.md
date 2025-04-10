@@ -1004,18 +1004,18 @@ ip address 10.2.2.1 255.255.255.0
 no sh
 exit
 
-ip dhcp excluded-address 10.1.2.0 10.1.2.63
-ip dhcp excluded-address 10.1.2.128 10.1.2.255
+ip dhcp excluded-address 10.2.2.0 10.2.2.63
+ip dhcp excluded-address 10.2.2.128 10.2.2.255
 ip dhcp pool VOICE
-network 10.1.2.0 255.255.255.0
-default-router 10.1.2.1
-option 150 ip 10.1.2.1
+network 10.2.2.0 255.255.255.0
+default-router 10.2.2.1
+option 150 ip 10.2.2.1
 exit
 
 telephony-service
 max-dn 39
 max-ephones 39
-ip source-address  10.1.2.1 port 2000
+ip source-address  10.2.2.1 port 2000
 auto assign 1 to 39
 exit
 
@@ -1040,7 +1040,7 @@ number 52209
 ephone-dn 10
 number 52210
 ephone-dn 11
-number 54011
+number 52211
 
 ```
 
@@ -1761,7 +1761,7 @@ switchport mode access
 spanning-tree bpduguard enable
 sh
 exit
-int range Gig0/1
+int Gig0/1
 switchport trunk native vlan 150
 switchport trunk allowed vlan 100,101,102
 exit
