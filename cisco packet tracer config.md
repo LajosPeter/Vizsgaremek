@@ -8,9 +8,11 @@ spanning-tree portfast default
 Nem kell nativ vlan de biztonság miatt csinálok minden trunk porton engedélyezni kell DONE
 Ha mindegyik switch ismeri a tegelést akkor nem kel natív vlan de ha régebbi eszközökezt DONE
 
+ssw-tank meg kell csinálni hogy az sw-tank-04, sw-tank-06 működjön
 
 
 EZEN A ROUTEREN IPV6 config kell és SNAT is az IPv6-ra
+
 
 # rtr-telekom-core-01
 
