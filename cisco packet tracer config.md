@@ -80,6 +80,37 @@ L       195.228.6.5/32 is directly connected, Serial0/0/1
 en 
 conf t
 hostname rtr-sp-01
+ipv6 unicast-routing
+interface GigabitEthernet0/0
+ip address 195.228.6.16 255.255.255.224
+no sh
+exit
+interface GigabitEthernet0/1
+no sh
+exit
+interface GigabitEthernet0/1.400
+encapsulation dot1Q 400
+ip address 10.6.1.1 255.255.255.0
+no sh
+interface GigabitEthernet0/1.430
+encapsulation dot1Q 430
+ip address 10.6.30.1 255.255.255.0
+ipv6 address FE80::DB4F:1:1 link-local
+ipv6 enable
+exit
+int g0/1
+ip nat inside
+exit
+
+int g0/0
+ip nat outside
+exit
+
+access-list 6 permit 10.2.1.0 0.0.0.255
+access-list 6 permit 10.2.30.0 0.0.0.255
+ip nat pool PNATPOOLSP 195.228.6.4 195.228.6.8 netmask 255.255.255.224
+ip nat inside source list 6 pool PNATPOOLSP overload
+
 
 
 # sw-sp-01
@@ -102,7 +133,8 @@ vlan 440
 name SP_NAT
 exit
 int vlan 430
-ipv6 address  FIXME
+ip address 10.6.30.192 255.255.255.0
+ipv6 address FE80::DB4F:1:C0 link-local
 int g0/1
 switchport mode trunk
 switchport trunk native vlan 440
@@ -111,11 +143,30 @@ exit
 int f0/1
 switchport mode access 
 switchport access vlan 400
+spanning-tree portfast
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 1
+exit
 exit
 int fa0/2
 switchport mode access 
 switchport access vlan 430
+spanning-tree portfast
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 1
 exit
+int range fa0/3-24, gig0/2
+sh
+exit
+
+
+
 
 
 
