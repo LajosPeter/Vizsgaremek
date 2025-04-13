@@ -44,8 +44,6 @@ network 195.228.7.0	0.0.0.31 area 6
 network 195.228.6.0	0.0.0.3 area 6
 network 195.228.6.4	0.0.0.3 area 6
 
-network ```IPV6``` area 6
-
 
 area 6 authentication message-digest
 exit
