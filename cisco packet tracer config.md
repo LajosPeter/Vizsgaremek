@@ -1705,9 +1705,18 @@ int vlan 130
 ip address 10.1.30.195 255.255.255.0
 no sh
 exit
-int range fa 0/1-3, int Gig 0/1-2
+int range fa 0/1-3, int Gig 0/1
 switchport trunk native vlan 140
 switchport trunk allowed vlan 103,104,130
+exit
+int Gig 0/2
+switchport mode access
+switchport access vlan 104
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 1
 exit
 ```
 
