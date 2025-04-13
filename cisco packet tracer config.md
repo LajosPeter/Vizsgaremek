@@ -11,7 +11,6 @@ Ha mindegyik switch ismeri a tegelést akkor nem kel natív vlan de ha régebbi 
 ssw-tank meg kell csinálni hogy az sw-tank-04, sw-tank-06 működjön
 
 
-EZEN A ROUTEREN IPV6 config kell és SNAT is az IPv6-ra
 
 
 # rtr-telekom-core-01
@@ -32,15 +31,16 @@ ip address 195.228.6.5 255.255.255.252
 no shutdown
 exit
 
-ipv6 unicast-routing
+
 interface Gig0/0
-ipv6 enable
+ip address 195.228.7.1 255.255.255.224
 no shutdown
 exit
 
 router ospf 6
 router-id 6.6.6.1
 passive-interface Gig0/0
+network 195.228.7.0	0.0.0.31 area 6
 network 195.228.6.0	0.0.0.3 area 6
 network 195.228.6.4	0.0.0.3 area 6
 
@@ -74,7 +74,7 @@ C       195.228.6.4/30 is directly connected, Serial0/0/1
 L       195.228.6.5/32 is directly connected, Serial0/0/1
 
 ```
-
+Még mindig szar
 
 # rtr-sp-01
 en 
@@ -82,7 +82,7 @@ conf t
 hostname rtr-sp-01
 ipv6 unicast-routing
 interface GigabitEthernet0/0
-ip address 195.228.6.16 255.255.255.224
+ip address 195.228.7.16 255.255.255.224
 no sh
 exit
 interface GigabitEthernet0/1
@@ -90,11 +90,11 @@ no sh
 exit
 interface GigabitEthernet0/1.400
 encapsulation dot1Q 400
-ip address 10.6.1.1 255.255.255.0
+ip address 10.7.1.1 255.255.255.0
 no sh
 interface GigabitEthernet0/1.430
 encapsulation dot1Q 430
-ip address 10.6.30.1 255.255.255.0
+ip address 10.7.30.1 255.255.255.0
 ipv6 address FE80::DB4F:1:1 link-local
 ipv6 enable
 exit
@@ -106,10 +106,10 @@ int g0/0
 ip nat outside
 exit
 
-access-list 6 permit 10.2.1.0 0.0.0.255
-access-list 6 permit 10.2.30.0 0.0.0.255
-ip nat pool PNATPOOLSP 195.228.6.4 195.228.6.8 netmask 255.255.255.224
-ip nat inside source list 6 pool PNATPOOLSP overload
+access-list 7 permit 10.7.1.0 0.0.0.255
+access-list 7 permit 10.7.30.0 0.0.0.255
+ip nat pool PNATPOOLSP 195.228.7.4 195.228.7.8 netmask 255.255.255.224
+ip nat inside source list 7 pool PNATPOOLSP overload
 
 
 
@@ -133,12 +133,12 @@ vlan 440
 name SP_NAT
 exit
 int vlan 430
-ip address 10.6.30.192 255.255.255.0
+ip address 10.7.30.192 255.255.255.0
 ipv6 address FE80::DB4F:1:C0 link-local
 int g0/1
 switchport mode trunk
 switchport trunk native vlan 440
-switchport trunk allowed vlan 400,430
+switchport trunk allowed vlan 400,430,440
 exit
 int f0/1
 switchport mode access 
@@ -149,7 +149,6 @@ switchport port-security
 switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 1
-exit
 exit
 int fa0/2
 switchport mode access 
