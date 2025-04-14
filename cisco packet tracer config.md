@@ -75,6 +75,7 @@ L       195.228.6.5/32 is directly connected, Serial0/0/1
 Még mindig szar
 
 # rtr-sp-01
+```
 en 
 conf t
 hostname rtr-sp-01
@@ -108,10 +109,12 @@ access-list 7 permit 10.7.1.0 0.0.0.255
 access-list 7 permit 10.7.30.0 0.0.0.255
 ip nat pool PNATPOOLSP 195.228.7.4 195.228.7.8 netmask 255.255.255.224
 ip nat inside source list 7 pool PNATPOOLSP overload
-
+```
 
 
 # sw-sp-01
+
+```
 en 
 conf t
 hostname sw-sp-01
@@ -161,7 +164,7 @@ exit
 int range fa0/3-24, gig0/2
 sh
 exit
-
+```
 
 
 
@@ -526,6 +529,7 @@ access-list 2 permit 10.2.1.0 0.0.0.255
 access-list 2 permit 10.2.3.0 0.0.0.255
 access-list 2 permit 10.2.4.0 0.0.0.255
 access-list 2 permit 10.2.5.0 0.0.0.255
+access-list 2 permit 10.2.10.0 0.0.0.255
 access-list 2 permit 10.2.20.0 0.0.0.255
 access-list 2 permit 10.2.21.0 0.0.0.255
 ip nat pool PNATPOOLGIM 195.228.3.4 195.228.3.8 netmask 255.255.255.224
@@ -672,6 +676,7 @@ network 10.2.1.0 0.0.0.255 area 2
 network 10.2.3.0 0.0.0.255 area 2
 network 10.2.4.0 0.0.0.255 area 2
 network 10.2.5.0 0.0.0.255 area 2
+network 10.2.10.0 0.0.0.255 area 2
 network 10.2.20.0 0.0.0.255 area 2
 network 10.2.21.0 0.0.0.255 area 2
 area 2 authentication message-digest
@@ -791,6 +796,7 @@ network 10.2.1.0 0.0.0.255 area 2
 network 10.2.3.0 0.0.0.255 area 2
 network 10.2.4.0 0.0.0.255 area 2
 network 10.2.5.0 0.0.0.255 area 2
+network 10.2.10.0 0.0.0.255 area 2
 network 10.2.20.0 0.0.0.255 area 2
 network 10.2.21.0 0.0.0.255 area 2
 area 2 authentication message-digest
@@ -1020,6 +1026,7 @@ int gig0/2
 switchport mode access
 spanning-tree bpduguard enable
 sh
+exit
 
 ```
 
@@ -1046,8 +1053,6 @@ int range g0/1, G1/1, G2/1
 no sh
 switchport mode trunk
 switchport trunk native vlan 241
-switcport trunk allowed vlan none
-switcport trunk allowed vlan add 220, 221
 exit
 
 int vlan 221
@@ -1065,13 +1070,17 @@ switchport port-security maximum 1
 ```
 
 
-
+ROSSZ
 # ssw-gim-01
 ```
 en 
 conf t
 hostname ssw-gim-01
 int fa0/0
+no sh
+int fa0/0.20
+encapsulation dot1q 202
+description %GIM_TEL%
 ip address 10.2.2.1 255.255.255.0
 no sh
 exit
@@ -1114,6 +1123,8 @@ number 52210
 ephone-dn 11
 number 52211
 exit
+
+
 ```
 
 
@@ -1197,12 +1208,34 @@ conf t
 hostname fw-dc-01
 
 # sw-dc-01
+```
 en 
 conf t
 hostname sw-dc-01
+vlan 520
+name DC_SERVER
+vlan 530
+name DC_SWMAN
+vlan 540
+name DC_NATIV
+exit
+int range fa0/2-3
+switcport mode access
+switchport access vlan 520
+spanning-tree bpduguard enable
+switchport port-security
+switchport port-security mac-address sticky
+switchport port-security violation restrict
+switchport port-security maximum 1
+exit
+int fa0/1
+switchport mode trunk
+switcport trunk nativ vlan 540
+```
 
 
-# srv-dc-01 - Windows server
+
+# srv-dc-01 - Windows server 10.5.20.16
 Szolgáltatások : 
 - Címtár_pl_ Active Directory
 
@@ -1219,7 +1252,7 @@ Szolgáltatások :
 
 
 
-# srv-dc-02 - Linux server
+# srv-dc-02 - Linux server 10.5.20.17
 Szolgáltatások
 - HTTP_HTTPS docker
 
@@ -1268,6 +1301,7 @@ exit
 access-list 1 permit 10.1.0.0 0.0.0.255
 access-list 1 permit 10.1.1.0 0.0.0.255
 access-list 1 permit 10.1.3.0 0.0.0.255
+access-list 1 permit 10.1.10.0 0.0.0.255
 access-list 1 permit 10.1.20.0 0.0.0.255
 access-list 1 permit 10.1.30.0 0.0.0.255
 ip nat pool PNATPOOLTANK 195.228.1.4 195.228.1.8 netmask 255.255.255.224
@@ -1330,6 +1364,16 @@ standby 103 priority 150
 standby 103 preempt
 exit
 
+int Gig 0/1.110
+description %TANK_WIFI%
+encapsulation dot1q 110
+ip address 10.1.10.2 255.255.255.0
+ip helper-address 10.1.20.16
+standby version 2
+standby 110 ip 10.1.10.1 
+standby 110 priority 150
+standby 110 preempt
+exit
 
 int Gig 0/0.120
 description %TANK_RG%
@@ -1360,6 +1404,7 @@ network 10.1.255.4 0.0.0.3 area 1
 network 10.1.0.0 0.0.0.255 area 1
 network 10.1.1.0 0.0.0.255 area 1
 network 10.1.3.0 0.0.0.255 area 1
+network 10.1.10.0 0.0.0.255 area 1
 network 10.1.20.0 0.0.0.255 area 1
 network 10.1.30.0 0.0.0.255 area 1
 area 1 authentication message-digest
@@ -1410,7 +1455,7 @@ exit
 int Gig 0/0.120
 description %TANK_SERVER%
 encapsulation dot1q 120
-ip address 10.1.20.2 255.255.255.0
+ip address 10.1.20.3 255.255.255.0
 standby version 2
 standby 120 ip 10.1.20.1 
 standby 120 priority 120
@@ -1425,6 +1470,17 @@ standby version 2
 standby 103 ip 10.1.3.1 
 standby 103 priority 120
 exit
+
+int Gig 0/1.110
+description %TANK_WIFI%
+encapsulation dot1q 110
+ip address 10.1.10.3 255.255.255.0
+ip helper-address 10.1.20.16
+standby version 2
+standby 110 ip 10.1.10.1 
+standby 110 priority 120
+exit
+
 
 int Gig 0/1.130
 description %TANK_SWMAN%
@@ -1445,6 +1501,7 @@ network 10.1.255.4 0.0.0.3 area 1
 network 10.1.0.0 0.0.0.255 area 1
 network 10.1.1.0 0.0.0.255 area 1
 network 10.1.3.0 0.0.0.255 area 1
+network 10.1.10.0 0.0.0.255 area 1
 network 10.1.20.0 0.0.0.255 area 1
 network 10.1.30.0 0.0.0.255 area 1
 area 1 authentication message-digest
@@ -1544,6 +1601,9 @@ exit
 vlan 104 
 name TANK_ALKTEL
 exit
+vlan 110
+name TANK_WIFI
+exit
 vlan 130
 name TANK_SWMAN
 exit
@@ -1556,12 +1616,12 @@ exit
 spanning-tree vlan 1-4095 priority 4096
 
 int Fa 0/4
-switchport access vlan 103
+switchport access vlan 110
 spanning-tree bpduguard enable
 exit
 int  fa 0/6
 switchport access vlan 103
-switchport voice 104
+switchport voice vlan 104
 spanning-tree bpduguard enable
 switchport port-security
 switchport port-security mac-address sticky
@@ -1582,9 +1642,9 @@ int vlan 130
 ip address 10.1.30.192 255.255.255.0
 no sh
 exit
-int range fa0/2-4
+int range fa0/1-3
 switchport trunk native vlan 140
-switchport trunk allowed vlan 103,104,130
+switchport trunk allowed vlan 103,104,110,130
 exit
 ```
 
@@ -1608,15 +1668,14 @@ spanning-tree mode rapid-pvst
 int fa0/4 
 switchport mode access
 switchport access vlan 103
-switchport voice 104
-spanning-tree bpduguard enable
+switchport voice vlan 104
 switchport port-security
 switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 2
 exit
 int fa 0/5
-switchport access vlan 103
+switchport access vlan 110
 int range fa0/6-24 
 spanning-tree bpduguard enable
 sh
@@ -1630,7 +1689,7 @@ no sh
 exit
 int range fa 0/1-3
 switchport trunk native vlan 140
-switchport trunk allowed vlan 103,104,130
+switchport trunk allowed vlan 103,104,110,130
 exit
 ```
 
@@ -1647,24 +1706,19 @@ vtp password JXTBOyTW
 spanning-tree mode rapid-pvst
 int range fa0/1-3, Gig0/1
 switchport mode trunk
-
 exit
 int fa 0/4
 switchport mode access
 switchport access vlan 103
-switchport voice 104
-spanning-tree bpduguard enable
+switchport voice vlan 104
 switchport port-security
 switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 2
 exit
-int fa 0/5
-
 int range fa 0/5-14
 switchport mode access
 switchport access vlan 103
-spanning-tree bpduguard enable
 switchport port-security
 switchport port-security mac-address sticky
 switchport port-security violation restrict
@@ -1678,7 +1732,7 @@ no sh
 exit
 int range fa0/1-3, Gig0/1
 switchport trunk native vlan 140
-switchport trunk allowed vlan 103,104,130
+switchport trunk allowed vlan 103,104,110,130
 ```
 
 
@@ -1692,18 +1746,17 @@ vtp version 2
 vtp mode client
 vtp domain tanka
 vtp password JXTBOyTW
-int range fa 0/1-3, int Gig 0/1
+int range fa 0/1-3, Gig 0/1
 switchport mode trunk
 exit
 int fa 0/4
 switchport mode access
-switchport access vlan 103
+switchport access vlan 110
 exit
 int fa 0/5
 switchport mode access
 switchport access vlan 103
-switchport voice 104
-spanning-tree bpduguard enable
+switchport voice vlan 104
 switchport port-security
 switchport port-security mac-address sticky
 switchport port-security violation restrict
@@ -1712,7 +1765,6 @@ exit
 int range fa 0/6-14
 switchport mode access
 switchport access vlan 103
-spanning-tree bpduguard enable
 switchport port-security
 switchport port-security mac-address sticky
 switchport port-security violation restrict
@@ -1725,14 +1777,13 @@ int vlan 130
 ip address 10.1.30.195 255.255.255.0
 no sh
 exit
-int range fa 0/1-3, int Gig 0/1
+int range fa 0/1-3,  Gig 0/1
 switchport trunk native vlan 140
-switchport trunk allowed vlan 103,104,130
+switchport trunk allowed vlan 103,104,110,130
 exit
 int Gig 0/2
 switchport mode access
 switchport access vlan 104
-spanning-tree bpduguard enable
 switchport port-security
 switchport port-security mac-address sticky
 switchport port-security violation restrict
@@ -1764,7 +1815,7 @@ vlan 102
 name TANK_VRTEL
 exit
 vlan 120
-name %TANK_VRTEL%
+name TANK_SERVER
 exit
 vlan 150
 name TANK_NATVEZRG
@@ -1777,7 +1828,7 @@ spanning-tree vlan 1-4095 priority 4096
 int fa 0/2 
 switchport mode access
 switchport access vlan 100
-switchport voice 102
+switchport voice vlan 102
 spanning-tree bpduguard enable
 switchport port-security
 switchport port-security mac-address sticky
@@ -1785,6 +1836,8 @@ switchport port-security violation restrict
 switchport port-security maximum 2
 exit
 int Gig 0/2
+switchport mode access
+switchport access vlan 120
 spanning-tree bpduguard enable
 switchport port-security
 switchport port-security mac-address sticky
@@ -1799,7 +1852,7 @@ int vlan 100
 ip address 10.1.0.192 255.255.255.0
 no sh
 exit
-int range fa0/1, Gig0/1-2
+int range fa0/1, Gig0/1
 switchport trunk native vlan 150
 switchport trunk allowed vlan 100,101,102,120
 exit
@@ -1831,7 +1884,7 @@ switchport port-security maximum 1
 exit
 int range fa 0/2-3
 switchport access vlan 101
-switchport voice 102
+switchport voice vlan 102
 spanning-tree bpduguard enable
 switchport port-security
 switchport port-security mac-address sticky
@@ -1843,9 +1896,9 @@ switchport mode access
 spanning-tree bpduguard enable
 sh
 exit
-int Gig0/1
+int range Gig0/1, fa0/1
 switchport trunk native vlan 150
-switchport trunk allowed vlan 100,101,102
+switchport trunk allowed vlan 100,101,102,120
 exit
 int vlan 100
 ip address 10.1.0.193 255.255.255.0
@@ -1866,7 +1919,7 @@ default gateway: 10.1.20.1
 | TANK_RG | 10.1.0.1 | 10.1.20.16 | 10.1.0.64 | 255.255.255.0 | 64 | 10.1.20.16 |
 | TANK_VEZ | 10.1.1.1 | 10.1.20.16| 10.1.1.64 | 255.255.255.0 | 64 | 10.1.20.16 |
 | TANK_ALK | 10.1.3.1 | 10.1.20.16 | 10.1.3.64 | 255.255.255.0 | 64 | 10.1.20.16 |
-
+| TANK_WIFI | 10.1.10.1 | 10.1.20.16 | 10.1.10.64 | 255.255.255.0 | 64 | 10.1.20.16 |
 
 
 
