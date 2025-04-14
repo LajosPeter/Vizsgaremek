@@ -976,7 +976,7 @@ exit
 int fa 0/3
 switchport access vlan 202 
 exit
-int range fa 0/5-10
+int range fa 0/4-10
 switchport access vlan 205 
 exit
 int range fa 0/11-20
@@ -1035,6 +1035,8 @@ no sh
 exit
 
 int g2/1
+switchport mode access
+switchport access vlan 220
 switchport port-security
 switchport port-security mac-address sticky
 switchport port-security violation restrict
@@ -1042,7 +1044,6 @@ switchport port-security maximum 1
 ```
 
 
-MEG KELL CSINÁLNI AZ IP TELEFONT
 
 # ssw-gim-01
 ```
