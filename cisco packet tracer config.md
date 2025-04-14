@@ -625,6 +625,17 @@ standby 205 priority 150
 standby 205 preempt
 exit
 
+int gig0/1.210
+encapsulation dot1Q 210
+description %GIM_WIFI%
+ip address 10.2.10.2 255.255.255.0
+ip helper-address 10.2.20.16
+standby version 2
+standby 210 ip 10.2.10.1 
+standby 210 priority 150
+standby 210 preempt
+exit
+
 int g0/3/0
 no sh
 exit
@@ -738,6 +749,16 @@ standby 205 ip 10.2.5.1
 standby 205 priority 120
 exit
 
+int gig0/1.210
+encapsulation dot1Q 210
+description %GIM_WIFI%
+ip address 10.2.10.3 255.255.255.0
+ip helper-address 10.2.20.16
+standby version 2
+standby 210 ip 10.2.10.1 
+standby 210 priority 120
+exit
+
 int g0/3/0
 no sh
 exit
@@ -804,6 +825,8 @@ vlan 204
 name GIM_PORTA
 vlan 205
 name GIM_GO
+vlan 210
+name GIM_WIFI
 vlan 240
 name GIM_NAT
 int range fa0/18-19
@@ -829,7 +852,7 @@ switchport voice vlan 202
 exit
 int fa 0/1
 switchport mode access
-switchport access vlan 203
+switchport access vlan 210
 spanning-tree bpduguard enable
 exit
 int range fa 0/2-11
@@ -848,7 +871,7 @@ exit
 
 int range fa0/20-21, g0/1, fa0/18-19
 switchport trunk native vlan 240
-switchport trunk allowed vlan 200,201,202,203,204,205
+switchport trunk allowed vlan 200,201,202,203,204,205,210
 exit
 ```
 
@@ -883,18 +906,19 @@ switchport port-security violation restrict
 switchport port-security maximum 2
 switchport voice vlan 202
 exit
-int range fa 0/2, fa0/15
+int range fa 0/2, fa0/14
 spanning-tree bpduguard enable
 switchport mode access
+spanning-tree bpduguard enable
 switchport port-security
 switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 1
 exit
-int range fa0/1, fa0/16
+int range fa0/1, fa0/15
 switchport mode access
 spanning-tree bpduguard enable
-switchport access vlan 203
+switchport access vlan 210
 exit
 int range fa0/17, fa0/20-22, gig0/1-2
 switchport mode access
@@ -910,16 +934,13 @@ exit
 int fa 0/16
 switchport access vlan 204
 exit
-int range fa0/1, fa0/15
-switchport access vlan 203
-exit
 int vlan 200
 ip address 10.2.0.193 255.255.255.0
 no sh
 exit
 int range fa0/18-19, fa0/23-24
 switchport trunk native vlan 240
-switchport trunk allowed vlan 200,201,202,203,204,205
+switchport trunk allowed vlan 200,201,202,203,204,205,210
 exit
 ```
 
@@ -968,7 +989,7 @@ exit
 int fa 0/1
 spanning-tree bpduguard enable
 switchport mode access
-switchport access vlan 203
+switchport access vlan 210
 exit
 int fa 0/2
 switchport access vlan 200 
@@ -1092,7 +1113,7 @@ ephone-dn 10
 number 52210
 ephone-dn 11
 number 52211
-
+exit
 ```
 
 
@@ -1113,6 +1134,7 @@ DHCP
 | GIM_TANAR | 10.2.3.1 | 10.2.20.16 | 10.2.3.64 | 255.255.255.0 | 64 | 10.2.20.16 |
 | GIM_PORTA | 10.2.4.1 | 10.2.20.16 | 10.2.4.64 | 255.255.255.0 | 64 | 10.2.20.16 |
 | GIM_GO | 10.2.5.1 | 10.2.20.16 | 10.2.5.64 | 255.255.255.0 | 64 | 10.2.20.16 |
+| GIM_WIFI | 10.2.10.1 | 10.2.20.16 | 10.2.10.64 | 255.255.255.0 | 64 | 10.2.20.16 |
 
 TFTP, DNS
 
