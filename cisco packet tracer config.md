@@ -510,7 +510,7 @@ area 2 authentication message-digest
 exit
 
 int range g0/1-2
-ip ospf message-digest-key 1 md5 eiaA8Qsp1i
+ip ospf message-digest-key 2 md5 eiaA8Qsp1i
 exit
 
 int range g0/1-2
@@ -666,7 +666,7 @@ network 10.2.21.0 0.0.0.255 area 2
 area 2 authentication message-digest
 exit
 int range gig0/0, gig0/2
-ip ospf message-digest-key 1 md5 eiaA8Qsp1i
+ip ospf message-digest-key 2 md5 eiaA8Qsp1i
 exit
 
 ```
@@ -745,7 +745,7 @@ exit
 int Gig0/3/0.220
 encapsulation dot1Q 220
 description %GIM_SERVER%
-ip address 10.2.20.2 255.255.255.0
+ip address 10.2.20.3 255.255.255.0
 standby version 2
 standby 220 ip 10.2.20.1 
 standby 220 priority 120
@@ -753,7 +753,7 @@ exit
 int Gig0/3/0.221
 encapsulation dot1Q 221
 description %GIM_SERVER_MGMT%
-ip address 10.2.21.2 255.255.255.0
+ip address 10.2.21.3 255.255.255.0
 standby version 2
 standby 221 ip 10.2.21.1 
 standby 221 priority 120
@@ -775,7 +775,7 @@ network 10.2.21.0 0.0.0.255 area 2
 area 2 authentication message-digest
 exit
 int range gig0/0, gig0/2
-ip ospf message-digest-key 1 md5 eiaA8Qsp1i
+ip ospf message-digest-key 2 md5 eiaA8Qsp1i
 exit
 ```
 
