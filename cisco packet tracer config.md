@@ -364,10 +364,6 @@ hostname sw-kol-01
 spanning-tree mode rapid-pvst
 
 vlan 300 
-name %KOL_TANAR%
-exit
-
-vlan 301 
 name %KOL_DIAK%
 exit
 
@@ -384,11 +380,13 @@ ip address 10.3.30.192 255.255.255.0
 no sh 
 exit
 
-int range gig0/1, gig6/1, gig5/1, gig7/1, gig8/1, gig9/1
+int range gig0/1, fa0/1-4
 switchport mode trunk
 switchport trunk native vlan 340
-switchport trunk allowed vlan 300,301,330
+switchport trunk allowed vlan 300,330
 exit
+int range fa0/5-24
+sh
 ```
 
 ### Show parancsok
@@ -1893,7 +1891,6 @@ int fa 0/2
 switchport mode access
 switchport access vlan 100
 switchport voice vlan 102
-spanning-tree bpduguard enable
 switchport port-security
 switchport port-security mac-address sticky
 switchport port-security violation restrict
@@ -1949,7 +1946,6 @@ exit
 int range fa 0/2-3
 switchport access vlan 101
 switchport voice vlan 102
-spanning-tree bpduguard enable
 switchport port-security
 switchport port-security mac-address sticky
 switchport port-security violation restrict
