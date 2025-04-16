@@ -892,7 +892,7 @@ int vlan 200
 ip address 10.2.0.192 255.255.255.0
 no sh
 exit
-
+ip default-gateway 10.2.0.1
 int range fa0/20-21, g0/1, fa0/18-19
 switchport trunk native vlan 240
 switchport trunk allowed vlan 200,201,202,203,204,205,210
@@ -960,6 +960,7 @@ int vlan 200
 ip address 10.2.0.193 255.255.255.0
 no sh
 exit
+ip default-gateway 10.2.0.1
 int range fa0/18-19, fa0/23-24
 switchport trunk native vlan 240
 switchport trunk allowed vlan 200,201,202,203,204,205,210
@@ -1033,6 +1034,7 @@ int vlan 200
 ip address 10.2.0.194 255.255.255.0
 no sh
 exit
+ip default-gateway 10.2.0.1
 int range gig0/1, fa0/23-24, fa0/21-22
 switchport trunk native vlan 240
 switchport trunk allowed vlan 200,201,202,203,204,205,210
@@ -1710,6 +1712,7 @@ int vlan 130
 ip address 10.1.30.192 255.255.255.0
 no sh
 exit
+ip default-gateway 10.1.30.1
 int range fa0/1-3
 switchport trunk native vlan 140
 switchport trunk allowed vlan 103,104,110,130
@@ -1755,6 +1758,7 @@ int vlan 130
 ip address 10.1.30.193 255.255.255.0
 no sh
 exit
+ip default-gateway 10.1.30.1
 int range fa 0/1-3
 switchport trunk native vlan 140
 switchport trunk allowed vlan 103,104,110,130
@@ -1798,6 +1802,7 @@ int vlan 130
 ip address 10.1.30.194 255.255.255.0
 no sh
 exit
+ip default-gateway 10.1.30.1
 int range fa0/1-3, Gig0/1
 switchport trunk native vlan 140
 switchport trunk allowed vlan 103,104,110,130
@@ -1845,6 +1850,7 @@ int vlan 130
 ip address 10.1.30.195 255.255.255.0
 no sh
 exit
+ip default-gateway 10.1.30.1
 int range fa 0/1-3,  Gig 0/1
 switchport trunk native vlan 140
 switchport trunk allowed vlan 103,104,110,130
@@ -1919,6 +1925,7 @@ int vlan 100
 ip address 10.1.0.192 255.255.255.0
 no sh
 exit
+ip default-gateway 10.1.0.1
 int range fa0/1, Gig0/1
 switchport trunk native vlan 150
 switchport trunk allowed vlan 100,101,102,120
@@ -1970,6 +1977,7 @@ int vlan 100
 ip address 10.1.0.193 255.255.255.0
 no sh
 exit
+ip default-gateway 10.1.0.1
 ```
 
 
