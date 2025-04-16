@@ -253,6 +253,7 @@ no sh
 int gigabitEthernet 0/1.300
 description %KOL_DIAK%
 ip address 10.3.1.1 255.255.255.0
+ip helper-address 10.3.1.1
 no sh
 exit
 int gigabitEthernet 0/1.330
@@ -261,11 +262,11 @@ ip address 10.3.30.1 255.255.255.0
 no sh
 exit
 
-ip dhcp excluded-address 10.3.3.0 10.3.3.63
-ip dhcp excluded-address 10.3.3.128 10.3.3.255
-ip dhcp pool VOICE
-network 10.3.3.0 255.255.255.0
-default-router 10.3.3.1
+ip dhcp excluded-address 10.3.1.0 10.3.1.63
+ip dhcp excluded-address 10.3.1.128 10.3.1.255
+ip dhcp pool DIAK
+network 10.3.1.0 255.255.255.0
+default-router 10.3.1.1
 exit
 
 
@@ -379,12 +380,16 @@ int vlan 330
 ip address 10.3.30.192 255.255.255.0
 no sh 
 exit
+ip default-gateway 10.3.30.1
 
-int range gig0/1, fa0/1-4
+int gig0/1
 switchport mode trunk
 switchport trunk native vlan 340
 switchport trunk allowed vlan 300,330
 exit
+int range fa0/1-4
+switchport mode access
+switchport access vlan 300
 int range fa0/5-24
 sh
 ```
@@ -1029,7 +1034,7 @@ no sh
 exit
 int range gig0/1, fa0/23-24, fa0/21-22
 switchport trunk native vlan 240
-switchport trunk allowed vlan 200,201,202,203,204,205,240
+switchport trunk allowed vlan 200,201,202,203,204,205,210
 exit
 int gig0/2
 switchport mode access
