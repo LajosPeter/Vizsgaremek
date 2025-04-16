@@ -249,9 +249,23 @@ no sh
 exit
 
 int gigabitEthernet 0/1
-description %KOL_AP%
+no sh
+int gigabitEthernet 0/1.300
+description %KOL_DIAK%
 ip address 10.3.1.1 255.255.255.0
 no sh
+exit
+int gigabitEthernet 0/1.330
+description %KOL_SWMAN%
+ip address 10.3.30.1 255.255.255.0
+no sh
+exit
+
+ip dhcp excluded-address 10.3.3.0 10.3.3.63
+ip dhcp excluded-address 10.3.3.128 10.3.3.255
+ip dhcp pool VOICE
+network 10.3.3.0 255.255.255.0
+default-router 10.3.3.1
 exit
 
 
