@@ -904,7 +904,6 @@ vtp password 2VqOjiFH
 spanning-tree vlan 1-4095 priority 8192
 
 int range fa 0/3-13, fa0/16                
-spanning-tree bpduguard enable
 switchport mode access
 switchport port-security
 switchport port-security mac-address sticky
@@ -913,7 +912,6 @@ switchport port-security maximum 2
 switchport voice vlan 202
 exit
 int range fa 0/2, fa0/14
-spanning-tree bpduguard enable
 switchport mode access
 spanning-tree bpduguard enable
 switchport port-security
@@ -976,7 +974,6 @@ vtp password 2VqOjiFH
 
 
 int range fa 0/2, fa0/4-9, fa0/11-20
-spanning-tree bpduguard enable
 switchport mode access
 switchport port-security
 switchport port-security mac-address sticky
@@ -985,7 +982,6 @@ switchport port-security maximum 2
 switchport voice vlan 202
 exit
 int range  fa 0/3, fa0/10
-spanning-tree bpduguard enable
 switchport mode access
 switchport port-security
 switchport port-security mac-address sticky
@@ -1012,7 +1008,8 @@ exit
 int gig0/1
 switchport mode trunk
 exit
-
+int fa0/10
+spanning-tree bpduguard enable
 
 int vlan 200
 ip address 10.2.0.194 255.255.255.0
@@ -1077,9 +1074,6 @@ en
 conf t
 hostname ssw-gim-01
 int fa0/0
-no sh
-int fa0/0.20
-encapsulation dot1q 202
 description %GIM_TEL%
 ip address 10.2.2.1 255.255.255.0
 no sh
@@ -1122,6 +1116,62 @@ ephone-dn 10
 number 52210
 ephone-dn 11
 number 52211
+ephone-dn 12
+number 52212
+ephone-dn 13
+number 52213
+ephone-dn 14
+number 52214
+ephone-dn 15
+number 52215
+ephone-dn 16
+number 52216
+ephone-dn 17
+number 52217
+ephone-dn 18
+number 52218
+ephone-dn 19
+number 52219
+ephone-dn 20
+number 52220
+ephone-dn 21
+number 52221
+ephone-dn 22
+number 52222
+ephone-dn 23
+number 52223
+ephone-dn 24
+number 52224
+ephone-dn 25
+number 52225
+ephone-dn 26
+number 52226
+ephone-dn 27
+number 52227
+ephone-dn 28
+number 52228
+ephone-dn 29
+number 52229
+ephone-dn 30
+number 52230
+ephone-dn 31
+number 52231
+ephone-dn 32
+number 52232
+ephone-dn 33
+number 52233
+ephone-dn 34
+number 52234
+ephone-dn 35
+number 52235
+ephone-dn 36
+number 52236
+ephone-dn 37
+number 52237
+ephone-dn 38
+number 52238
+ephone-dn 39
+number 52239
 exit
 
 
