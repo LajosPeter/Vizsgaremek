@@ -1,16 +1,14 @@
-ki kell rakni a telefon központot (nem lehet külön valaminek át kell rajta mennie) jÓ AHOL VAN 
+
 Le kell tesztelni a szervereket
-Nem kell szórni ospf-fel a voice hálózatokat DONE
-po1 re cseréljem le a etherchannelt DONE
-ahol ap vagy telefon van ne legyen bpdguard hanem guard root legyen minden portján ki kell adni DONE
+
+
 spanning-tree portfast minden porton ahol nincs switch 
 spanning-tree portfast default 
-Nem kell nativ vlan de biztonság miatt csinálok minden trunk porton engedélyezni kell DONE
-Ha mindegyik switch ismeri a tegelést akkor nem kel natív vlan de ha régebbi eszközökezt DONE
+
 
 ssw-tank meg kell csinálni hogy az sw-tank-04, sw-tank-06 működjön
 
-
+Port security restrict max 2 mac cím valamiért blokkolja az ip telefenokat
 
 
 # rtr-telekom-core-01
