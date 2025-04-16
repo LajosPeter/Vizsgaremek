@@ -1,6 +1,7 @@
 
 Le kell tesztelni a szervereket
-Alagutak, ASA, vty, jelszó védvédelem
+Alagutak, ASA, vty, jelszó védvédelem, ACL
+
 
 spanning-tree portfast minden porton ahol nincs switch 
 spanning-tree portfast default 
