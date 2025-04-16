@@ -251,13 +251,15 @@ exit
 int gigabitEthernet 0/1
 no sh
 int gigabitEthernet 0/1.300
-description %KOL_DIAK%
+encapsulation dot1Q 300
+description KOL_DIAK
 ip address 10.3.1.1 255.255.255.0
 ip helper-address 10.3.1.1
 no sh
 exit
 int gigabitEthernet 0/1.330
-description %KOL_SWMAN%
+encapsulation dot1Q 330
+description KOL_SWMAN
 ip address 10.3.30.1 255.255.255.0
 no sh
 exit
@@ -280,7 +282,6 @@ ip nat inside
 exit
 
 access-list 3 permit 10.3.0.0 0.0.0.255
-access-list 3 permit 10.3.1.0 0.0.0.255
 access-list 3 permit 10.3.30.0 0.0.0.255
 ip nat pool PNATPOOLKOL 195.228.3.4 195.228.3.8 netmask 255.255.255.224
 ip nat inside source list 3 pool PNATPOOLKOL overload
