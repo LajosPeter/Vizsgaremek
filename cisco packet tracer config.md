@@ -253,8 +253,8 @@ no sh
 int gigabitEthernet 0/1.300
 encapsulation dot1Q 300
 description KOL_DIAK
-ip address 10.3.1.1 255.255.255.0
-ip helper-address 10.3.1.1
+ip address 10.3.0.1 255.255.255.0
+ip helper-address 10.3.0.1
 no sh
 exit
 int gigabitEthernet 0/1.330
@@ -264,11 +264,11 @@ ip address 10.3.30.1 255.255.255.0
 no sh
 exit
 
-ip dhcp excluded-address 10.3.1.0 10.3.1.63
-ip dhcp excluded-address 10.3.1.128 10.3.1.255
+ip dhcp excluded-address 10.3.0.0 10.3.0.63
+ip dhcp excluded-address 10.3.0.128 10.3.0.255
 ip dhcp pool DIAK
-network 10.3.1.0 255.255.255.0
-default-router 10.3.1.1
+network 10.3.0.0 255.255.255.0
+default-router 10.3.0.1
 exit
 
 
