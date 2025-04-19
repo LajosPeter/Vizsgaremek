@@ -549,7 +549,7 @@ access-list 2 permit 10.2.5.0 0.0.0.255
 access-list 2 permit 10.2.10.0 0.0.0.255
 access-list 2 permit 10.2.20.0 0.0.0.255
 access-list 2 permit 10.2.21.0 0.0.0.255
-ip nat pool PNATPOOLGIM 195.228.3.4 195.228.3.8 netmask 255.255.255.224
+ip nat pool PNATPOOLGIM 195.228.2.4 195.228.2.8 netmask 255.255.255.224
 ip nat inside source list 2 pool PNATPOOLGIM overload
 
 
@@ -1276,6 +1276,7 @@ en
 conf t
 hostname fw-dc-01
 
+
 # sw-dc-01
 ```
 en 
@@ -1289,7 +1290,7 @@ vlan 540
 name DC_NATIV
 exit
 int range fa0/2-3
-switcport mode access
+switchport mode access
 switchport access vlan 520
 spanning-tree bpduguard enable
 switchport port-security
@@ -1299,7 +1300,13 @@ switchport port-security maximum 1
 exit
 int fa0/1
 switchport mode trunk
-switcport trunk nativ vlan 540
+switchport trunk nativ vlan 540
+switchport trunk allowed vlan 520,530
+exit
+interface Vlan530
+ip address 10.5.30.16 255.255.255.0
+exit
+ip default-gateway 10.5.30.1
 ```
 
 
