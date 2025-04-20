@@ -1788,7 +1788,7 @@ conf t
 hostname rtr-tank-01
 
 int g0/1
-ip address 192.228.1.16 255.255.255.224
+ip address 195.228.1.16 255.255.255.224
 no sh
 exit
 
