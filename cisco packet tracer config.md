@@ -108,7 +108,6 @@ interface GigabitEthernet0/0
 !
 interface GigabitEthernet0/1
  no ip address
- ip nat inside
  duplex auto
  speed auto
  ipv6 nat
@@ -117,6 +116,7 @@ interface GigabitEthernet0/1
 interface GigabitEthernet0/1.400
  encapsulation dot1Q 400
  ip address 10.7.1.1 255.255.255.0
+ ip nat inside
 !
 interface GigabitEthernet0/1.430
  encapsulation dot1Q 430
@@ -134,13 +134,19 @@ interface Vlan1
  no ip address
  shutdown
 !
-ip nat pool PNATPOOLSP 195.228.7.4 195.228.7.8 netmask 255.255.255.224
-ip nat inside source list 7 pool PNATPOOLSP overload
+! NAT ACL with exceptions
+ip access-list extended NAT_ACL
+ deny ip 10.7.1.0 0.0.0.255 10.5.20.0 0.0.0.255
+ deny ip 10.7.30.0 0.0.0.255 10.5.20.0 0.0.0.255
+ permit ip 10.7.1.0 0.0.0.255 any
+ permit ip 10.7.30.0 0.0.0.255 any
+!
+! dynamic NAT rules
+ip nat pool PNATPOOLSP 195.228.7.16 195.228.7.16 netmask 255.255.255.255
+ip nat inside source list NAT_ACL pool PNATPOOLSP overload
+!
 ip route 0.0.0.0 0.0.0.0 195.228.7.1 
 !
-access-list 7 permit 10.7.1.0 0.0.0.255
-access-list 7 permit 10.7.30.0 0.0.0.255
-
 !!!!!!!!!!!!!!! IPsec related objects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !
 !
@@ -645,16 +651,28 @@ int g0/0
 ip nat outside
 exit
 
-access-list 2 permit 10.2.0.0 0.0.0.255
-access-list 2 permit 10.2.1.0 0.0.0.255
-access-list 2 permit 10.2.3.0 0.0.0.255
-access-list 2 permit 10.2.4.0 0.0.0.255
-access-list 2 permit 10.2.5.0 0.0.0.255
-access-list 2 permit 10.2.10.0 0.0.0.255
-access-list 2 permit 10.2.20.0 0.0.0.255
-access-list 2 permit 10.2.21.0 0.0.0.255
-ip nat pool PNATPOOLGIM 195.228.2.4 195.228.2.8 netmask 255.255.255.224
-ip nat inside source list 2 pool PNATPOOLGIM overload
+! NAT ACL with VPN exception
+ip access-list extended NAT_ACL
+ deny ip 10.2.0.0 0.0.0.255 10.5.20.0 0.0.0.255
+ deny ip 10.2.1.0 0.0.0.255 10.5.20.0 0.0.0.255
+ deny ip 10.2.3.0 0.0.0.255 10.5.20.0 0.0.0.255
+ deny ip 10.2.4.0 0.0.0.255 10.5.20.0 0.0.0.255
+ deny ip 10.2.5.0 0.0.0.255 10.5.20.0 0.0.0.255
+ deny ip 10.2.20.0 0.0.0.255 10.5.20.0 0.0.0.255
+ permit ip 10.2.0.0 0.0.0.255 any
+ permit ip 10.2.1.0 0.0.0.255 any
+ permit ip 10.2.3.0 0.0.0.255 any
+ permit ip 10.2.4.0 0.0.0.255 any
+ permit ip 10.2.5.0 0.0.0.255 any
+ permit ip 10.2.10.0 0.0.0.255 any
+ permit ip 10.2.20.0 0.0.0.255 any
+ permit ip 10.2.21.0 0.0.0.255 any
+!
+! NAT rules
+ip nat inside source list NAT_ACL pool PNATPOOLGIM overload
+ip nat pool PNATPOOLGIM 195.228.2.16 195.228.2.16 netmask 255.255.255.255
+
+
 !!!!!!!!!!!!!!! IPsec related objects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !
 !
