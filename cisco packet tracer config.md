@@ -1482,7 +1482,7 @@ service-policy PMAP_BASE global
 !!!!!!!!!!!!!!! IPsec related objects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !
 ! közös mindenhol
-crypto ipsec ikev1 transform-set IKEV1_TRSET esp-aes 256 esp-sha-hmac
+crypto ipsec ikev1 transform-set IKEV1_TRSET esp-aes-256 esp-sha-hmac
 !
 ! ez is közös
 crypto ikev1 policy 100
@@ -1524,6 +1524,17 @@ object network TANK_SWMAN
 object network TANK_VEZ
  subnet 10.1.1.0 255.255.255.0
 !
+object network rtr-tank-01.internet
+ host 195.228.1.16
+object network rtr-gim-01.internet
+ host 195.228.2.16			
+object network rtr-kol-01.internet
+ host 195.228.3.16
+object network rtr-sp-01.internet
+ host 195.228.7.16
+object network fw-dc-01.internet
+ host 195.228.5.15
+!
 ! Sportpálya specifikus IPsec tunnel ACL
 access-list IPSEC_SP_ACL extended permit ip object DC_SERVER object SP_DESKTOP
 access-list IPSEC_SP_ACL extended permit ip object DC_SERVER object SP_SWMAN
@@ -1547,33 +1558,25 @@ access-list IPSEC_TANK_ACL extended permit ip object DC_SERVER object TANK_VEZ
 access-list IPSEC_KOL_ACL extended permit ip object DC_SERVER object KOL_SWMAN
 access-list IPSEC_KOL_ACL extended permit ip object DC_SERVER object KOL_DIAK
 !
-! 
+!
 ! Tankerület
-crypto map CMAP_TANK 10 match address IPSEC_TANK_ACL
-crypto map CMAP_TANK 10 set peer 195.228.1.16 
-crypto map CMAP_TANK 10 set ikev1 transform-set IKEV1_TRSET 
-crypto map CMAP_TANK interface INTERNET
-crypto ikev1 enable INTERNET
-!
+crypto map CMAP 1 match address IPSEC_TANK_ACL
+crypto map CMAP 1 set peer 195.228.1.16 
+crypto map CMAP 1 set ikev1 transform-set IKEV1_TRSET 
 ! Gimnázium
-crypto map CMAP_GIM 10 match address IPSEC_GIM_ACL
-crypto map CMAP_GIM 10 set peer 195.228.2.16 
-crypto map CMAP_GIM 10 set ikev1 transform-set IKEV1_TRSET 
-crypto map CMAP_GIM interface INTERNET
-crypto ikev1 enable INTERNET
-!
+crypto map CMAP 2 match address IPSEC_GIM_ACL
+crypto map CMAP 2 set peer 195.228.2.16 
+crypto map CMAP 2 set ikev1 transform-set IKEV1_TRSET 
 ! Kollégium
-crypto map CMAP_KOL 10 match address IPSEC_KOL_ACL
-crypto map CMAP_KOL 10 set peer 195.228.3.16 
-crypto map CMAP_KOL 10 set ikev1 transform-set IKEV1_TRSET 
-crypto map CMAP_KOL interface INTERNET
-crypto ikev1 enable INTERNET
-!
+crypto map CMAP 3 match address IPSEC_KOL_ACL
+crypto map CMAP 3 set peer 195.228.3.16 
+crypto map CMAP 3 set ikev1 transform-set IKEV1_TRSET
 ! Sportpálya
-crypto map CMAP_SP 10 match address IPSEC_SP_ACL
-crypto map CMAP_SP 10 set peer 195.228.7.16 
-crypto map CMAP_SP 10 set ikev1 transform-set IKEV1_TRSET 
-crypto map CMAP_SP interface INTERNET
+crypto map CMAP 7 match address IPSEC_SP_ACL
+crypto map CMAP 7 set peer 195.228.7.16 
+crypto map CMAP 7 set ikev1 transform-set IKEV1_TRSET 
+!
+crypto map CMAP interface INTERNET
 crypto ikev1 enable INTERNET
 !
 ! viszonylatonkénti tunnel group
@@ -1600,7 +1603,16 @@ tunnel-group 195.228.7.16 ipsec-attributes
 
 !!!!!!!!!!!!!!!!!!!!!!! tűzfal szabályok !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !
+! IPsec tunnelhez szükséges szabályok
+access-list FW_INTERNET_ACL extended permit ip object rtr-tank-01.internet object fw-dc-01.internet
+access-list FW_INTERNET_ACL extended permit ip object rtr-gim-01.internet object fw-dc-01.internet
+access-list FW_INTERNET_ACL extended permit ip object rtr-kol-01.internet object fw-dc-01.internet
+access-list FW_INTERNET_ACL extended permit ip object rtr-sp-01.internet object fw-dc-01.internet
+no access-list FW_INTERNET_ACL extended deny ip any any
+access-list FW_INTERNET_ACL extended deny ip any any
+!
 ! Tankerület
+access-list FW_INTERNET_ACL extended permit icmp object TANK_RG object DC_SERVER echo
 access-list FW_INTERNET_ACL extended permit icmp object TANK_RG object DC_SERVER echo
 access-list FW_INTERNET_ACL extended permit udp object TANK_RG object DC_SERVER eq 53
 access-list FW_INTERNET_ACL extended permit tcp object TANK_RG object DC_SERVER eq 53
@@ -1687,9 +1699,6 @@ access-list FW_INTERNET_ACL extended permit tcp object KOL_SWMAN object DC_SERVE
 no access-list FW_INTERNET_ACL extended deny ip any any
 access-list FW_INTERNET_ACL extended deny ip any any
 !
-!
-
-!
 ! Sportpálya
 access-list FW_INTERNET_ACL extended permit icmp object SP_DESKTOP object DC_SERVER echo
 access-list FW_INTERNET_ACL extended permit udp object SP_DESKTOP object DC_SERVER eq 53
@@ -1701,6 +1710,25 @@ access-list FW_INTERNET_ACL extended permit tcp object SP_DESKTOP object DC_SERV
 access-list FW_INTERNET_ACL extended permit icmp object SP_SWMAN object DC_SERVER echo
 access-list FW_INTERNET_ACL extended permit tcp object SP_SWMAN object DC_SERVER eq 21
 !
+no access-list FW_INTERNET_ACL extended deny ip any any
+access-list FW_INTERNET_ACL extended deny ip any any
+!
+! debug from DC_SERVER zone
+access-list FW_INTERNET_ACL extended permit icmp object TANK_RG object DC_SERVER echo-reply
+access-list FW_INTERNET_ACL extended permit icmp object TANK_VEZ object DC_SERVER echo-reply
+access-list FW_INTERNET_ACL extended permit icmp object TANK_ALK object DC_SERVER echo-reply
+access-list FW_INTERNET_ACL extended permit icmp object TANK_SERVER object DC_SERVER echo-reply
+access-list FW_INTERNET_ACL extended permit icmp object TANK_SWMAN object DC_SERVER echo-reply
+access-list FW_INTERNET_ACL extended permit icmp object GIM_RG object DC_SERVER echo-reply
+access-list FW_INTERNET_ACL extended permit icmp object GIM_VEZ object DC_SERVER echo-reply
+access-list FW_INTERNET_ACL extended permit icmp object GIM_TANAR object DC_SERVER echo-reply
+access-list FW_INTERNET_ACL extended permit icmp object GIM_PORTA object DC_SERVER echo-reply
+access-list FW_INTERNET_ACL extended permit icmp object GIM_GO object DC_SERVER echo-reply
+access-list FW_INTERNET_ACL extended permit icmp object GIM_SERVER object DC_SERVER echo-reply
+access-list FW_INTERNET_ACL extended permit icmp object KOL_DIAK object DC_SERVER echo-reply
+access-list FW_INTERNET_ACL extended permit icmp object KOL_SWMAN object DC_SERVER echo-reply
+access-list FW_INTERNET_ACL extended permit icmp object SP_DESKTOP object DC_SERVER echo-reply
+access-list FW_INTERNET_ACL extended permit icmp object SP_SWMAN object DC_SERVER echo-reply
 no access-list FW_INTERNET_ACL extended deny ip any any
 access-list FW_INTERNET_ACL extended deny ip any any
 !
