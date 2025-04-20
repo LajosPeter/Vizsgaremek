@@ -1407,9 +1407,6 @@ exit
 ```
 
 
-
-SZERVER TELEPHELY MÉG SEMMI
-
 # fw-dc-01
 ```
 en 
@@ -1510,7 +1507,7 @@ object network GIM_VEZ
  subnet 10.2.1.0 255.255.255.0
 object network KOL_SWMAN
  subnet 10.3.30.0 255.255.255.0
-object network KOL_TANAR
+object network KOL_DIAK
  subnet 10.3.0.0 255.255.255.0
 object network SP_DESKTOP
  subnet 10.7.1.0 255.255.255.0
@@ -1530,36 +1527,186 @@ object network TANK_VEZ
 ! Sportpálya specifikus IPsec tunnel ACL
 access-list IPSEC_SP_ACL extended permit ip object DC_SERVER object SP_DESKTOP
 access-list IPSEC_SP_ACL extended permit ip object DC_SERVER object SP_SWMAN
-! FIXME telephelyenkénti ACL-ek
-FIXME
-FIXME
 !
+! Gimnázium specifikus IPsec tunnel ACL
+access-list IPSEC_GIM_ACL extended permit ip object DC_SERVER object GIM_GO
+access-list IPSEC_GIM_ACL extended permit ip object DC_SERVER object GIM_PORTA
+access-list IPSEC_GIM_ACL extended permit ip object DC_SERVER object GIM_RG
+access-list IPSEC_GIM_ACL extended permit ip object DC_SERVER object GIM_SERVER
+access-list IPSEC_GIM_ACL extended permit ip object DC_SERVER object GIM_TANAR
+access-list IPSEC_GIM_ACL extended permit ip object DC_SERVER object GIM_VEZ
 !
-! viszonylatonkénti mapping
+! Tankerület specifikus IPsec tunnel ACL
+access-list IPSEC_TANK_ACL extended permit ip object DC_SERVER object TANK_ALK
+access-list IPSEC_TANK_ACL extended permit ip object DC_SERVER object TANK_RG
+access-list IPSEC_TANK_ACL extended permit ip object DC_SERVER object TANK_SERVER
+access-list IPSEC_TANK_ACL extended permit ip object DC_SERVER object TANK_SWMAN
+access-list IPSEC_TANK_ACL extended permit ip object DC_SERVER object TANK_VEZ
+!
+! Kollégium specifikus IPsec tunnel ACL
+access-list IPSEC_KOL_ACL extended permit ip object DC_SERVER object KOL_SWMAN
+access-list IPSEC_KOL_ACL extended permit ip object DC_SERVER object KOL_DIAK
+!
+! 
+! Tankerület
+crypto map CMAP_TANK 10 match address IPSEC_TANK_ACL
+crypto map CMAP_TANK 10 set peer 195.228.1.16 
+crypto map CMAP_TANK 10 set ikev1 transform-set IKEV1_TRSET 
+crypto map CMAP_TANK interface INTERNET
+crypto ikev1 enable INTERNET
+!
+! Gimnázium
+crypto map CMAP_GIM 10 match address IPSEC_GIM_ACL
+crypto map CMAP_GIM 10 set peer 195.228.2.16 
+crypto map CMAP_GIM 10 set ikev1 transform-set IKEV1_TRSET 
+crypto map CMAP_GIM interface INTERNET
+crypto ikev1 enable INTERNET
+!
+! Kollégium
+crypto map CMAP_KOL 10 match address IPSEC_KOL_ACL
+crypto map CMAP_KOL 10 set peer 195.228.3.16 
+crypto map CMAP_KOL 10 set ikev1 transform-set IKEV1_TRSET 
+crypto map CMAP_KOL interface INTERNET
+crypto ikev1 enable INTERNET
+!
+! Sportpálya
 crypto map CMAP_SP 10 match address IPSEC_SP_ACL
 crypto map CMAP_SP 10 set peer 195.228.7.16 
 crypto map CMAP_SP 10 set ikev1 transform-set IKEV1_TRSET 
 crypto map CMAP_SP interface INTERNET
 crypto ikev1 enable INTERNET
 !
-! többi cmap
-!
 ! viszonylatonkénti tunnel group
+! TANK
+tunnel-group 195.228.1.16 type ipsec-l2l
+tunnel-group 195.228.1.16 ipsec-attributes
+ ikev1 pre-shared-key cisco
+!
+! GIM
+tunnel-group 195.228.2.16 type ipsec-l2l
+tunnel-group 195.228.2.16 ipsec-attributes
+ ikev1 pre-shared-key cisco
+!
+! KOL
+tunnel-group 195.228.3.16 type ipsec-l2l
+tunnel-group 195.228.3.16 ipsec-attributes
+ ikev1 pre-shared-key cisco
+!
 ! SP
 tunnel-group 195.228.7.16 type ipsec-l2l
 tunnel-group 195.228.7.16 ipsec-attributes
  ikev1 pre-shared-key cisco
-!
-!
+
+
 !!!!!!!!!!!!!!!!!!!!!!! tűzfal szabályok !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !
-! siteonként/network-önként kell 
+! Tankerület
+access-list FW_INTERNET_ACL extended permit icmp object TANK_RG object DC_SERVER echo
+access-list FW_INTERNET_ACL extended permit udp object TANK_RG object DC_SERVER eq 53
+access-list FW_INTERNET_ACL extended permit tcp object TANK_RG object DC_SERVER eq 53
+access-list FW_INTERNET_ACL extended permit tcp object TANK_RG object DC_SERVER eq 80
+access-list FW_INTERNET_ACL extended permit tcp object TANK_RG object DC_SERVER eq 443
+access-list FW_INTERNET_ACL extended permit tcp object TANK_RG object DC_SERVER eq 21
+!
+access-list FW_INTERNET_ACL extended permit icmp object TANK_VEZ object DC_SERVER echo
+access-list FW_INTERNET_ACL extended permit udp object TANK_VEZ object DC_SERVER eq 53
+access-list FW_INTERNET_ACL extended permit tcp object TANK_VEZ object DC_SERVER eq 53
+access-list FW_INTERNET_ACL extended permit tcp object TANK_VEZ object DC_SERVER eq 80
+access-list FW_INTERNET_ACL extended permit tcp object TANK_VEZ object DC_SERVER eq 443
+access-list FW_INTERNET_ACL extended permit tcp object TANK_VEZ object DC_SERVER eq 21
+!
+access-list FW_INTERNET_ACL extended permit icmp object TANK_ALK object DC_SERVER echo
+access-list FW_INTERNET_ACL extended permit udp object TANK_ALK object DC_SERVER eq 53
+access-list FW_INTERNET_ACL extended permit tcp object TANK_ALK object DC_SERVER eq 53
+access-list FW_INTERNET_ACL extended permit tcp object TANK_ALK object DC_SERVER eq 80
+access-list FW_INTERNET_ACL extended permit tcp object TANK_ALK object DC_SERVER eq 443
+access-list FW_INTERNET_ACL extended permit tcp object TANK_ALK object DC_SERVER eq 21
+!
+access-list FW_INTERNET_ACL extended permit icmp object TANK_SERVER object DC_SERVER echo
+access-list FW_INTERNET_ACL extended permit tcp object TANK_SERVER object DC_SERVER eq 21
+!
+access-list FW_INTERNET_ACL extended permit icmp object TANK_SWMAN object DC_SERVER echo
+access-list FW_INTERNET_ACL extended permit tcp object TANK_SWMAN object DC_SERVER eq 21
+!
+no access-list FW_INTERNET_ACL extended deny ip any any
+access-list FW_INTERNET_ACL extended deny ip any any
+!
+! Gimnázium
+access-list FW_INTERNET_ACL extended permit icmp object GIM_RG object DC_SERVER echo
+access-list FW_INTERNET_ACL extended permit udp object GIM_RG object DC_SERVER eq 53
+access-list FW_INTERNET_ACL extended permit tcp object GIM_RG object DC_SERVER eq 53
+access-list FW_INTERNET_ACL extended permit tcp object GIM_RG object DC_SERVER eq 80
+access-list FW_INTERNET_ACL extended permit tcp object GIM_RG object DC_SERVER eq 443
+access-list FW_INTERNET_ACL extended permit tcp object GIM_RG object DC_SERVER eq 21
+!
+access-list FW_INTERNET_ACL extended permit icmp object GIM_VEZ object DC_SERVER echo
+access-list FW_INTERNET_ACL extended permit udp object GIM_VEZ object DC_SERVER eq 53
+access-list FW_INTERNET_ACL extended permit tcp object GIM_VEZ object DC_SERVER eq 53
+access-list FW_INTERNET_ACL extended permit tcp object GIM_VEZ object DC_SERVER eq 80
+access-list FW_INTERNET_ACL extended permit tcp object GIM_VEZ object DC_SERVER eq 443
+access-list FW_INTERNET_ACL extended permit tcp object GIM_VEZ object DC_SERVER eq 21
+!
+access-list FW_INTERNET_ACL extended permit icmp object GIM_TANAR object DC_SERVER echo
+access-list FW_INTERNET_ACL extended permit udp object GIM_TANAR object DC_SERVER eq 53
+access-list FW_INTERNET_ACL extended permit tcp object GIM_TANAR object DC_SERVER eq 53
+access-list FW_INTERNET_ACL extended permit tcp object GIM_TANAR object DC_SERVER eq 80
+access-list FW_INTERNET_ACL extended permit tcp object GIM_TANAR object DC_SERVER eq 443
+access-list FW_INTERNET_ACL extended permit tcp object GIM_TANAR object DC_SERVER eq 21
+!
+access-list FW_INTERNET_ACL extended permit icmp object GIM_PORTA object DC_SERVER echo
+access-list FW_INTERNET_ACL extended permit udp object GIM_PORTA object DC_SERVER eq 53
+access-list FW_INTERNET_ACL extended permit tcp object GIM_PORTA object DC_SERVER eq 53
+access-list FW_INTERNET_ACL extended permit tcp object GIM_PORTA object DC_SERVER eq 80
+access-list FW_INTERNET_ACL extended permit tcp object GIM_PORTA object DC_SERVER eq 443
+access-list FW_INTERNET_ACL extended permit tcp object GIM_PORTA object DC_SERVER eq 21
+!
+access-list FW_INTERNET_ACL extended permit icmp object GIM_GO object DC_SERVER echo
+access-list FW_INTERNET_ACL extended permit udp object GIM_GO object DC_SERVER eq 53
+access-list FW_INTERNET_ACL extended permit tcp object GIM_GO object DC_SERVER eq 53
+access-list FW_INTERNET_ACL extended permit tcp object GIM_GO object DC_SERVER eq 80
+access-list FW_INTERNET_ACL extended permit tcp object GIM_GO object DC_SERVER eq 443
+access-list FW_INTERNET_ACL extended permit tcp object GIM_GO object DC_SERVER eq 21
+!
+access-list FW_INTERNET_ACL extended permit icmp object GIM_SERVER object DC_SERVER echo
+access-list FW_INTERNET_ACL extended permit tcp object GIM_SERVER object DC_SERVER eq 21
+!
+no access-list FW_INTERNET_ACL extended deny ip any any
+access-list FW_INTERNET_ACL extended deny ip any any
+!
+! Kollégium
+access-list FW_INTERNET_ACL extended permit icmp object KOL_DIAK object DC_SERVER echo
+access-list FW_INTERNET_ACL extended permit udp object KOL_DIAK object DC_SERVER eq 53
+access-list FW_INTERNET_ACL extended permit tcp object KOL_DIAK object DC_SERVER eq 53
+access-list FW_INTERNET_ACL extended permit tcp object KOL_DIAK object DC_SERVER eq 80
+access-list FW_INTERNET_ACL extended permit tcp object KOL_DIAK object DC_SERVER eq 443
+access-list FW_INTERNET_ACL extended permit tcp object KOL_DIAK object DC_SERVER eq 21
+!
+access-list FW_INTERNET_ACL extended permit icmp object KOL_SWMAN object DC_SERVER echo
+access-list FW_INTERNET_ACL extended permit tcp object KOL_SWMAN object DC_SERVER eq 21
+!
+no access-list FW_INTERNET_ACL extended deny ip any any
+access-list FW_INTERNET_ACL extended deny ip any any
+!
+!
+
+!
+! Sportpálya
 access-list FW_INTERNET_ACL extended permit icmp object SP_DESKTOP object DC_SERVER echo
+access-list FW_INTERNET_ACL extended permit udp object SP_DESKTOP object DC_SERVER eq 53
+access-list FW_INTERNET_ACL extended permit tcp object SP_DESKTOP object DC_SERVER eq 53
+access-list FW_INTERNET_ACL extended permit tcp object SP_DESKTOP object DC_SERVER eq 80
+access-list FW_INTERNET_ACL extended permit tcp object SP_DESKTOP object DC_SERVER eq 443
+access-list FW_INTERNET_ACL extended permit tcp object SP_DESKTOP object DC_SERVER eq 21
+!
+access-list FW_INTERNET_ACL extended permit icmp object SP_SWMAN object DC_SERVER echo
+access-list FW_INTERNET_ACL extended permit tcp object SP_SWMAN object DC_SERVER eq 21
+!
+no access-list FW_INTERNET_ACL extended deny ip any any
 access-list FW_INTERNET_ACL extended deny ip any any
 !
 access-group FW_INTERNET_ACL in interface INTERNET
 !
-
+!
 ```
 
 # sw-dc-01
