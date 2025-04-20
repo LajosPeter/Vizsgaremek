@@ -1,6 +1,6 @@
 
 Le kell tesztelni a szervereket
-Alagutak, ASA, vty, jelszó védvédelem, ACL
+Alagutak, ASA, vty, jelszó védvédelem, acl, show parancsok
 
 
 spanning-tree portfast minden porton ahol nincs switch 
@@ -301,7 +301,21 @@ L       195.228.6.9/32 is directly connected, Serial0/0/1
 ### Konfiguracio
 
 ```
+! első boot után azonnal aktiválni kell a securtity licencet
+! el kell fogadni a license agreement-et, ki kell írni a konfigurációt
+! majd újra kell indítani a router-t
+ena
+conf t
+license boot module c2900 technology-package securityk9
+end
+wri mem
+reload
+
+! indulás után ellenőrizni kell a licence beállításokat
 enable
+show version
+
+! konfiguráció építés
 configure terminal
 hostname rtr-kol-01
 
@@ -347,11 +361,37 @@ access-list 3 permit 10.3.0.0 0.0.0.255
 access-list 3 permit 10.3.30.0 0.0.0.255
 ip nat pool PNATPOOLKOL 195.228.3.4 195.228.3.8 netmask 255.255.255.224
 ip nat inside source list 3 pool PNATPOOLKOL overload
+!!!!!!!!!!!!!!! IPsec related objects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!
+!
+crypto ipsec transform-set IKEV1_TRSET esp-aes 256 esp-sha-hmac
+!
+crypto isakmp policy 100
+ encr aes
+ authentication pre-share
+ group 5
+ lifetime 28800
+!
+! DC oldali ASA
+crypto isakmp key cisco address 195.228.5.15
+!
+! IPsec tunnel specifikus ACL
+ip access-list extended IPSEC_DC_ACL
+ permit ip 10.3.0.0 0.0.0.255 10.5.20.0 0.0.0.255
+ permit ip 10.3.30.0 0.0.0.255 10.5.20.0 0.0.0.255
+!
+crypto map CMAP_DC 10 ipsec-isakmp 
+ set peer 195.228.5.15
+ set transform-set IKEV1_TRSET 
+ match address IPSEC_DC_ACL
+!
+! interfész cryptomap összerendelés
+interface GigabitEthernet0/0
+ crypto map CMAP_DC
+!
 
 ```
-  ^
-  I
-FIXME nem találtam ki milyen nat kell
+
 ### Show parancsok
 
 ```
@@ -546,6 +586,23 @@ L       195.228.6.13/32 is directly connected, Serial0/0/0
 ### Konfiguracio
 
 ```
+! első boot után azonnal aktiválni kell a securtity licencet
+! el kell fogadni a license agreement-et, ki kell írni a konfigurációt
+! majd újra kell indítani a router-t
+ena
+conf t
+license boot module c2900 technology-package securityk9
+do wri mem
+do reload
+
+! indulás után ellenőrizni kell a licence beállításokat
+ena
+sh ver
+
+! konfiguráció építés
+conf t
+
+
 enable
 config terminal
 hostname rtr-gim-01
@@ -598,6 +655,41 @@ access-list 2 permit 10.2.20.0 0.0.0.255
 access-list 2 permit 10.2.21.0 0.0.0.255
 ip nat pool PNATPOOLGIM 195.228.2.4 195.228.2.8 netmask 255.255.255.224
 ip nat inside source list 2 pool PNATPOOLGIM overload
+!!!!!!!!!!!!!!! IPsec related objects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!
+!
+crypto ipsec transform-set IKEV1_TRSET esp-aes 256 esp-sha-hmac
+!
+crypto isakmp policy 100
+ encr aes
+ authentication pre-share
+ group 5
+ lifetime 28800
+!
+! DC oldali ASA
+crypto isakmp key cisco address 195.228.5.15
+!
+! IPsec tunnel specifikus ACL
+ip access-list extended IPSEC_DC_ACL
+ permit ip 10.2.0.0 0.0.0.255 10.5.20.0 0.0.0.255
+ permit ip 10.2.1.0 0.0.0.255 10.5.20.0 0.0.0.255
+ permit ip 10.2.3.0 0.0.0.255 10.5.20.0 0.0.0.255
+ permit ip 10.2.4.0 0.0.0.255 10.5.20.0 0.0.0.255
+ permit ip 10.2.5.0 0.0.0.255 10.5.20.0 0.0.0.255
+ permit ip 10.2.20.0 0.0.0.255 10.5.20.0 0.0.0.255
+!
+crypto map CMAP_DC 10 ipsec-isakmp 
+ set peer 195.228.5.15
+ set transform-set IKEV1_TRSET 
+ match address IPSEC_DC_ACL
+!
+! interfész cryptomap összerendelés
+interface GigabitEthernet0/0
+ crypto map CMAP_DC
+!
+
+
+
 
 
 ```
@@ -1527,8 +1619,22 @@ Szolgáltatások
 
 # rtr-tank-01
 ```
-en 
+! első boot után azonnal aktiválni kell a securtity licencet
+! el kell fogadni a license agreement-et, ki kell írni a konfigurációt
+! majd újra kell indítani a router-t
+ena
 conf t
+license boot module c2900 technology-package securityk9
+do wri mem
+do reload
+
+! indulás után ellenőrizni kell a licence beállításokat
+ena
+sh ver
+
+! konfiguráció építés
+conf t
+
 hostname rtr-tank-01
 
 int g0/1
@@ -1572,6 +1678,39 @@ access-list 1 permit 10.1.20.0 0.0.0.255
 access-list 1 permit 10.1.30.0 0.0.0.255
 ip nat pool PNATPOOLTANK 195.228.1.4 195.228.1.8 netmask 255.255.255.224
 ip nat inside source list 1 pool PNATPOOLTANK overload
+
+!!!!!!!!!!!!!!! IPsec related objects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!
+!
+crypto ipsec transform-set IKEV1_TRSET esp-aes 256 esp-sha-hmac
+!
+crypto isakmp policy 100
+ encr aes
+ authentication pre-share
+ group 5
+ lifetime 28800
+!
+! DC oldali ASA
+crypto isakmp key cisco address 195.228.5.15
+!
+! IPsec tunnel specifikus ACL
+ip access-list extended IPSEC_DC_ACL
+ permit ip 10.1.0.0 0.0.0.255 10.5.20.0 0.0.0.255
+ permit ip 10.1.1.0 0.0.0.255 10.5.20.0 0.0.0.255
+ permit ip 10.1.3.0 0.0.0.255 10.5.20.0 0.0.0.255
+ permit ip 10.1.20.0 0.0.0.255 10.5.20.0 0.0.0.255
+ permit ip 10.1.30.0 0.0.0.255 10.5.20.0 0.0.0.255
+!
+crypto map CMAP_DC 10 ipsec-isakmp 
+ set peer 195.228.5.15
+ set transform-set IKEV1_TRSET 
+ match address IPSEC_DC_ACL
+!
+! interfész cryptomap összerendelés
+interface GigabitEthernet0/1
+ crypto map CMAP_DC
+!
+
 
 ```
 
