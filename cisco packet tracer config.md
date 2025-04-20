@@ -80,6 +80,7 @@ Még mindig szar
 ena
 conf t
 license boot module c2900 technology-package securityk9
+end
 wri mem
 reload
 
