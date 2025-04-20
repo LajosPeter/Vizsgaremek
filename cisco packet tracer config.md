@@ -42,8 +42,6 @@ passive-interface Gig0/0
 network 195.228.7.0	0.0.0.31 area 6
 network 195.228.6.0	0.0.0.3 area 6
 network 195.228.6.4	0.0.0.3 area 6
-
-
 area 6 authentication message-digest
 exit
 int se0/0/0
@@ -271,7 +269,7 @@ ip dhcp pool DIAK
 network 10.3.0.0 255.255.255.0
 default-router 10.3.0.1
 exit
-
+ip route 0.0.0.0 0.0.0.0 195.228.3.1
 
 int gigabitethernet 0/0
 ip nat outside
@@ -415,22 +413,6 @@ VLAN Name                             Status    Ports
 ```
 
 
-# wlc-kol-01 FIXME
-```
-Username:cis$coIT
-Password:cis$coIT
-System Name: wlc-kol-01-mgmt
-Country : Netherlands
-Timezone: Amsterdam, Berlin, Rome, Vienna
-Management IP address: 10.3.30.193
-Subnet mask: 255.255.255.0
-Default Gateway: 10.3.30.1
-Management VLAN ID: 330
-Employee Network:
-    WPA2 Personal
-    Passphrase:cis$coIT
-    Confirm Passphrase: cisco1234
-```
 
 # rtr-telekom-core-03
 
