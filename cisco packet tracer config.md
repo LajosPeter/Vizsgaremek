@@ -142,10 +142,9 @@ access-list 7 permit 10.7.30.0 0.0.0.255
 
 !!!!!!!!!!!!!!! IPsec related objects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !
-! közös mindenhol
+!
 crypto ipsec transform-set IKEV1_TRSET esp-aes 256 esp-sha-hmac
 !
-! ez is közös
 crypto isakmp policy 100
  encr aes
  authentication pre-share
@@ -155,30 +154,20 @@ crypto isakmp policy 100
 ! DC oldali ASA
 crypto isakmp key cisco address 195.228.5.15
 !
-
-! Sportpálya specifikus IPsec tunnel ACL
-access-list IPSEC_SP_ACL extended permit ip object DC_SERVER object SP_DESKTOP
-access-list IPSEC_SP_ACL extended permit ip object DC_SERVER object SP_SWMAN
-! FIXME telephelyenkénti ACL-ek
-FIXME
-FIXME
+! IPsec tunnel specifikus ACL
+ip access-list extended IPSEC_DC_ACL
+ permit ip 10.7.1.0 0.0.0.255 10.5.20.0 0.0.0.255
+ permit ip 10.7.30.0 0.0.0.255 10.5.20.0 0.0.0.255
 !
+crypto map CMAP_DC 10 ipsec-isakmp 
+ set peer 195.228.5.15
+ set transform-set IKEV1_TRSET 
+ match address IPSEC_DC_ACL
 !
-! viszonylatonkénti mapping
-crypto map CMAP_SP 10 match address IPSEC_SP_ACL
-crypto map CMAP_SP 10 set peer 195.228.7.16 
-crypto map CMAP_SP 10 set ikev1 transform-set IKEV1_TRSET 
-crypto map CMAP_SP interface INTERNET
-crypto ikev1 enable INTERNET
+! interfész cryptomap összerendelés
+interface GigabitEthernet0/0
+ crypto map CMAP_DC
 !
-! többi cmap
-!
-! viszonylatonkénti tunnel group
-! SP
-tunnel-group 195.228.7.16 type ipsec-l2l
-tunnel-group 195.228.7.16 ipsec-attributes
- ikev1 pre-shared-key cisco
-
 
 
 ```
@@ -1387,6 +1376,18 @@ interface Ethernet0/7
 !
 route INTERNET 0.0.0.0 0.0.0.0 195.228.5.1 
 !
+class-map CMAP_BASE
+ match default-inspection-traffic
+!
+policy-map PMAP_BASE
+ class CMAP_BASE
+  inspect dns 
+  inspect ftp 
+  inspect http 
+  inspect icmp 
+!
+service-policy PMAP_BASE global
+!
 !!!!!!!!!!!!!!! IPsec related objects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !
 ! közös mindenhol
@@ -1455,6 +1456,14 @@ tunnel-group 195.228.7.16 type ipsec-l2l
 tunnel-group 195.228.7.16 ipsec-attributes
  ikev1 pre-shared-key cisco
 !
+!
+!!!!!!!!!!!!!!!!!!!!!!! tűzfal szabályok !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!
+! siteonként/network-önként kell 
+access-list FW_INTERNET_ACL extended permit icmp object SP_DESKTOP object DC_SERVER echo
+access-list FW_INTERNET_ACL extended deny ip any any
+!
+access-group FW_INTERNET_ACL in interface INTERNET
 !
 
 # sw-dc-01
