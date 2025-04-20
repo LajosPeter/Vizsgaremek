@@ -73,42 +73,111 @@ Még mindig szar
 
 # rtr-sp-01
 ```
-en 
+
+! első boot után azonnal aktiválni kell a securtity licencet
+! el kell fogadni a license agreement-et, ki kell írni a konfigurációt
+! majd újra kell indítani a router-t
+ena
 conf t
+license boot module c2900 technology-package securityk9
+wri mem
+reload
+
+! indulás után ellenőrizni kell a licence beállításokat
+ena
+sh ver
+
+! konfiguráció építés
+conf t
+
 hostname rtr-sp-01
+!
+no ip cef
 ipv6 unicast-routing
+!
+spanning-tree mode pvst
+!
 interface GigabitEthernet0/0
-ip address 195.228.7.16 255.255.255.224
-no sh
-exit
+ ip address 195.228.7.16 255.255.255.224
+ ip nat outside
+ duplex auto
+ speed auto
+ ipv6 nat
+ no shutdown
+!
 interface GigabitEthernet0/1
-no sh
-exit
+ no ip address
+ ip nat inside
+ duplex auto
+ speed auto
+ ipv6 nat
+ no shutdown
+!
 interface GigabitEthernet0/1.400
-encapsulation dot1Q 400
-ip address 10.7.1.1 255.255.255.0
-no sh
+ encapsulation dot1Q 400
+ ip address 10.7.1.1 255.255.255.0
+!
 interface GigabitEthernet0/1.430
-encapsulation dot1Q 430
-ip address 10.7.30.1 255.255.255.0
-ipv6 address FE80::DB4F:1:1 link-local
-ipv6 enable
-exit
-int g0/1
-ip nat inside
-exit
-
-int g0/0
-ip nat outside
-exit
-
-access-list 7 permit 10.7.1.0 0.0.0.255
-access-list 7 permit 10.7.30.0 0.0.0.255
+ encapsulation dot1Q 430
+ ip address 10.7.30.1 255.255.255.0
+ ipv6 address FE80::DB4F:1:1 link-local
+ ipv6 enable
+!
+interface GigabitEthernet0/2
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
 ip nat pool PNATPOOLSP 195.228.7.4 195.228.7.8 netmask 255.255.255.224
 ip nat inside source list 7 pool PNATPOOLSP overload
+ip route 0.0.0.0 0.0.0.0 195.228.7.1 
+!
+access-list 7 permit 10.7.1.0 0.0.0.255
+access-list 7 permit 10.7.30.0 0.0.0.255
 
-ip route 0.0.0.0 0.0.0.0 195.228.7.1
+!!!!!!!!!!!!!!! IPsec related objects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!
+! közös mindenhol
+crypto ipsec transform-set IKEV1_TRSET esp-aes 256 esp-sha-hmac
+!
+! ez is közös
+crypto isakmp policy 100
+ encr aes
+ authentication pre-share
+ group 5
+ lifetime 28800
+!
+! DC oldali ASA
+crypto isakmp key cisco address 195.228.5.15
+!
 
+! Sportpálya specifikus IPsec tunnel ACL
+access-list IPSEC_SP_ACL extended permit ip object DC_SERVER object SP_DESKTOP
+access-list IPSEC_SP_ACL extended permit ip object DC_SERVER object SP_SWMAN
+! FIXME telephelyenkénti ACL-ek
+FIXME
+FIXME
+!
+!
+! viszonylatonkénti mapping
+crypto map CMAP_SP 10 match address IPSEC_SP_ACL
+crypto map CMAP_SP 10 set peer 195.228.7.16 
+crypto map CMAP_SP 10 set ikev1 transform-set IKEV1_TRSET 
+crypto map CMAP_SP interface INTERNET
+crypto ikev1 enable INTERNET
+!
+! többi cmap
+!
+! viszonylatonkénti tunnel group
+! SP
+tunnel-group 195.228.7.16 type ipsec-l2l
+tunnel-group 195.228.7.16 ipsec-attributes
+ ikev1 pre-shared-key cisco
 
 
 
