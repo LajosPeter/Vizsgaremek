@@ -108,6 +108,8 @@ access-list 7 permit 10.7.1.0 0.0.0.255
 access-list 7 permit 10.7.30.0 0.0.0.255
 ip nat pool PNATPOOLSP 195.228.7.4 195.228.7.8 netmask 255.255.255.224
 ip nat inside source list 7 pool PNATPOOLSP overload
+
+ip route 0.0.0.0 0.0.0.0 195.228.7.1
 ```
 
 
@@ -1274,8 +1276,131 @@ SZERVER TELEPHELY MÉG SEMMI
 # fw-dc-01
 en 
 conf t
-hostname fw-dc-01
 
+! default config cleanup
+no dhcp auto_config outside 
+no dhcp address 192.168.1.5-192.168.1.36 inside
+no dhcpd enable inside 
+int eth0/0
+ no switchport access vlan 2
+
+! base config
+hostname fw-dc-01
+!
+interface Vlan1
+ nameif INTERNET
+ security-level 0
+ ip address 195.228.5.15 255.255.255.224
+!
+interface Vlan2
+ nameif DC_SERVER
+ security-level 100
+ ip address 10.5.20.1 255.255.255.0
+!
+interface Vlan530
+ no forward interface Vlan2
+ nameif DC_SWMAN
+ security-level 0
+ ip address 10.5.30.1 255.255.255.0
+!
+interface Ethernet0/0
+ ! desc rtr-telekom-04/Gi0/0
+ switchport access vlan 1
+!
+interface Ethernet0/1
+ ! desc sw-dc-01/Fa0/1
+ switchport access vlan 2
+!
+interface Ethernet0/2
+ ! desc sw-dc-01/Fa0/2
+ switchport access vlan 530
+!
+interface Ethernet0/3
+ shutdown
+!
+interface Ethernet0/4
+ shutdown
+!
+interface Ethernet0/5
+ shutdown
+!
+interface Ethernet0/6
+ shutdown
+!
+interface Ethernet0/7
+ shutdown
+!
+route INTERNET 0.0.0.0 0.0.0.0 195.228.5.1 
+!
+!!!!!!!!!!!!!!! IPsec related objects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!
+! közös mindenhol
+crypto ipsec ikev1 transform-set IKEV1_TRSET esp-aes 256 esp-sha-hmac
+!
+! ez is közös
+crypto ikev1 policy 100
+ encr aes
+ authentication pre-share
+ group 5
+ lifetime 28800
+!
+object network DC_SERVER
+ subnet 10.5.20.0 255.255.255.0
+object network GIM_GO
+ subnet 10.2.5.0 255.255.255.0
+object network GIM_PORTA
+ subnet 10.2.4.0 255.255.255.0
+object network GIM_RG
+ subnet 10.2.0.0 255.255.255.0
+object network GIM_SERVER
+ subnet 10.2.20.0 255.255.255.0
+object network GIM_TANAR
+ subnet 10.2.3.0 255.255.255.0
+object network GIM_VEZ
+ subnet 10.2.1.0 255.255.255.0
+object network KOL_SWMAN
+ subnet 10.3.30.0 255.255.255.0
+object network KOL_TANAR
+ subnet 10.3.0.0 255.255.255.0
+object network SP_DESKTOP
+ subnet 10.7.1.0 255.255.255.0
+object network SP_SWMAN
+ subnet 10.7.30.0 255.255.255.0
+object network TANK_ALK
+ subnet 10.1.3.0 255.255.255.0
+object network TANK_RG
+ subnet 10.1.0.0 255.255.255.0
+object network TANK_SERVER
+ subnet 10.1.20.0 255.255.255.0
+object network TANK_SWMAN
+ subnet 10.1.30.0 255.255.255.0
+object network TANK_VEZ
+ subnet 10.1.1.0 255.255.255.0
+!
+! Sportpálya specifikus IPsec tunnel ACL
+access-list IPSEC_SP_ACL extended permit ip object DC_SERVER object SP_DESKTOP
+access-list IPSEC_SP_ACL extended permit ip object DC_SERVER object SP_SWMAN
+! FIXME telephelyenkénti ACL-ek
+FIXME
+FIXME
+!
+!
+! viszonylatonkénti mapping
+crypto map CMAP_SP 10 match address IPSEC_SP_ACL
+crypto map CMAP_SP 10 set peer 195.228.7.16 
+crypto map CMAP_SP 10 set ikev1 transform-set IKEV1_TRSET 
+crypto map CMAP_SP interface INTERNET
+crypto ikev1 enable INTERNET
+!
+! többi cmap
+!
+! viszonylatonkénti tunnel group
+! SP
+tunnel-group 195.228.7.16 type ipsec-l2l
+tunnel-group 195.228.7.16 ipsec-attributes
+ ikev1 pre-shared-key cisco
+!
+!
 
 # sw-dc-01
 ```
