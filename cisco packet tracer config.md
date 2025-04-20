@@ -1411,6 +1411,7 @@ exit
 SZERVER TELEPHELY MÉG SEMMI
 
 # fw-dc-01
+```
 en 
 conf t
 
@@ -1558,6 +1559,8 @@ access-list FW_INTERNET_ACL extended deny ip any any
 !
 access-group FW_INTERNET_ACL in interface INTERNET
 !
+
+```
 
 # sw-dc-01
 ```
