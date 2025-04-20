@@ -108,6 +108,10 @@ ip nat pool PNATPOOLSP 195.228.7.4 195.228.7.8 netmask 255.255.255.224
 ip nat inside source list 7 pool PNATPOOLSP overload
 
 ip route 0.0.0.0 0.0.0.0 195.228.7.1
+
+
+
+
 ```
 
 
