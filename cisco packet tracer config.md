@@ -337,6 +337,7 @@ encapsulation dot1Q 300
 description KOL_DIAK
 ip address 10.3.0.1 255.255.255.0
 ip helper-address 10.3.0.1
+ip nat inside
 no sh
 exit
 int gigabitEthernet 0/1.330
@@ -363,10 +364,20 @@ int gigabitethernet 0/1
 ip nat inside
 exit
 
-access-list 3 permit 10.3.0.0 0.0.0.255
-access-list 3 permit 10.3.30.0 0.0.0.255
-ip nat pool PNATPOOLKOL 195.228.3.4 195.228.3.8 netmask 255.255.255.224
-ip nat inside source list 3 pool PNATPOOLKOL overload
+! NAT ACL with exceptions
+ip access-list extended NAT_ACL
+ deny ip 10.3.0.0 0.0.0.255 10.5.20.0 0.0.0.255
+ deny ip 10.3.30.0 0.0.0.255 10.5.20.0 0.0.0.255
+ permit ip 10.3.0.0 0.0.0.255 any
+ permit ip 10.3.30.0 0.0.0.255 any
+!
+! dynamic NAT rules
+ip nat pool PNATPOOLKOL 195.228.3.16 195.228.3.16 netmask 255.255.255.255
+ip nat inside source list NAT_ACL pool PNATPOOLKOL overload
+!
+
+
+
 !!!!!!!!!!!!!!! IPsec related objects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !
 !
@@ -1778,15 +1789,27 @@ int g0/2
 ip nat inside
 exit
 
-access-list 1 permit 10.1.0.0 0.0.0.255
-access-list 1 permit 10.1.1.0 0.0.0.255
-access-list 1 permit 10.1.3.0 0.0.0.255
-access-list 1 permit 10.1.10.0 0.0.0.255
-access-list 1 permit 10.1.20.0 0.0.0.255
-access-list 1 permit 10.1.30.0 0.0.0.255
-ip nat pool PNATPOOLTANK 195.228.1.4 195.228.1.8 netmask 255.255.255.224
-ip nat inside source list 1 pool PNATPOOLTANK overload
 
+
+! NAT ACL with exceptions
+ip access-list extended NAT_ACL
+ deny ip 10.1.0.0 0.0.0.255 10.5.20.0 0.0.0.255
+ deny ip 10.1.1.0 0.0.0.255 10.5.20.0 0.0.0.255
+ deny ip 10.1.3.0 0.0.0.255 10.5.20.0 0.0.0.255
+ deny ip 10.1.10.0 0.0.0.255 10.5.20.0 0.0.0.255
+ deny ip 10.1.20.0 0.0.0.255 10.5.20.0 0.0.0.255
+ deny ip 10.1.30.0 0.0.0.255 10.5.20.0 0.0.0.255
+ permit ip 10.1.0.0 0.0.0.255 any
+ permit ip 10.1.1.0 0.0.0.255 any
+ permit ip 10.1.3.0 0.0.0.255 any
+ permit ip 10.1.10.0 0.0.0.255 any
+ permit ip 10.1.20.0 0.0.0.255 any
+ permit ip 10.1.30.0 0.0.0.255 any
+!
+! dynamic NAT rules
+ip nat pool PNATPOOLTANK 195.228.1.16 195.228.1.16 netmask 255.255.255.255
+ip nat inside source list NAT_ACL pool PNATPOOLTANK overload
+!
 !!!!!!!!!!!!!!! IPsec related objects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !
 !
