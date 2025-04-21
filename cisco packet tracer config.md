@@ -352,6 +352,7 @@ ip dhcp excluded-address 10.3.0.128 10.3.0.255
 ip dhcp pool DIAK
 network 10.3.0.0 255.255.255.0
 default-router 10.3.0.1
+dns-server 10.5.20.16
 exit
 ip route 0.0.0.0 0.0.0.0 195.228.3.1
 
@@ -472,9 +473,9 @@ GigabitEthernet0/0 is up, line protocol is up (connected)
     [...]
 ```
 
-ENNÉL KI KELL CSERÉLNI A PORTOKAT FIXME
 
-# sw-kol-01 teljesen újra
+
+# sw-kol-01 
 
 ### Konfiguracio
 
@@ -669,7 +670,9 @@ ip access-list extended NAT_ACL
  deny ip 10.2.3.0 0.0.0.255 10.5.20.0 0.0.0.255
  deny ip 10.2.4.0 0.0.0.255 10.5.20.0 0.0.0.255
  deny ip 10.2.5.0 0.0.0.255 10.5.20.0 0.0.0.255
+ deny ip 10.2.10.0 0.0.0.255 10.5.20.0 0.0.0.255
  deny ip 10.2.20.0 0.0.0.255 10.5.20.0 0.0.0.255
+ deny ip 10.2.21.0 0.0.0.255 10.5.20.0 0.0.0.255
  permit ip 10.2.0.0 0.0.0.255 any
  permit ip 10.2.1.0 0.0.0.255 any
  permit ip 10.2.3.0 0.0.0.255 any
@@ -677,7 +680,6 @@ ip access-list extended NAT_ACL
  permit ip 10.2.5.0 0.0.0.255 any
  permit ip 10.2.10.0 0.0.0.255 any
  permit ip 10.2.20.0 0.0.0.255 any
- permit ip 10.2.21.0 0.0.0.255 any
 !
 ! NAT rules
 ip nat inside source list NAT_ACL pool PNATPOOLGIM overload
@@ -705,7 +707,9 @@ ip access-list extended IPSEC_DC_ACL
  permit ip 10.2.3.0 0.0.0.255 10.5.20.0 0.0.0.255
  permit ip 10.2.4.0 0.0.0.255 10.5.20.0 0.0.0.255
  permit ip 10.2.5.0 0.0.0.255 10.5.20.0 0.0.0.255
+ permit ip 10.2.10.0 0.0.0.255 10.5.20.0 0.0.0.255
  permit ip 10.2.20.0 0.0.0.255 10.5.20.0 0.0.0.255
+ permit ip 10.2.21.0 0.0.0.255 10.5.20.0 0.0.0.255
 !
 crypto map CMAP_DC 10 ipsec-isakmp 
  set peer 195.228.5.15
@@ -736,8 +740,6 @@ Gateway of last resort is not set
 C       195.228.2.0/27 is directly connected, GigabitEthernet0/0
 L       195.228.2.16/32 is directly connected, GigabitEthernet0/0
 ```
-
-Ki kell venni az 220 ki kell venni áttettem de subinterfacen nem működik ki kell törölni a 220 vlant
 
 # rtr-gim-02
 
@@ -1371,18 +1373,19 @@ exit
 ip cím: 10.2.20.16
 mask: 255.255.255.0
 default gateway: 10.2.20.1
+dns address: 10.5.20.16
 ```
 
 DHCP
 
 | Pool Name              | Default Gateway | DNS server | Start IP Address | Subnet Mask | Maximum Users | TFTP server |
 | :---------------- | :------: | :------: | :------: | :------: | :------: | :------: |
-| GIM_RG | 10.2.0.1 | 10.2.20.16 | 10.2.0.64 | 255.255.255.0 | 64 | 10.2.20.16 |
-| GIM_VEZ | 10.2.1.1 | 10.2.20.16 | 10.2.1.64 | 255.255.255.0 | 64 | 10.2.20.16 |
-| GIM_TANAR | 10.2.3.1 | 10.2.20.16 | 10.2.3.64 | 255.255.255.0 | 64 | 10.2.20.16 |
-| GIM_PORTA | 10.2.4.1 | 10.2.20.16 | 10.2.4.64 | 255.255.255.0 | 64 | 10.2.20.16 |
-| GIM_GO | 10.2.5.1 | 10.2.20.16 | 10.2.5.64 | 255.255.255.0 | 64 | 10.2.20.16 |
-| GIM_WIFI | 10.2.10.1 | 10.2.20.16 | 10.2.10.64 | 255.255.255.0 | 64 | 10.2.20.16 |
+| GIM_RG | 10.2.0.1 | 10.5.20.16 | 10.2.0.64 | 255.255.255.0 | 64 | 10.2.20.16 |
+| GIM_VEZ | 10.2.1.1 | 10.5.20.16 | 10.2.1.64 | 255.255.255.0 | 64 | 10.2.20.16 |
+| GIM_TANAR | 10.2.3.1 | 10.5.20.16 | 10.2.3.64 | 255.255.255.0 | 64 | 10.2.20.16 |
+| GIM_PORTA | 10.2.4.1 | 10.5.20.16 | 10.2.4.64 | 255.255.255.0 | 64 | 10.2.20.16 |
+| GIM_GO | 10.2.5.1 | 10.5.20.16 | 10.2.5.64 | 255.255.255.0 | 64 | 10.2.20.16 |
+| GIM_WIFI | 10.2.10.1 | 10.5.20.16 | 10.2.10.64 | 255.255.255.0 | 64 | 10.2.20.16 |
 
 TFTP, DNS
 
@@ -1534,6 +1537,8 @@ object network GIM_TANAR
  subnet 10.2.3.0 255.255.255.0
 object network GIM_VEZ
  subnet 10.2.1.0 255.255.255.0
+object network GIM_WIFI
+ subnet 10.2.10.0 255.255.255.0
 object network KOL_SWMAN
  subnet 10.3.30.0 255.255.255.0
 object network KOL_DIAK
@@ -1552,6 +1557,8 @@ object network TANK_SWMAN
  subnet 10.1.30.0 255.255.255.0
 object network TANK_VEZ
  subnet 10.1.1.0 255.255.255.0
+object network TANK_WIFI
+ subnet 10.1.10.0 255.255.255.0
 !
 object network rtr-tank-01.internet
  host 195.228.1.16
@@ -1572,6 +1579,7 @@ access-list IPSEC_SP_ACL extended permit ip object DC_SERVER object SP_SWMAN
 access-list IPSEC_GIM_ACL extended permit ip object DC_SERVER object GIM_GO
 access-list IPSEC_GIM_ACL extended permit ip object DC_SERVER object GIM_PORTA
 access-list IPSEC_GIM_ACL extended permit ip object DC_SERVER object GIM_RG
+access-list IPSEC_GIM_ACL extended permit ip object DC_SERVER object GIM_WIFI
 access-list IPSEC_GIM_ACL extended permit ip object DC_SERVER object GIM_SERVER
 access-list IPSEC_GIM_ACL extended permit ip object DC_SERVER object GIM_TANAR
 access-list IPSEC_GIM_ACL extended permit ip object DC_SERVER object GIM_VEZ
@@ -1579,6 +1587,7 @@ access-list IPSEC_GIM_ACL extended permit ip object DC_SERVER object GIM_VEZ
 ! Tankerület specifikus IPsec tunnel ACL
 access-list IPSEC_TANK_ACL extended permit ip object DC_SERVER object TANK_ALK
 access-list IPSEC_TANK_ACL extended permit ip object DC_SERVER object TANK_RG
+access-list IPSEC_TANK_ACL extended permit ip object DC_SERVER object TANK_WIFI
 access-list IPSEC_TANK_ACL extended permit ip object DC_SERVER object TANK_SERVER
 access-list IPSEC_TANK_ACL extended permit ip object DC_SERVER object TANK_SWMAN
 access-list IPSEC_TANK_ACL extended permit ip object DC_SERVER object TANK_VEZ
@@ -1637,28 +1646,22 @@ access-list FW_INTERNET_ACL extended permit ip object rtr-tank-01.internet objec
 access-list FW_INTERNET_ACL extended permit ip object rtr-gim-01.internet object fw-dc-01.internet
 access-list FW_INTERNET_ACL extended permit ip object rtr-kol-01.internet object fw-dc-01.internet
 access-list FW_INTERNET_ACL extended permit ip object rtr-sp-01.internet object fw-dc-01.internet
-no access-list FW_INTERNET_ACL extended deny ip any any
-access-list FW_INTERNET_ACL extended deny ip any any
-!
-! IPsec gateway traffic
-access-list FW_INTERNET_ACL extended permit ip object rtr-tank-01.internet object fw-dc-01.internet
-access-list FW_INTERNET_ACL extended permit ip object rtr-gim-01.internet object fw-dc-01.internet
-access-list FW_INTERNET_ACL extended permit ip object rtr-kol-01.internet object fw-dc-01.internet
-access-list FW_INTERNET_ACL extended permit ip object rtr-sp-01.internet object fw-dc-01.internet
 !
 ! Tankerület
-access-list FW_INTERNET_ACL extended permit ip object TANK_RG object DC_SERVER 
-access-list FW_INTERNET_ACL extended permit ip object TANK_VEZ object DC_SERVER 
-access-list FW_INTERNET_ACL extended permit ip object TANK_ALK object DC_SERVER 
-access-list FW_INTERNET_ACL extended permit ip object TANK_SERVER object DC_SERVER 
+access-list FW_INTERNET_ACL extended permit ip object TANK_RG object DC_SERVER
+access-list FW_INTERNET_ACL extended permit ip object TANK_VEZ object DC_SERVER
+access-list FW_INTERNET_ACL extended permit ip object TANK_ALK object DC_SERVER
+access-list FW_INTERNET_ACL extended permit ip object TANK_WIFI object DC_SERVER
+access-list FW_INTERNET_ACL extended permit ip object TANK_SERVER object DC_SERVER
 access-list FW_INTERNET_ACL extended permit ip object TANK_SWMAN object DC_SERVER 
 !
 ! Gimnázium
-access-list FW_INTERNET_ACL extended permit ip object GIM_RG object DC_SERVER 
-access-list FW_INTERNET_ACL extended permit ip object GIM_VEZ object DC_SERVER 
-access-list FW_INTERNET_ACL extended permit ip object GIM_TANAR object DC_SERVER 
-access-list FW_INTERNET_ACL extended permit ip object GIM_PORTA object DC_SERVER 
-access-list FW_INTERNET_ACL extended permit ip object GIM_GO object DC_SERVER 
+access-list FW_INTERNET_ACL extended permit ip object GIM_RG object DC_SERVER
+access-list FW_INTERNET_ACL extended permit ip object GIM_VEZ object DC_SERVER
+access-list FW_INTERNET_ACL extended permit ip object GIM_TANAR object DC_SERVER
+access-list FW_INTERNET_ACL extended permit ip object GIM_PORTA object DC_SERVER
+access-list FW_INTERNET_ACL extended permit ip object GIM_GO object DC_SERVER
+access-list FW_INTERNET_ACL extended permit ip object GIM_WIFI object DC_SERVER
 access-list FW_INTERNET_ACL extended permit ip object GIM_SERVER object DC_SERVER 
 !
 ! Kollégium
@@ -1804,7 +1807,6 @@ ip access-list extended NAT_ACL
  permit ip 10.1.3.0 0.0.0.255 any
  permit ip 10.1.10.0 0.0.0.255 any
  permit ip 10.1.20.0 0.0.0.255 any
- permit ip 10.1.30.0 0.0.0.255 any
 !
 ! dynamic NAT rules
 ip nat pool PNATPOOLTANK 195.228.1.16 195.228.1.16 netmask 255.255.255.255
@@ -1829,6 +1831,7 @@ ip access-list extended IPSEC_DC_ACL
  permit ip 10.1.0.0 0.0.0.255 10.5.20.0 0.0.0.255
  permit ip 10.1.1.0 0.0.0.255 10.5.20.0 0.0.0.255
  permit ip 10.1.3.0 0.0.0.255 10.5.20.0 0.0.0.255
+ permit ip 10.1.10.0 0.0.0.255 10.5.20.0 0.0.0.255
  permit ip 10.1.20.0 0.0.0.255 10.5.20.0 0.0.0.255
  permit ip 10.1.30.0 0.0.0.255 10.5.20.0 0.0.0.255
 !
@@ -2049,7 +2052,7 @@ exit
 ```
 
 
-# ssw-tank-01 FIXME
+# ssw-tank-01 
 ```
 en
 conf t
@@ -2452,14 +2455,15 @@ ip default-gateway 10.1.0.1
 ip address 10.1.20.16
 mask: 255.255.255.0
 default gateway: 10.1.20.1
+dns address: 10.5.20.16
 ```
 
 | Pool Name              | Default Gateway | DNS server | Start IP Address | Subnet Mask | Maximum Users | TFTP server |
 | :---------------- | :------: | :------: | :------: | :------: | :------: | :------: |
-| TANK_RG | 10.1.0.1 | 10.1.20.16 | 10.1.0.64 | 255.255.255.0 | 64 | 10.1.20.16 |
-| TANK_VEZ | 10.1.1.1 | 10.1.20.16| 10.1.1.64 | 255.255.255.0 | 64 | 10.1.20.16 |
-| TANK_ALK | 10.1.3.1 | 10.1.20.16 | 10.1.3.64 | 255.255.255.0 | 64 | 10.1.20.16 |
-| TANK_WIFI | 10.1.10.1 | 10.1.20.16 | 10.1.10.64 | 255.255.255.0 | 64 | 10.1.20.16 |
+| TANK_RG | 10.1.0.1 | 10.5.20.16 | 10.1.0.64 | 255.255.255.0 | 64 | 10.1.20.16 |
+| TANK_VEZ | 10.1.1.1 | 10.5.20.16| 10.1.1.64 | 255.255.255.0 | 64 | 10.1.20.16 |
+| TANK_ALK | 10.1.3.1 | 10.5.20.16 | 10.1.3.64 | 255.255.255.0 | 64 | 10.1.20.16 |
+| TANK_WIFI | 10.1.10.1 | 10.5.20.16 | 10.1.10.64 | 255.255.255.0 | 64 | 10.1.20.16 |
 
 
 
