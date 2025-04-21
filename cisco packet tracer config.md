@@ -1,15 +1,13 @@
 
 Le kell tesztelni a szervereket
-Alagutak, ASA, vty, jelszó védvédelem, acl, show parancsok
+ vty, jelszó védvédelem, show parancsok
 kol, tank nat jav
 
 spanning-tree portfast minden porton ahol nincs switch 
 spanning-tree portfast default 
 
 
-ssw-tank meg kell csinálni hogy az sw-tank-04, sw-tank-06 működjön
 
-Port security restrict max 2 mac cím valamiért blokkolja az ip telefenokat
 
 
 # rtr-telekom-core-01
@@ -69,7 +67,6 @@ C       195.228.6.4/30 is directly connected, Serial0/0/1
 L       195.228.6.5/32 is directly connected, Serial0/0/1
 
 ```
-Még mindig szar
 
 # rtr-sp-01
 ```
