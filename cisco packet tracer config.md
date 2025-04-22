@@ -1530,6 +1530,8 @@ object network GIM_RG
  subnet 10.2.0.0 255.255.255.0
 object network GIM_SERVER
  subnet 10.2.20.0 255.255.255.0
+object network GIM_SERVER_MGMT
+ subnet 10.2.21.0 255.255.255.0
 object network GIM_TANAR
  subnet 10.2.3.0 255.255.255.0
 object network GIM_VEZ
@@ -1578,6 +1580,7 @@ access-list IPSEC_GIM_ACL extended permit ip object DC_SERVER object GIM_PORTA
 access-list IPSEC_GIM_ACL extended permit ip object DC_SERVER object GIM_RG
 access-list IPSEC_GIM_ACL extended permit ip object DC_SERVER object GIM_WIFI
 access-list IPSEC_GIM_ACL extended permit ip object DC_SERVER object GIM_SERVER
+access-list IPSEC_GIM_ACL extended permit ip object DC_SERVER object GIM_SERVER_MGMT
 access-list IPSEC_GIM_ACL extended permit ip object DC_SERVER object GIM_TANAR
 access-list IPSEC_GIM_ACL extended permit ip object DC_SERVER object GIM_VEZ
 !
@@ -1659,7 +1662,8 @@ access-list FW_INTERNET_ACL extended permit ip object GIM_TANAR object DC_SERVER
 access-list FW_INTERNET_ACL extended permit ip object GIM_PORTA object DC_SERVER
 access-list FW_INTERNET_ACL extended permit ip object GIM_GO object DC_SERVER
 access-list FW_INTERNET_ACL extended permit ip object GIM_WIFI object DC_SERVER
-access-list FW_INTERNET_ACL extended permit ip object GIM_SERVER object DC_SERVER 
+access-list FW_INTERNET_ACL extended permit ip object GIM_SERVER object DC_SERVER
+access-list FW_INTERNET_ACL extended permit ip object GIM_SERVER_MGMT object DC_SERVER  
 !
 ! Kollégium
 access-list FW_INTERNET_ACL extended permit ip object KOL_SWMAN object DC_SERVER 
