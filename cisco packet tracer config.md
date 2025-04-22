@@ -1220,29 +1220,31 @@ exit
 en
 conf t
 hostname sw-gim-04
-
+!
 vlan 220
 name GIM_SERVER
 exit
-
+!
 vlan 221
 name GIM_SERVER_MGMT
-
+!
 vlan 241
 name GIM_SERVER_NAT
 exit
-
+!
 int range g0/1, G1/1, G2/1
 no sh
 switchport mode trunk
 switchport trunk native vlan 241
 exit
-
+!
 int vlan 221
 ip address 10.2.21.192 255.255.255.0
 no sh
 exit
-
+!
+ip default-gateway 10.2.21.1
+!
 int g2/1
 switchport mode access
 switchport access vlan 220
