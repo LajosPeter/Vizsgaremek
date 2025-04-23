@@ -1706,9 +1706,12 @@ switchport port-security violation restrict
 switchport port-security maximum 1
 exit
 int fa0/1
-switchport mode trunk
-switchport trunk nativ vlan 540
-switchport trunk allowed vlan 520,530
+switchport mode access
+switchport access vlan 520
+exit
+int fa0/4
+switchport mode access
+switchport access vlan 530
 exit
 interface Vlan530
 ip address 10.5.30.16 255.255.255.0
