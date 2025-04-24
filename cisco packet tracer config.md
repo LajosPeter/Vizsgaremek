@@ -204,7 +204,7 @@ ipv6 address FE80::DB4F:1:C0 link-local
 int g0/1
 switchport mode trunk
 switchport trunk native vlan 440
-switchport trunk allowed vlan 400,430,440
+switchport trunk allowed vlan 400,430
 exit
 int f0/1
 switchport mode access 
