@@ -1,5 +1,3 @@
-
-Le kell tesztelni a szervereket
  vty, jelszó védvédelem, show parancsok
 
 
