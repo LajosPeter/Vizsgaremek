@@ -973,7 +973,6 @@ router ospf 2
 router-id 2.2.2.3
 passive-interface Gig0/1
 passive-interface Gig0/3/0
-network 10.2.255.0 0.0.0.3 area 2
 network 10.2.255.4 0.0.0.3 area 2
 network 10.2.255.8 0.0.0.3 area 2
 network 10.2.0.0 0.0.0.255 area 2
