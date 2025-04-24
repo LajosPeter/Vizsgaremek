@@ -1,7 +1,7 @@
 
 Le kell tesztelni a szervereket
  vty, jelszó védvédelem, show parancsok
-kol, tank nat jav
+
 
 spanning-tree portfast minden porton ahol nincs switch 
 spanning-tree portfast default 
