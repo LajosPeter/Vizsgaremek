@@ -142,6 +142,7 @@ interface GigabitEthernet0/1.430
  ip address 10.7.30.1 255.255.255.0
  ipv6 address FE80::DB4F:1:1 link-local
  ipv6 enable
+ip nat inside
 !
 interface GigabitEthernet0/2
  no ip address
