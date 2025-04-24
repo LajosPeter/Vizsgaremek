@@ -38,6 +38,7 @@ network 195.228.6.0	0.0.0.3 area 6
 network 195.228.6.4	0.0.0.3 area 6
 area 6 authentication message-digest
 exit
+!
 int se0/0/0
 ip ospf message-digest-key 6 md5 lOLpFsanK7
 exit
