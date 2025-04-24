@@ -1,5 +1,4 @@
-ssh, vty, jelszó védvédelem, show parancsok
-
+show parancsok
 
 spanning-tree portfast minden porton ahol nincs switch 
 spanning-tree portfast default 
@@ -15,23 +14,22 @@ spanning-tree portfast default
 enable 
 conf terminal
 hostname rtr-telekom-core-01
-
+!
 interface Se0/0/0
 ip address 195.228.6.1 255.255.255.252
 no shutdown
 exit
-
+!
 interface Se0/0/1
 ip address 195.228.6.5 255.255.255.252
 no shutdown
 exit
-
-
+!
 interface Gig0/0
 ip address 195.228.7.1 255.255.255.224
 no shutdown
 exit
-
+! OSPF konfiguráció
 router ospf 6
 router-id 6.6.6.1
 passive-interface Gig0/0
@@ -43,10 +41,35 @@ exit
 int se0/0/0
 ip ospf message-digest-key 6 md5 lOLpFsanK7
 exit
-
+!
 int se0/0/1
 ip ospf message-digest-key 6 md5 lOLpFsanK7
 exit
+! Titkosítás
+service password-encryption
+no ip domain lookup
+!
+enable secret cisco
+!
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH
+ip domain-name telekom.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 
 ```
 ### Show parancsok
@@ -78,14 +101,14 @@ license boot module c2900 technology-package securityk9
 end
 wri mem
 reload
-
+!
 ! indulás után ellenőrizni kell a licence beállításokat
 ena
 sh ver
-
+!
 ! konfiguráció építés
 conf t
-
+!
 hostname rtr-sp-01
 !
 no ip cef
@@ -170,7 +193,30 @@ crypto map CMAP_DC 10 ipsec-isakmp
 interface GigabitEthernet0/0
  crypto map CMAP_DC
 !
-
+!
+! Titkosítás
+service password-encryption
+no ip domain lookup
+enable secret cisco
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH konfiguráció
+ip domain-name avalon.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 
 ```
 
@@ -184,26 +230,32 @@ hostname sw-sp-01
 sdm prefer dual-ipv4-and-ipv6 default
 do reload
 y
-
+!
 en 
 conf t
 vlan 400
+!
 name SP_DESKTOP
 exit
+!
 vlan 430
 name SP_SWMAN
 exit
+!
 vlan 440
 name SP_NAT
 exit
+!
 int vlan 430
 ip address 10.7.30.192 255.255.255.0
 ipv6 address FE80::DB4F:1:C0 link-local
+!
 int g0/1
 switchport mode trunk
 switchport trunk native vlan 440
 switchport trunk allowed vlan 400,430
 exit
+!
 int f0/1
 switchport mode access 
 switchport access vlan 400
@@ -214,6 +266,7 @@ switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 1
 exit
+!
 int fa0/2
 switchport mode access 
 switchport access vlan 430
@@ -224,9 +277,34 @@ switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 1
 exit
+!
 int range fa0/3-24, gig0/2
 sh
 exit
+!
+! Titkosítás
+service password-encryption
+no ip domain lookup
+enable secret cisco
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH konfiguráció
+ip domain-name avalon.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 ```
 
 
@@ -242,23 +320,23 @@ exit
 enable
 configure terminal
 hostname rtr-telekom-core-02
-
+!
 interface Se0/0/0
 ip address 195.228.6.2 255.255.255.252
 no shutdown
 exit
-
+!
 interface Se0/0/1
 ip address 195.228.6.9 255.255.255.252
 no shutdown
 exit
-
+!
 interface GigabitEthernet0/0
 ip address 195.228.3.1 255.255.255.0
 ip address 195.228.3.1 255.255.255.224
 no sh
 exit
-
+! OSPF konfiguráció
 router ospf 6
 router-id 6.6.6.2
 passive-interface Gig0/0
@@ -267,12 +345,39 @@ network 195.228.6.8	0.0.0.3 area 6
 network 195.228.3.0	0.0.0.31  area 6
 area 6 authentication message-digest
 exit
+!
 int se0/0/0
 ip ospf message-digest-key 6 md5 lOLpFsanK7
 exit
+!
 int se0/0/1
 ip ospf message-digest-key 6 md5 lOLpFsanK7
 exit
+! Titkosítás
+service password-encryption
+no ip domain lookup
+!
+enable secret cisco
+!
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH
+ip domain-name telekom.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 
 ```
 
@@ -311,22 +416,23 @@ license boot module c2900 technology-package securityk9
 end
 wri mem
 reload
-
+!
 ! indulás után ellenőrizni kell a licence beállításokat
 enable
 show version
-
+!
 ! konfiguráció építés
 configure terminal
 hostname rtr-kol-01
-
+!
 interface GigabitEthernet0/0
 ip address 195.228.3.16 255.255.255.224
 no sh
 exit
-
+!
 int gigabitEthernet 0/1
 no sh
+!
 int gigabitEthernet 0/1.300
 encapsulation dot1Q 300
 description KOL_DIAK
@@ -335,13 +441,14 @@ ip helper-address 10.3.0.1
 ip nat inside
 no sh
 exit
+!
 int gigabitEthernet 0/1.330
 encapsulation dot1Q 330
 description KOL_SWMAN
 ip address 10.3.30.1 255.255.255.0
 no sh
 exit
-
+!
 ip dhcp excluded-address 10.3.0.0 10.3.0.63
 ip dhcp excluded-address 10.3.0.128 10.3.0.255
 ip dhcp pool DIAK
@@ -350,16 +457,16 @@ default-router 10.3.0.1
 dns-server 10.5.20.16
 exit
 ip route 0.0.0.0 0.0.0.0 195.228.3.1
-
+!
 int gigabitethernet 0/0
 ip nat outside
 exit
-
-
+!
+!
 int gigabitethernet 0/1
 ip nat inside
 exit
-
+!
 ! NAT ACL with exceptions
 ip access-list extended NAT_ACL
  deny ip 10.3.0.0 0.0.0.255 10.5.20.0 0.0.0.255
@@ -370,9 +477,7 @@ ip access-list extended NAT_ACL
 ip nat pool PNATPOOLKOL 195.228.3.16 195.228.3.16 netmask 255.255.255.255
 ip nat inside source list NAT_ACL pool PNATPOOLKOL overload
 !
-
-
-
+!
 !!!!!!!!!!!!!!! IPsec related objects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !
 !
@@ -401,7 +506,30 @@ crypto map CMAP_DC 10 ipsec-isakmp
 interface GigabitEthernet0/0
  crypto map CMAP_DC
 !
-
+!
+! Titkosítás
+service password-encryption
+no ip domain lookup
+enable secret cisco
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH konfiguráció
+ip domain-name avalon.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 ```
 
 ### Show parancsok
@@ -477,36 +605,64 @@ GigabitEthernet0/0 is up, line protocol is up (connected)
 enable
 config terminal
 hostname sw-kol-01
+!
 spanning-tree mode rapid-pvst
-
+!
 vlan 300 
 name %KOL_DIAK%
 exit
-
+!
 vlan 330 
 name %KOL_SWMAN%
 exit
-
+!
 vlan 340
 name %KOL_NAT%
 exit
-
+!
 int vlan 330 
 ip address 10.3.30.192 255.255.255.0
 no sh 
 exit
+!
 ip default-gateway 10.3.30.1
-
+!
 int gig0/1
 switchport mode trunk
 switchport trunk native vlan 340
 switchport trunk allowed vlan 300,330
 exit
+!
 int range fa0/1-4
 switchport mode access
 switchport access vlan 300
 int range fa0/5-24
 sh
+!
+!
+! Titkosítás
+service password-encryption
+no ip domain lookup
+enable secret cisco
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH konfiguráció
+ip domain-name avalon.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 ```
 
 ### Show parancsok
@@ -537,22 +693,22 @@ VLAN Name                             Status    Ports
 enable
 config terminal
 hostname rtr-telekom-core-03
-
+!
 interface Se0/0/1
 ip address 195.228.6.6 255.255.255.252
 no shutdown
 exit
-
+!
 interface Se0/0/0
 ip address 195.228.6.13 255.255.255.252
 no shutdown
 exit
-
+!
 interface GigabitEthernet0/0
 ip address 195.228.2.1 255.255.255.224
 no sh
 exit
-
+! OSPF konfiguráció
 router ospf 6
 router-id 6.6.6.3
 passive-interface Gig0/0
@@ -561,14 +717,39 @@ network 195.228.6.12 0.0.0.3 area 6
 network 195.228.2.0	0.0.0.31 area 6
 area 6 authentication message-digest
 exit
-
+!
 int  se0/0/0
 ip ospf message-digest-key 6 md5 lOLpFsanK7
 exit
-
+!
 int  se0/0/1
 ip ospf message-digest-key 6 md5 lOLpFsanK7
 exit
+! Titkosítás
+service password-encryption
+no ip domain lookup
+!
+enable secret cisco
+!
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH
+ip domain-name telekom.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 
 ```
 ### Show parancsok
@@ -606,34 +787,30 @@ conf t
 license boot module c2900 technology-package securityk9
 do wri mem
 do reload
-
+!
 ! indulás után ellenőrizni kell a licence beállításokat
 ena
 sh ver
-
+!
 ! konfiguráció építés
-conf t
-
-
-enable
 config terminal
 hostname rtr-gim-01
-
+!
 int g0/0
 ip address 195.228.2.16 255.255.255.224 
 no sh
 exit
-
+!
 int g0/1
 ip address 10.2.255.1 255.255.255.252
 no sh
 exit
-
+!
 int g0/2
 ip address 10.2.255.5 255.255.255.252
 no sh
 exit
-
+! OSPF konfiguráció
 ip route 0.0.0.0 0.0.0.0 195.228.2.1
 router ospf 2
 router-id 2.2.2.1
@@ -644,19 +821,19 @@ network 10.2.255.0 0.0.0.3 area 2
 network 10.2.255.4 0.0.0.3 area 2
 area 2 authentication message-digest
 exit
-
+!
 int range g0/1-2
 ip ospf message-digest-key 2 md5 eiaA8Qsp1i
 exit
-
+!
 int range g0/1-2
 ip nat inside
 exit
-
+!
 int g0/0
 ip nat outside
 exit
-
+!
 ! NAT ACL with VPN exception
 ip access-list extended NAT_ACL
  deny ip 10.2.0.0 0.0.0.255 10.5.20.0 0.0.0.255
@@ -714,10 +891,30 @@ crypto map CMAP_DC 10 ipsec-isakmp
 interface GigabitEthernet0/0
  crypto map CMAP_DC
 !
-
-
-
-
+!
+! Titkosítás
+service password-encryption
+no ip domain lookup
+enable secret cisco
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH konfiguráció
+ip domain-name avalon.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 
 ```
 
@@ -742,19 +939,21 @@ L       195.228.2.16/32 is directly connected, GigabitEthernet0/0
 en 
 conf t
 hostname rtr-gim-02
+!
 int g0/0
 ip address 10.2.255.2 255.255.255.252
 no sh
 ex
+!
 int g0/2
 ip address 10.2.255.9 255.255.255.252
 no sh
 exit
-
+!
 int g0/1
 no sh
 exit
-
+!
 int gig0/1.200
 encapsulation dot1Q 200
 description %GIM_RG%
@@ -765,7 +964,7 @@ standby 200 ip 10.2.0.1
 standby 200 priority 150
 standby 200 preempt
 exit
-
+!
 int gig0/1.201
 encapsulation dot1Q 201
 description %GIM_VEZ%
@@ -776,7 +975,7 @@ standby 201 ip 10.2.1.1
 standby 201 priority 150
 standby 201 preempt
 exit
-
+!
 int gig0/1.203
 encapsulation dot1Q 203
 description %GIM_TANAR%
@@ -787,7 +986,7 @@ standby 203 ip 10.2.3.1
 standby 203 priority 150
 standby 203 preempt
 exit
-
+!
 int gig0/1.204
 encapsulation dot1Q 204
 description %GIM_PORTA%
@@ -798,7 +997,7 @@ standby 204 ip 10.2.4.1
 standby 204 priority 150
 standby 204 preempt
 exit
-
+!
 int gig0/1.205
 encapsulation dot1Q 205
 description %GIM_GO%
@@ -809,7 +1008,7 @@ standby 205 ip 10.2.5.1
 standby 205 priority 150
 standby 205 preempt
 exit
-
+!
 int gig0/1.210
 encapsulation dot1Q 210
 description %GIM_WIFI%
@@ -820,11 +1019,11 @@ standby 210 ip 10.2.10.1
 standby 210 priority 150
 standby 210 preempt
 exit
-
+!
 int g0/3/0
 no sh
 exit
-
+!
 int gig0/3/0.220
 encapsulation dot1Q 220
 description %GIM_SERVER%
@@ -834,7 +1033,7 @@ standby 220 ip 10.2.20.1
 standby 220 priority 150
 standby 220 preempt
 exit
-
+!
 int gig0/3/0.221
 encapsulation dot1Q 221
 description %GIM_SERVER_MGMT%
@@ -844,8 +1043,8 @@ standby 221 ip 10.2.21.1
 standby 221 priority 150
 standby 221 preempt
 exit
-
-
+!
+! OSPF konfiguráció
 router ospf 2
 router-id 2.2.2.2
 passive-interface Gig0/1
@@ -862,10 +1061,35 @@ network 10.2.20.0 0.0.0.255 area 2
 network 10.2.21.0 0.0.0.255 area 2
 area 2 authentication message-digest
 exit
+!
 int range gig0/0, gig0/2
 ip ospf message-digest-key 2 md5 eiaA8Qsp1i
 exit
-
+!
+!
+! Titkosítás
+service password-encryption
+no ip domain lookup
+enable secret cisco
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH konfiguráció
+ip domain-name avalon.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 ```
 
 
@@ -875,16 +1099,20 @@ exit
 en 
 conf t
 hostname rtr-gim-03
+!
 int g0/0
 ip address 10.2.255.6 255.255.255.252
 no sh
 ex
+!
 int g0/2
 ip address 10.2.255.10 255.255.255.252
 no sh
+!
 int g0/1 
 no sh
 exit
+!
 int gig0/1.200
 encapsulation dot1Q 200
 description %GIM_RG%
@@ -894,7 +1122,7 @@ standby version 2
 standby 200 ip 10.2.0.1 
 standby 200 priority 120
 exit
-
+!
 int gig0/1.201
 encapsulation dot1Q 201
 description %GIM_VEZ%
@@ -904,7 +1132,7 @@ standby version 2
 standby 201 ip 10.2.1.1 
 standby 201 priority 120
 exit
-
+!
 int gig0/1.203
 encapsulation dot1Q 203
 description %GIM_TANAR%
@@ -914,7 +1142,7 @@ standby version 2
 standby 203 ip 10.2.3.1 
 standby 203 priority 120
 exit
-
+!
 int gig0/1.204
 encapsulation dot1Q 204
 description %GIM_PORTA%
@@ -924,7 +1152,7 @@ standby version 2
 standby 204 ip 10.2.4.1 
 standby 204 priority 120
 exit
-
+!
 int gig0/1.205
 encapsulation dot1Q 205
 description %GIM_GO%
@@ -934,7 +1162,7 @@ standby version 2
 standby 205 ip 10.2.5.1 
 standby 205 priority 120
 exit
-
+!
 int gig0/1.210
 encapsulation dot1Q 210
 description %GIM_WIFI%
@@ -944,11 +1172,11 @@ standby version 2
 standby 210 ip 10.2.10.1 
 standby 210 priority 120
 exit
-
+!
 int g0/3/0
 no sh
 exit
-
+!
 int Gig0/3/0.220
 encapsulation dot1Q 220
 description %GIM_SERVER%
@@ -957,6 +1185,7 @@ standby version 2
 standby 220 ip 10.2.20.1 
 standby 220 priority 120
 exit
+!
 int Gig0/3/0.221
 encapsulation dot1Q 221
 description %GIM_SERVER_MGMT%
@@ -965,7 +1194,7 @@ standby version 2
 standby 221 ip 10.2.21.1 
 standby 221 priority 120
 exit
-
+! OSPF konfiguráció
 router ospf 2
 router-id 2.2.2.3
 passive-interface Gig0/1
@@ -982,9 +1211,34 @@ network 10.2.20.0 0.0.0.255 area 2
 network 10.2.21.0 0.0.0.255 area 2
 area 2 authentication message-digest
 exit
+!
 int range gig0/0, gig0/2
 ip ospf message-digest-key 2 md5 eiaA8Qsp1i
 exit
+!
+! Titkosítás
+service password-encryption
+no ip domain lookup
+enable secret cisco
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH konfiguráció
+ip domain-name avalon.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 ```
 
 # sw-gim-01
@@ -992,43 +1246,58 @@ exit
 en 
 conf t
 hostname sw-gim-01
+!
 spanning-tree mode rapid-pvst
+! VPT szerver
 vtp version 2
 vtp domain gim
 vtp mode server
 vtp password 2VqOjiFH
+!
 int gig0/1
 switchport mode trunk
 exit
+!
 vlan 200
 name GIM_RG
+!
 vlan 201
 name GIM_VEZ
+!
 vlan 202
 name GIM_TEL
+!
 vlan 203
 name GIM_TANAR
+!
 vlan 204
 name GIM_PORTA
+!
 vlan 205
 name GIM_GO
+!
 vlan 210
 name GIM_WIFI
+!
 vlan 240
 name GIM_NAT
+!
 int range fa0/18-19
 switchport mode trunk
 channel-group 1 mode active
 exit
+!
 int range fa0/20-21
 switchport mode trunk
 channel-group 2 mode desirable
 exit
+!
 int g0/1 
 switchport mode trunk
 exit
+!
 spanning-tree vlan 1-4095 priority 4096
-
+!
 int range fa0/2-12
 switchport mode access
 switchport port-security
@@ -1037,29 +1306,61 @@ switchport port-security violation restrict
 switchport port-security maximum 2
 switchport voice vlan 202
 exit
+!
 int fa 0/1
 switchport mode access
 switchport access vlan 210
 spanning-tree bpduguard enable
 exit
+!
 int range fa 0/2-11
 switchport access vlan 203
 exit
+!
 int fa 0/12
 switchport access vlan 201
 exit
+!
 int range fa0/13-17
 sh
 exit
+!
 int vlan 200
 ip address 10.2.0.192 255.255.255.0
 no sh
 exit
+!
 ip default-gateway 10.2.0.1
+!
 int range fa0/20-21, g0/1, fa0/18-19
 switchport trunk native vlan 240
 switchport trunk allowed vlan 200,201,202,203,204,205,210
 exit
+!
+!
+! Titkosítás
+service password-encryption
+no ip domain lookup
+enable secret cisco
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH konfiguráció
+ip domain-name avalon.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 ```
 
 
@@ -1069,21 +1370,26 @@ exit
 en 
 conf t
 hostname sw-gim-02
+!
 spanning-tree mode rapid-pvst
+!
 int range fa0/18-19
 switchport mode trunk
 channel-group 1 mode passive
 exit
+!
 int range fa0/23-24
 switchport mode trunk
 channel-group 3 mode active
 exit
+! VTP cliens
 vtp version 2
 vtp mode client
 vtp domain gim
 vtp password 2VqOjiFH
+!
 spanning-tree vlan 1-4095 priority 8192
-
+!
 int range fa 0/3-13, fa0/16                
 switchport mode access
 switchport port-security
@@ -1092,6 +1398,7 @@ switchport port-security violation restrict
 switchport port-security maximum 2
 switchport voice vlan 202
 exit
+!
 int range fa 0/2, fa0/14
 switchport mode access
 spanning-tree bpduguard enable
@@ -1100,34 +1407,67 @@ switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 1
 exit
+!
 int range fa0/1, fa0/15
 switchport mode access
 spanning-tree bpduguard enable
 switchport access vlan 210
 exit
+!
 int range fa0/17, fa0/20-22, gig0/1-2
 switchport mode access
 spanning-tree bpduguard enable
 sh
 exit
+!
 int range fa0/2-12
 switchport access vlan 203
 exit
+!
 int range fa 0/13-14
 switchport access vlan 201
 exit
+!
 int fa 0/16
 switchport access vlan 204
 exit
+!
 int vlan 200
 ip address 10.2.0.193 255.255.255.0
 no sh
 exit
+!
 ip default-gateway 10.2.0.1
+!
 int range fa0/18-19, fa0/23-24
 switchport trunk native vlan 240
 switchport trunk allowed vlan 200,201,202,203,204,205,210
 exit
+!
+!
+! Titkosítás
+service password-encryption
+no ip domain lookup
+enable secret cisco
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH konfiguráció
+ip domain-name avalon.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 ```
 
 
@@ -1138,23 +1478,28 @@ exit
 en 
 conf t
 hostname sw-gim-03
+!
 spanning-tree mode rapid-pvst
+!
 int g0/1
 switchport mode trunk
+!
 int range fa0/21-22
 switchport mode trunk
 channel-group 2 mode auto
 exit
+!
 int range fa0/23-24
 switchport mode trunk
 channel-group 3 mode passive
 exit
+! VTP cliens
 vtp mode client
 vtp version 2
 vtp domain gim
 vtp password 2VqOjiFH
-
-
+!
+!
 int range fa 0/2, fa0/4-9, fa0/11-20
 switchport mode access
 switchport port-security
@@ -1163,6 +1508,7 @@ switchport port-security violation restrict
 switchport port-security maximum 2
 switchport voice vlan 202
 exit
+!
 int range  fa 0/3, fa0/10
 switchport mode access
 switchport port-security
@@ -1170,44 +1516,78 @@ switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 1
 exit
+!
 int fa 0/1
 spanning-tree bpduguard enable
 switchport mode access
 switchport access vlan 210
 exit
+!
 int fa 0/2
 switchport access vlan 200 
 exit
+!
 int fa 0/3
 switchport access vlan 202 
 exit
+!
 int range fa 0/4-10
 switchport access vlan 205 
 exit
+!
 int range fa 0/11-20
 switchport access vlan 203 
 exit
+!
 int gig0/1
 switchport mode trunk
 exit
+!
 int fa0/10
 spanning-tree bpduguard enable
-
+!
 int vlan 200
 ip address 10.2.0.194 255.255.255.0
 no sh
 exit
+!
 ip default-gateway 10.2.0.1
+!
 int range gig0/1, fa0/23-24, fa0/21-22
 switchport trunk native vlan 240
 switchport trunk allowed vlan 200,201,202,203,204,205,210
 exit
+!
 int gig0/2
 switchport mode access
 spanning-tree bpduguard enable
 sh
 exit
-
+!
+!
+! Titkosítás
+service password-encryption
+no ip domain lookup
+enable secret cisco
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH konfiguráció
+ip domain-name avalon.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 ```
 
 
@@ -1249,21 +1629,45 @@ switchport port-security
 switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 1
+!
+!
+! Titkosítás
+service password-encryption
+no ip domain lookup
+enable secret cisco
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH konfiguráció
+ip domain-name avalon.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 ```
 
-
-ROSSZ
 # ssw-gim-01
 ```
 en 
 conf t
 hostname ssw-gim-01
+!
 int fa0/0
 description %GIM_TEL%
 ip address 10.2.2.1 255.255.255.0
 no sh
 exit
-
+!
 ip dhcp excluded-address 10.2.2.0 10.2.2.63
 ip dhcp excluded-address 10.2.2.128 10.2.2.255
 ip dhcp pool VOICE
@@ -1271,14 +1675,14 @@ network 10.2.2.0 255.255.255.0
 default-router 10.2.2.1
 option 150 ip 10.2.2.1
 exit
-
+!
 telephony-service
 max-dn 39
 max-ephones 39
 ip source-address  10.2.2.1 port 2000
 auto assign 1 to 39
 exit
-
+!
 ephone-dn 1
 number 52201
 ephone-dn 2
@@ -1358,7 +1762,31 @@ number 52238
 ephone-dn 39
 number 52239
 exit
-
+!
+!
+! Titkosítás
+service password-encryption
+no ip domain lookup
+enable secret cisco
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH konfiguráció
+ip domain-name avalon.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 
 ```
 
@@ -1397,22 +1825,22 @@ interface Se0/0/1
 ip address 195.228.6.10 255.255.255.252
 no shutdown
 exit
-
+!
 interface Se0/0/0
 ip address 195.228.6.14 255.255.255.252
 no shutdown
 exit
-
+!
 interface Gig0/0
 no sh
 ip address 195.228.5.1 255.255.255.224
 ex
-
+!
 int Gig 0/1
 ip address 195.228.1.1 255.255.255.224
 no sh 
 exit
-
+! OSPF konfiguráció
 router ospf 6
 router-id 6.6.6.4
 passive-interface Gig0/0
@@ -1423,14 +1851,40 @@ network 195.228.5.0	0.0.0.31 area 6
 network 195.228.1.0	0.0.0.31 area 6
 area 6 authentication message-digest
 exit
-
+!
 int  se0/0/0
 ip ospf message-digest-key 6 md5 lOLpFsanK7
 exit
-
+!
 int  se0/0/1
 ip ospf message-digest-key 6 md5 lOLpFsanK7
 exit
+!
+! Titkosítás
+service password-encryption
+no ip domain lookup
+!
+enable secret cisco
+!
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH
+ip domain-name telekom.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 
 ```
 
@@ -1679,6 +2133,9 @@ access-list FW_INTERNET_ACL extended deny ip any any
 access-group FW_INTERNET_ACL in interface INTERNET
 !
 !
+! Titkosítás
+enable password cisco
+!
 ```
 
 # sw-dc-01
@@ -1686,13 +2143,17 @@ access-group FW_INTERNET_ACL in interface INTERNET
 en 
 conf t
 hostname sw-dc-01
+!
 vlan 520
 name DC_SERVER
+!
 vlan 530
 name DC_SWMAN
+!
 vlan 540
 name DC_NATIV
 exit
+!
 int range fa0/2-3
 switchport mode access
 switchport access vlan 520
@@ -1702,18 +2163,45 @@ switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 1
 exit
+!
 int fa0/1
 switchport mode access
 switchport access vlan 520
 exit
+!
 int fa0/4
 switchport mode access
 switchport access vlan 530
 exit
+!
 interface Vlan530
 ip address 10.5.30.16 255.255.255.0
 exit
 ip default-gateway 10.5.30.1
+!
+! Titkosítás
+service password-encryption
+no ip domain lookup
+enable secret cisco
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH konfiguráció
+ip domain-name avalon.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 ```
 
 
@@ -1752,28 +2240,28 @@ conf t
 license boot module c2900 technology-package securityk9
 do wri mem
 do reload
-
+!
 ! indulás után ellenőrizni kell a licence beállításokat
 ena
 sh ver
-
+!
 ! konfiguráció építés
 conf t
-
+!
 hostname rtr-tank-01
-
+!
 int g0/1
 ip address 195.228.1.16 255.255.255.224
 no sh
 exit
-
+!
 int Gig0/2
 ip address 10.1.255.1 255.255.255.252
 no sh
 exit
-
+!
 ip route 0.0.0.0 0.0.0.0 195.228.1.1
-
+! OSPF konfiguráció
 router ospf 1
 router-id 1.1.1.1
 passive-interface Gig0/1
@@ -1782,21 +2270,21 @@ network 195.228.1.0 0.0.0.31 area 1
 network 10.1.255.0 0.0.0.3 area 1
 area 1 authentication message-digest
 exit
-
+!
 int g0/2
 ip ospf message-digest-key 1 md5 iOIasQ18nh
 exit
-
+!
 int g0/1 
 ip nat outside
 exit
-
+!
 int g0/2
 ip nat inside
 exit
-
-
-
+!
+!
+!
 ! NAT ACL with exceptions
 ip access-list extended NAT_ACL
  deny ip 10.1.0.0 0.0.0.255 10.5.20.0 0.0.0.255
@@ -1847,7 +2335,30 @@ crypto map CMAP_DC 10 ipsec-isakmp
 interface GigabitEthernet0/1
  crypto map CMAP_DC
 !
-
+!
+! Titkosítás
+service password-encryption
+no ip domain lookup
+enable secret cisco
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH konfiguráció
+ip domain-name avalon.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 
 ```
 
@@ -1857,21 +2368,21 @@ interface GigabitEthernet0/1
 en 
 conf t
 hostname rtr-tank-02
-
+!
 int Gig0/2
 ip address 10.1.255.2 255.255.255.252
 no sh
 exit
-
+!
 int Gig0/3/0
 ip address 10.1.255.5 255.255.255.252
 no sh
 exit
-
+!
 int range Gig 0/0, gig0/1
 no sh
 exit
-
+!
 int Gig 0/0.100
 description %TANK_RG%
 encapsulation dot1q 100
@@ -1882,7 +2393,7 @@ standby 100 ip 10.1.0.1
 standby 100 priority 150
 standby 100 preempt
 exit
-
+!
 int Gig 0/0.101
 description %TANK_VEZ%
 encapsulation dot1q 101
@@ -1893,8 +2404,7 @@ standby 101 ip 10.1.1.1
 standby 101 priority 150
 standby 101 preempt
 exit
-
-
+!
 int Gig 0/1.103
 description %TANK_ALK%
 encapsulation dot1q 103
@@ -1905,7 +2415,7 @@ standby 103 ip 10.1.3.1
 standby 103 priority 150
 standby 103 preempt
 exit
-
+!
 int Gig 0/1.110
 description %TANK_WIFI%
 encapsulation dot1q 110
@@ -1916,7 +2426,7 @@ standby 110 ip 10.1.10.1
 standby 110 priority 150
 standby 110 preempt
 exit
-
+!
 int Gig 0/0.120
 description %TANK_RG%
 encapsulation dot1q 120
@@ -1926,7 +2436,7 @@ standby 120 ip 10.1.20.1
 standby 120 priority 150
 standby 120 preempt
 exit
-
+!
 int Gig 0/1.130
 description %TANK_SWMAN%
 encapsulation dot1q 130
@@ -1936,7 +2446,7 @@ standby 130 ip 10.1.30.1
 standby 130 priority 150
 standby 130 preempt
 exit
-
+! OSPF konfiguráció
 router ospf 1
 router-id 1.1.1.2
 passive-interface Gig0/1
@@ -1951,11 +2461,34 @@ network 10.1.20.0 0.0.0.255 area 1
 network 10.1.30.0 0.0.0.255 area 1
 area 1 authentication message-digest
 exit
-
+!
 int range g0/2, Gig0/3/0
 ip ospf message-digest-key 1 md5 iOIasQ18nh
 exit
-
+!
+! Titkosítás
+service password-encryption
+no ip domain lookup
+enable secret cisco
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH konfiguráció
+ip domain-name avalon.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 ```
 
 
@@ -1964,16 +2497,16 @@ exit
 en 
 conf t
 hostname rtr-tank-03
-
+!
 int Gig0/3/0
 ip address 10.1.255.6 255.255.255.252
 no sh
 exit
-
+!
 int range g0/1, g0/0
 no sh
 exit
-
+!
 int Gig 0/0.100
 description %TANK_RG%
 encapsulation dot1q 100
@@ -1983,7 +2516,7 @@ standby version 2
 standby 100 ip 10.1.0.1 
 standby 100 priority 120
 exit
-
+!
 int Gig 0/0.101
 description %TANK_VEZ%
 encapsulation dot1q 101
@@ -1993,7 +2526,7 @@ standby version 2
 standby 101 ip 10.1.1.1 
 standby 101 priority 120
 exit
-
+!
 int Gig 0/0.120
 description %TANK_SERVER%
 encapsulation dot1q 120
@@ -2002,7 +2535,7 @@ standby version 2
 standby 120 ip 10.1.20.1 
 standby 120 priority 120
 exit
-
+!
 int Gig 0/1.103
 description %TANK_ALK%
 encapsulation dot1q 103
@@ -2012,7 +2545,7 @@ standby version 2
 standby 103 ip 10.1.3.1 
 standby 103 priority 120
 exit
-
+!
 int Gig 0/1.110
 description %TANK_WIFI%
 encapsulation dot1q 110
@@ -2022,8 +2555,7 @@ standby version 2
 standby 110 ip 10.1.10.1 
 standby 110 priority 120
 exit
-
-
+!
 int Gig 0/1.130
 description %TANK_SWMAN%
 encapsulation dot1q 130
@@ -2032,8 +2564,8 @@ standby version 2
 standby 130 ip 10.1.30.1 
 standby 130 priority 120
 exit
-
-
+!
+! OSPF konfiguráció
 router ospf 1
 router-id 1.1.1.3
 passive-interface Gig0/1
@@ -2048,10 +2580,34 @@ network 10.1.20.0 0.0.0.255 area 1
 network 10.1.30.0 0.0.0.255 area 1
 area 1 authentication message-digest
 exit
-
+!
 int range g0/2, Gig0/3/0
 ip ospf message-digest-key 1 md5 iOIasQ18nh
 exit
+!
+! Titkosítás
+service password-encryption
+no ip domain lookup
+enable secret cisco
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH konfiguráció
+ip domain-name avalon.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 ```
 
 
@@ -2064,23 +2620,23 @@ int fa0/0
 ip address 10.1.4.1 255.255.255.0
 no sh
 exit
-
+!
 ip dhcp excluded-address 10.1.4.0 10.1.4.63
 ip dhcp excluded-address 10.1.4.128 10.1.4.255
-
+!
 ip dhcp pool ALKTEL
 network 10.1.4.0 255.255.255.0
 default-router 10.1.4.1
 option 150 ip 10.1.4.1
 exit
-
+!
 telephony-service
 max-dn 4
 max-ephones 4
 ip source-address  10.1.4.1 port 2000
 auto assign 1 to 4
 exit
-
+!
 ephone-dn 1
 number 51401
 ephone-dn 2
@@ -2089,7 +2645,31 @@ ephone-dn 3
 number 51403
 ephone-dn 4
 number 51404
-
+!
+!
+! Titkosítás
+service password-encryption
+no ip domain lookup
+enable secret cisco
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH konfiguráció
+ip domain-name avalon.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 ```
 
 # ssw-tank-02
@@ -2101,7 +2681,7 @@ int fa0/0
 ip address 10.1.2.1 255.255.255.0
 no sh
 exit
-
+!
 ip dhcp excluded-address 10.1.2.0 10.1.2.63
 ip dhcp excluded-address 10.1.2.128 10.1.2.255
 ip dhcp pool VRTEL
@@ -2109,21 +2689,45 @@ network 10.1.2.0 255.255.255.0
 default-router 10.1.2.1
 option 150 ip 10.1.2.1
 exit
-
+!
 telephony-service
 max-dn 3
 max-ephones 3
 ip source-address  10.1.2.1 port 2000
 auto assign 1 to 3
 exit
-
+!
 ephone-dn 1
 number 51201
 ephone-dn 2
 number 51202
 ephone-dn 3
 number 51203
-
+!
+!
+! Titkosítás
+service password-encryption
+no ip domain lookup
+enable secret cisco
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH konfiguráció
+ip domain-name avalon.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 ```
 
 
@@ -2133,34 +2737,43 @@ number 51203
 en 
 conf t
 hostname sw-tank-01
+! VTP szerver
 vtp version 2
 vtp domain tanka
 vtp mode server
 vtp password JXTBOyTW
+!
 vlan 103
 name TANK_ALK
 exit
+!
 vlan 104 
 name TANK_ALKTEL
 exit
+!
 vlan 110
 name TANK_WIFI
 exit
+!
 vlan 130
 name TANK_SWMAN
 exit
+!
 vlan 140
 name TANK_NATALK
 exit
+!
 int range fa0/1-3
 switchport mode trunk
 exit
+!
 spanning-tree vlan 1-4095 priority 4096
-
+!
 int Fa 0/4
 switchport access vlan 110
 spanning-tree bpduguard enable
 exit
+!
 int  fa 0/6
 switchport access vlan 103
 switchport voice vlan 104
@@ -2169,6 +2782,7 @@ switchport port-security
 switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 2
+!
 int range fa0/5, fa0/7-15
 switchport access vlan 103
 spanning-tree bpduguard enable
@@ -2176,19 +2790,47 @@ switchport port-security
 switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 1
+!
 int range fa 0/16-24
 spanning-tree bpduguard enable
 sh
 exit
+!
 int vlan 130
 ip address 10.1.30.192 255.255.255.0
 no sh
 exit
 ip default-gateway 10.1.30.1
+!
 int range fa0/1-3
 switchport trunk native vlan 140
 switchport trunk allowed vlan 103,104,110,130
 exit
+!
+!
+! Titkosítás
+service password-encryption
+no ip domain lookup
+enable secret cisco
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH konfiguráció
+ip domain-name avalon.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 ```
 
 
@@ -2198,16 +2840,19 @@ exit
 en 
 conf t
 hostname sw-tank-02
+! VTP client
 vtp version 2
 vtp mode client
 vtp domain tanka
 vtp password JXTBOyTW
+!
 int range fa 0/1-3
 switchport mode trunk
 exit
-
+!
 spanning-tree vlan 1-4095 priority  8192
 spanning-tree mode rapid-pvst
+!
 int fa0/4 
 switchport mode access
 switchport access vlan 103
@@ -2217,24 +2862,54 @@ switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 2
 exit
+!
 int fa 0/5
 switchport access vlan 110
+!
 int range fa0/6-24 
 spanning-tree bpduguard enable
 sh
 exit
+!
 int range fa 0/6-24, gig0/1-2
 sh
 exit
+!
 int vlan 130
 ip address 10.1.30.193 255.255.255.0
 no sh
 exit
+!
 ip default-gateway 10.1.30.1
+!
 int range fa 0/1-3
 switchport trunk native vlan 140
 switchport trunk allowed vlan 103,104,110,130
 exit
+!
+! Titkosítás
+service password-encryption
+no ip domain lookup
+enable secret cisco
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH konfiguráció
+ip domain-name avalon.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 ```
 
 
@@ -2243,14 +2918,18 @@ exit
 en 
 conf t
 hostname sw-tank-03
+! VTP client
 vtp version 2
 vtp mode client
 vtp domain tanka
 vtp password JXTBOyTW
+!
 spanning-tree mode rapid-pvst
+!
 int range fa0/1-3, Gig0/1
 switchport mode trunk
 exit
+!
 int fa 0/4
 switchport mode access
 switchport access vlan 103
@@ -2260,6 +2939,7 @@ switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 2
 exit
+!
 int range fa 0/5-14
 switchport mode access
 switchport access vlan 103
@@ -2268,16 +2948,45 @@ switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 1
 exit
+!
 int Gig 0/2
 sh
+!
 int vlan 130
 ip address 10.1.30.194 255.255.255.0
 no sh
 exit
+!
 ip default-gateway 10.1.30.1
+!
 int range fa0/1-3, Gig0/1
 switchport trunk native vlan 140
 switchport trunk allowed vlan 103,104,110,130
+!
+!
+! Titkosítás
+service password-encryption
+no ip domain lookup
+enable secret cisco
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH konfiguráció
+ip domain-name avalon.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 ```
 
 
@@ -2286,18 +2995,23 @@ switchport trunk allowed vlan 103,104,110,130
 en 
 conf t
 hostname sw-tank-04
+!
 spanning-tree mode rapid-pvst
+! vtp client
 vtp version 2
 vtp mode client
 vtp domain tanka
 vtp password JXTBOyTW
+!
 int range fa 0/1-3, Gig 0/1
 switchport mode trunk
 exit
+!
 int fa 0/4
 switchport mode access
 switchport access vlan 110
 exit
+!
 int fa 0/5
 switchport mode access
 switchport access vlan 103
@@ -2307,6 +3021,7 @@ switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 2
 exit
+!
 int range fa 0/6-14
 switchport mode access
 switchport access vlan 103
@@ -2315,18 +3030,22 @@ switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 1
 exit
+!
 int range fa 0/15-24
 sh
 exit
+!
 int vlan 130
 ip address 10.1.30.195 255.255.255.0
 no sh
 exit
+!
 ip default-gateway 10.1.30.1
 int range fa 0/1-3,  Gig 0/1
 switchport trunk native vlan 140
 switchport trunk allowed vlan 103,104,110,130
 exit
+!
 int Gig 0/2
 switchport mode access
 switchport access vlan 104
@@ -2335,10 +3054,32 @@ switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 1
 exit
+!
+!
+! Titkosítás
+service password-encryption
+no ip domain lookup
+enable secret cisco
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH konfiguráció
+ip domain-name avalon.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 ```
-
-
-# ssw-tank-02 FIXME
 
 
 # sw-tank-05
@@ -2346,30 +3087,38 @@ exit
 en 
 conf t
 hostname sw-tank-05
+!
 spanning-tree mode rapid-pvst
+! VTP server
 vtp version 2
 vtp domain tankv
 vtp mode server
 vtp password IvYkhCjy
+!
 vlan 100
 name TANK_RG
 exit
+!
 vlan 101
 name TANK_VEZ
 exit
+!
 vlan 102
 name TANK_VRTEL
 exit
+!
 vlan 120
 name TANK_SERVER
 exit
+!
 vlan 150
 name TANK_NATVEZRG
 exit
+!
 int range fa0/1, Gig0/1-2
 switchport mode trunk
 exit
-
+!
 spanning-tree vlan 1-4095 priority 4096 
 int fa 0/2 
 switchport mode access
@@ -2380,6 +3129,7 @@ switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 2
 exit
+!
 int Gig 0/2
 switchport mode access
 switchport access vlan 120
@@ -2389,19 +3139,48 @@ switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 1
 exit
+!
 int range fa 0/3-24
 switchport mode access
 spanning-tree bpduguard enable
 sh
+!
 int vlan 100
 ip address 10.1.0.192 255.255.255.0
 no sh
 exit
+!
 ip default-gateway 10.1.0.1
+!
 int range fa0/1, Gig0/1
 switchport trunk native vlan 150
 switchport trunk allowed vlan 100,101,102,120
 exit
+!
+!
+! Titkosítás
+service password-encryption
+no ip domain lookup
+enable secret cisco
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH konfiguráció
+ip domain-name avalon.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 ```
 
 # sw-tank-06
@@ -2409,15 +3188,18 @@ exit
 en 
 conf t
 hostname sw-tank-06
+!
 spanning-tree mode rapid-pvst
+! VTP client
 vtp version 2
 vtp mode client
 vtp domain tankv
 vtp password IvYkhCjy
+!
 int range fa0/1, Gig0/1
 switchport mode trunk
 exit
-
+!
 spanning-tree vlan 1-4095 priority 8192
 int Gig 0/2
 switchport mode access
@@ -2428,6 +3210,7 @@ switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 1
 exit
+!
 int range fa 0/2-3
 switchport access vlan 101
 switchport voice vlan 102
@@ -2436,20 +3219,49 @@ switchport port-security mac-address sticky
 switchport port-security violation restrict
 switchport port-security maximum 2
 exit
+!
 int range fa0/4-24
 switchport mode access
 spanning-tree bpduguard enable
 sh
 exit
+!
 int range Gig0/1, fa0/1
 switchport trunk native vlan 150
 switchport trunk allowed vlan 100,101,102,120
 exit
+!
 int vlan 100
 ip address 10.1.0.193 255.255.255.0
 no sh
 exit
+!
 ip default-gateway 10.1.0.1
+!
+!
+! Titkosítás
+service password-encryption
+no ip domain lookup
+enable secret cisco
+line console 0
+password cisco
+login
+exit
+!
+banner motd #Az engedely nelkuli hozzaferes tiltott!#
+! SSH konfiguráció
+ip domain-name avalon.hu
+crypto key generate rsa
+1024
+username admin privilege 15 secret cisco
+line vty 0 4
+transport input ssh
+login local
+exit
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
 ```
 
 
