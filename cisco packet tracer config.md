@@ -1,4 +1,4 @@
- vty, jelszó védvédelem, show parancsok
+ssh, vty, jelszó védvédelem, show parancsok
 
 
 spanning-tree portfast minden porton ahol nincs switch 
