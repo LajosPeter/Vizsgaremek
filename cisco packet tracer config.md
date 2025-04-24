@@ -365,7 +365,6 @@ ip access-list extended NAT_ACL
  deny ip 10.3.0.0 0.0.0.255 10.5.20.0 0.0.0.255
  deny ip 10.3.30.0 0.0.0.255 10.5.20.0 0.0.0.255
  permit ip 10.3.0.0 0.0.0.255 any
- permit ip 10.3.30.0 0.0.0.255 any
 !
 ! dynamic NAT rules
 ip nat pool PNATPOOLKOL 195.228.3.16 195.228.3.16 netmask 255.255.255.255
