@@ -2213,8 +2213,8 @@ Szolgáltatások :
 - Címtár_pl_ Active Directory
 
 - DNS
-| ------------ | ------------ | ----------- |
 | Név | Elérhetőség | Típus |
+| ------------ | ------------ | ----------- |
 | avalon.hu | 10.5.20.16 | A Record |
 | www.avalon.hu | 10.5.20.17 | A Record |
 
