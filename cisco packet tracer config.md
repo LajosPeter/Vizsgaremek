@@ -2226,8 +2226,8 @@ Szolgáltatások :
 
 - Email szolgáltatás
 
-| -------------- | -------------- |  -------------- | ------------- |
 | Felhasználó gép | Felhasználónév | Jelszó | Email szerver |
+| -------------- | -------------- |  -------------- | ------------- |
 |  pc-tank-rg-01  | tank-rg-01  | cisco | avalon.hu |
 |  pc-tank-kanc-01  | tank-kanc-01  | cisco | avalon.hu |
 |  pc-tank-kanc-02  | tank-kanc-02  | cisco | avalon.hu |
