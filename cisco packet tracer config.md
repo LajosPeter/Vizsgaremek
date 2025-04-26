@@ -2225,7 +2225,7 @@ Szolgáltatások :
 
 - Automatizált_mentés
 
-- Email szolgáltatás
+- Email szolgáltatás:
 
 | Felhasználó gép | Felhasználónév | Jelszó | Email szerver |
 | -------------- | -------------- |  -------------- | ------------- |
@@ -2243,11 +2243,11 @@ Szolgáltatások :
 |  pc-gim-iga-02  | gim-iga-02  | cisco | avalon.hu |
 |  pc-gim-tan-01  | gim-tan-01  | cisco | avalon.hu |
 |  pc-gim-tan-02  | gim-tan-02  | cisco | avalon.hu |
-|  pc-gim-tan-11  | gim-tan-21  | cisco | avalon.hu |
-|  pc-gim-tan-12  | gim-tan-22  | cisco | avalon.hu |
+|  pc-gim-tan-11  | gim-tan-11  | cisco | avalon.hu |
+|  pc-gim-tan-12  | gim-tan-12  | cisco | avalon.hu |
 |  pc-gim-tan-21  | gim-tan-21  | cisco | avalon.hu |
 |  pc-gim-tan-22  | gim-tan-22  | cisco | avalon.hu |
-|  pc-gim-porta-22  | gim-porta-01  | cisco | avalon.hu |
+|  pc-gim-porta-01  | gim-porta-01  | cisco | avalon.hu |
 |  pc-gim-go-01  | gim-go-01  | cisco | avalon.hu |
 |  sp-gim-01  | gim-sp-01  | cisco | avalon.hu |
 |  sp-kol-01  | kol-sp-01  | cisco | avalon.hu |
