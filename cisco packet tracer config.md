@@ -2213,7 +2213,10 @@ Szolgáltatások :
 - Címtár_pl_ Active Directory
 
 - DNS
-
+| ------------ | ------------ | ----------- |
+| Név | Elérhetőség | Típus |
+| avalon.hu | 10.5.20.16 | A Record |
+| www.avalon.hu | 10.5.20.17 | A Record |
 
 - Fájl_és_nyomtató_megosztás
 
@@ -2221,6 +2224,34 @@ Szolgáltatások :
 
 - Automatizált_mentés
 
+- Email szolgáltatás
+
+| -------------- | -------------- |  -------------- | ------------- |
+| Felhasználó gép | Felhasználónév | Jelszó | Email szerver |
+|  pc-tank-rg-01  | tank-rg-01  | cisco | avalon.hu |
+|  pc-tank-kanc-01  | tank-kanc-01  | cisco | avalon.hu |
+|  pc-tank-kanc-02  | tank-kanc-02  | cisco | avalon.hu |
+|  pc-tank-alk-01  | tank-alk-01  | cisco | avalon.hu |
+|  pc-tank-alk-11  | tank-alk-11  | cisco | avalon.hu |
+|  pc-tank-alk-12  | tank-alk-12  | cisco | avalon.hu |
+|  pc-tank-alk-20  | tank-alk-20  | cisco | avalon.hu |
+|  pc-tank-alk-30  | tank-alk-30  | cisco | avalon.hu |
+|  sp-tank-01  | tank-sp-01  | cisco | avalon.hu |
+|  pc-gim-rg-01  | gim-rg-01  | cisco | avalon.hu |
+|  pc-gim-iga-01  | gim-iga-01  | cisco | avalon.hu |
+|  pc-gim-iga-02  | gim-iga-02  | cisco | avalon.hu |
+|  pc-gim-tan-01  | gim-tan-01  | cisco | avalon.hu |
+|  pc-gim-tan-02  | gim-tan-02  | cisco | avalon.hu |
+|  pc-gim-tan-11  | gim-tan-21  | cisco | avalon.hu |
+|  pc-gim-tan-12  | gim-tan-22  | cisco | avalon.hu |
+|  pc-gim-tan-21  | gim-tan-21  | cisco | avalon.hu |
+|  pc-gim-tan-22  | gim-tan-22  | cisco | avalon.hu |
+|  pc-gim-porta-22  | gim-porta-01  | cisco | avalon.hu |
+|  pc-gim-go-01  | gim-go-01  | cisco | avalon.hu |
+|  sp-gim-01  | gim-sp-01  | cisco | avalon.hu |
+|  sp-kol-01  | kol-sp-01  | cisco | avalon.hu |
+|  pc-sp-rg-01  | sp-rg-01  | cisco | avalon.hu |
+|  pc-sp-01  | sp-pc-01  | cisco | avalon.hu |
 
 
 
