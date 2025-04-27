@@ -1,7 +1,5 @@
-show parancsok, logging, email test, ntp
+show parancsok
 
-spanning-tree portfast minden porton ahol nincs switch 
-spanning-tree portfast default 
 
 
 
