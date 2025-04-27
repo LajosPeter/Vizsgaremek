@@ -1,4 +1,4 @@
-show parancsok
+show parancsok, logging, email test, ntp
 
 spanning-tree portfast minden porton ahol nincs switch 
 spanning-tree portfast default 
@@ -116,6 +116,8 @@ no ip cef
 ipv6 unicast-routing
 !
 spanning-tree mode pvst
+!
+no ip domain-lookup 
 !
 interface GigabitEthernet0/0
  ip address 195.228.7.16 255.255.255.224
@@ -235,8 +237,10 @@ y
 !
 en 
 conf t
-vlan 400
 !
+no ip domain-lookup 
+!
+vlan 400
 name SP_DESKTOP
 exit
 !
@@ -281,7 +285,7 @@ switchport port-security maximum 1
 exit
 !
 int range fa0/3-24, gig0/2
-sh
+shutdown
 exit
 !
 ! Titkosítás
@@ -426,6 +430,8 @@ show version
 ! konfiguráció építés
 configure terminal
 hostname rtr-kol-01
+!
+no ip domain-lookup 
 !
 interface GigabitEthernet0/0
 ip address 195.228.3.16 255.255.255.224
@@ -609,6 +615,8 @@ config terminal
 hostname sw-kol-01
 !
 spanning-tree mode rapid-pvst
+!
+no ip domain-lookup 
 !
 vlan 300 
 name %KOL_DIAK%
@@ -798,6 +806,8 @@ sh ver
 config terminal
 hostname rtr-gim-01
 !
+no ip domain-lookup 
+!
 int g0/0
 ip address 195.228.2.16 255.255.255.224 
 no sh
@@ -917,7 +927,17 @@ ip ssh version 2
 ip ssh time-out 60
 ip ssh authentication-retries 3
 !
-
+! SYSLOG
+logging host 10.2.20.16
+logging trap debugging
+! Netflow
+int range g0/0-2
+ip flow ingress 
+ip flow egress 
+ex
+ip flow-export destination 10.2.0.64 9996
+ip flow-export version 9
+!
 ```
 
 ### Show parancsok
@@ -941,6 +961,8 @@ L       195.228.2.16/32 is directly connected, GigabitEthernet0/0
 en 
 conf t
 hostname rtr-gim-02
+!
+no ip domain-lookup 
 !
 int g0/0
 ip address 10.2.255.2 255.255.255.252
@@ -1092,6 +1114,10 @@ ip ssh version 2
 ip ssh time-out 60
 ip ssh authentication-retries 3
 !
+! SYSLOG
+logging host 10.2.20.16
+logging trap debugging
+!
 ```
 
 
@@ -1101,6 +1127,8 @@ ip ssh authentication-retries 3
 en 
 conf t
 hostname rtr-gim-03
+!
+no ip domain-lookup 
 !
 int g0/0
 ip address 10.2.255.6 255.255.255.252
@@ -1241,6 +1269,10 @@ ip ssh version 2
 ip ssh time-out 60
 ip ssh authentication-retries 3
 !
+! SYSLOG
+logging host 10.2.20.16
+logging trap debugging
+!
 ```
 
 # sw-gim-01
@@ -1250,6 +1282,9 @@ conf t
 hostname sw-gim-01
 !
 spanning-tree mode rapid-pvst
+!
+no ip domain-lookup 
+!
 ! VPT szerver
 vtp version 2
 vtp domain gim
@@ -1375,6 +1410,8 @@ hostname sw-gim-02
 !
 spanning-tree mode rapid-pvst
 !
+no ip domain-lookup 
+!
 int range fa0/18-19
 switchport mode trunk
 channel-group 1 mode passive
@@ -1482,6 +1519,8 @@ conf t
 hostname sw-gim-03
 !
 spanning-tree mode rapid-pvst
+!
+no ip domain-lookup 
 !
 int g0/1
 switchport mode trunk
@@ -1600,6 +1639,8 @@ en
 conf t
 hostname sw-gim-04
 !
+no ip domain-lookup 
+!
 vlan 220
 name GIM_SERVER
 exit
@@ -1663,6 +1704,8 @@ ip ssh authentication-retries 3
 en 
 conf t
 hostname ssw-gim-01
+!
+no ip domain-lookup 
 !
 int fa0/0
 description %GIM_TEL%
@@ -2142,9 +2185,11 @@ enable password cisco
 
 # sw-dc-01
 ```
-en 
-conf t
+enable
+configure terminal
 hostname sw-dc-01
+!
+no ip domain-lookup 
 !
 vlan 520
 name DC_SERVER
@@ -2254,7 +2299,11 @@ Szolgáltatások :
 |  pc-sp-rg-01  | sp-rg-01  | cisco | avalon.hu |
 |  pc-sp-01  | sp-pc-01  | cisco | avalon.hu |
 
+- NTP
 
+| Eszköz | Megbízott kulcs | NTP szerver | Jelszó | 
+| -------------- | -------------- |  -------------- | ------------- |
+cisco
 
 
 # srv-dc-02 - Linux server 10.5.20.17
@@ -2283,6 +2332,8 @@ sh ver
 conf t
 !
 hostname rtr-tank-01
+!
+no ip domain-lookup 
 !
 int g0/1
 ip address 195.228.1.16 255.255.255.224
@@ -2393,7 +2444,18 @@ ip ssh version 2
 ip ssh time-out 60
 ip ssh authentication-retries 3
 !
-
+! SYSLOG
+logging host 10.1.20.16
+logging trap debugging
+!
+! Netflow
+int range g0/1-2
+ip flow ingress 
+ip flow egress 
+exit
+ip flow-export destination 10.1.0.64 9996
+ip flow-export version 9
+!
 ```
 
 
@@ -2402,6 +2464,8 @@ ip ssh authentication-retries 3
 en 
 conf t
 hostname rtr-tank-02
+!
+no ip domain-lookup 
 !
 int Gig0/2
 ip address 10.1.255.2 255.255.255.252
@@ -2523,6 +2587,10 @@ ip ssh version 2
 ip ssh time-out 60
 ip ssh authentication-retries 3
 !
+! SYSLOG
+logging host 10.1.20.16
+logging trap debugging
+!
 ```
 
 
@@ -2531,6 +2599,8 @@ ip ssh authentication-retries 3
 en 
 conf t
 hostname rtr-tank-03
+!
+no ip domain-lookup 
 !
 int Gig0/3/0
 ip address 10.1.255.6 255.255.255.252
@@ -2642,6 +2712,10 @@ ip ssh version 2
 ip ssh time-out 60
 ip ssh authentication-retries 3
 !
+! SYSLOG
+logging host 10.1.20.16
+logging trap debugging
+!
 ```
 
 
@@ -2650,6 +2724,9 @@ ip ssh authentication-retries 3
 en
 conf t
 hostname ssw-tank-01
+!
+no ip domain-lookup 
+!
 int fa0/0
 ip address 10.1.4.1 255.255.255.0
 no sh
@@ -2711,6 +2788,9 @@ ip ssh authentication-retries 3
 en 
 conf t
 hostname ssw-gim-02
+!
+no ip domain-lookup 
+!
 int fa0/0
 ip address 10.1.2.1 255.255.255.0
 no sh
@@ -2771,6 +2851,9 @@ ip ssh authentication-retries 3
 en 
 conf t
 hostname sw-tank-01
+!
+no ip domain-lookup 
+!
 ! VTP szerver
 vtp version 2
 vtp domain tanka
@@ -2874,6 +2957,9 @@ ip ssh authentication-retries 3
 en 
 conf t
 hostname sw-tank-02
+!
+no ip domain-lookup 
+!
 ! VTP client
 vtp version 2
 vtp mode client
@@ -2952,6 +3038,9 @@ ip ssh authentication-retries 3
 en 
 conf t
 hostname sw-tank-03
+!
+no ip domain-lookup 
+!
 ! VTP client
 vtp version 2
 vtp mode client
@@ -3029,6 +3118,8 @@ ip ssh authentication-retries 3
 en 
 conf t
 hostname sw-tank-04
+!
+no ip domain-lookup 
 !
 spanning-tree mode rapid-pvst
 ! vtp client
@@ -3123,6 +3214,9 @@ conf t
 hostname sw-tank-05
 !
 spanning-tree mode rapid-pvst
+!
+no ip domain-lookup 
+!
 ! VTP server
 vtp version 2
 vtp domain tankv
@@ -3224,6 +3318,9 @@ conf t
 hostname sw-tank-06
 !
 spanning-tree mode rapid-pvst
+!
+no ip domain-lookup 
+!
 ! VTP client
 vtp version 2
 vtp mode client
