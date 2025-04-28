@@ -2297,11 +2297,34 @@ Szolgáltatások :
 |  pc-sp-rg-01  | sp-rg-01  | cisco | avalon.hu |
 |  pc-sp-01  | sp-pc-01  | cisco | avalon.hu |
 
-- NTP
+- FTP szolgáltatás:
+Mivel az FTP szolgáltatás a 10.5.20.16 IP című szerveren üzemel ezért nem fogom feltüntetni minden egyes sorban.
 
-| Eszköz | Megbízott kulcs | NTP szerver | Jelszó | 
-| -------------- | -------------- |  -------------- | ------------- |
-cisco
+| Felhasználó gép | Felhasználónév | Jelszó | Hozzáférési szint |
+| -------------- | -------------- |  -------------- | ----------------- |
+|  pc-tank-rg-01  | tank-rg-01  | cisco | RWDNL |
+|  pc-tank-kanc-01  | tank-kanc-01  | cisco | RWL |
+|  pc-tank-kanc-02  | tank-kanc-02  | cisco | RWL |
+|  pc-tank-alk-01  | tank-alk-01  | cisco | RWL |
+|  pc-tank-alk-11  | tank-alk-11  | cisco | RWL |
+|  pc-tank-alk-12  | tank-alk-12  | cisco | RWL |
+|  pc-tank-alk-20  | tank-alk-20  | cisco | RWL |
+|  pc-tank-alk-30  | tank-alk-30  | cisco | RWL |
+|  pc-gim-rg-01  | gim-rg-01  | cisco | RWDNL |
+|  pc-gim-iga-01  | gim-iga-01  | cisco | RWL |
+|  pc-gim-iga-02  | gim-iga-02  | cisco | RWL |
+|  pc-gim-tan-01  | gim-tan-01  | cisco | RWL |
+|  pc-gim-tan-02  | gim-tan-02  | cisco | RWL |
+|  pc-gim-tan-11  | gim-tan-11  | cisco | RWL |
+|  pc-gim-tan-12  | gim-tan-12  | cisco | RWL |
+|  pc-gim-tan-21  | gim-tan-21  | cisco | RWL |
+|  pc-gim-tan-22  | gim-tan-22  | cisco | RWL |
+|  pc-gim-porta-01  | gim-porta-01  | cisco | RWL |
+|  pc-gim-go-01  | gim-go-01  | cisco | RWL |
+|  pc-sp-rg-01  | sp-rg-01  | cisco | RWDNL |
+|  pc-sp-01  | sp-pc-01  | cisco | RWL |
+
+
 
 
 # srv-dc-02 - Linux server 10.5.20.17
