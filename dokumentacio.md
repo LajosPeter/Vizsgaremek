@@ -1,5 +1,5 @@
 <h1>Vizsgaremek</h1>
-<p>Lajos Péter & Szabó András
+<p>Lajos Péter 
 
 ## Oldaljegyzék
 
@@ -24,7 +24,7 @@ Cisco partnerek vagyunk 5 éve
 ```
 ### Tulajdonos
 - Lajos Péter
-- Szabó Anrás
+
 
 ### Cég szakmai története
 ```
