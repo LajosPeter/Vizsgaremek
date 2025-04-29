@@ -1,8 +1,3 @@
-show parancsok
-
-
-
-
 
 
 # rtr-telekom-core-01
@@ -80,11 +75,26 @@ rtr-telekom-core-01#show ip route
 
 Gateway of last resort is not set
 
-     195.228.6.0/24 is variably subnetted, 4 subnets, 2 masks
+     195.228.1.0/27 is subnetted, 1 subnets
+O       195.228.1.0/27 [110/129] via 195.228.6.2, 00:07:44, Serial0/0/0
+                       [110/129] via 195.228.6.6, 00:07:44, Serial0/0/1
+     195.228.2.0/27 is subnetted, 1 subnets
+O       195.228.2.0/27 [110/65] via 195.228.6.6, 00:07:44, Serial0/0/1
+     195.228.3.0/27 is subnetted, 1 subnets
+O       195.228.3.0/27 [110/65] via 195.228.6.2, 00:07:44, Serial0/0/0
+     195.228.5.0/27 is subnetted, 1 subnets
+O       195.228.5.0/27 [110/129] via 195.228.6.2, 00:07:44, Serial0/0/0
+                       [110/129] via 195.228.6.6, 00:07:44, Serial0/0/1
+     195.228.6.0/24 is variably subnetted, 6 subnets, 2 masks
 C       195.228.6.0/30 is directly connected, Serial0/0/0
 L       195.228.6.1/32 is directly connected, Serial0/0/0
 C       195.228.6.4/30 is directly connected, Serial0/0/1
 L       195.228.6.5/32 is directly connected, Serial0/0/1
+O       195.228.6.8/30 [110/128] via 195.228.6.2, 00:07:44, Serial0/0/0
+O       195.228.6.12/30 [110/128] via 195.228.6.6, 00:07:44, Serial0/0/1
+     195.228.7.0/24 is variably subnetted, 2 subnets, 2 masks
+C       195.228.7.0/27 is directly connected, GigabitEthernet0/0
+L       195.228.7.1/32 is directly connected, GigabitEthernet0/0
 
 ```
 
@@ -394,14 +404,25 @@ rtr-telekom-core-02#show ip route
 
 Gateway of last resort is not set
 
+     195.228.1.0/27 is subnetted, 1 subnets
+O       195.228.1.0/27 [110/65] via 195.228.6.10, 00:08:42, Serial0/0/1
+     195.228.2.0/27 is subnetted, 1 subnets
+O       195.228.2.0/27 [110/129] via 195.228.6.10, 00:08:32, Serial0/0/1
+                       [110/129] via 195.228.6.1, 00:08:32, Serial0/0/0
      195.228.3.0/24 is variably subnetted, 2 subnets, 2 masks
 C       195.228.3.0/27 is directly connected, GigabitEthernet0/0
 L       195.228.3.1/32 is directly connected, GigabitEthernet0/0
-     195.228.6.0/24 is variably subnetted, 4 subnets, 2 masks
+     195.228.5.0/27 is subnetted, 1 subnets
+O       195.228.5.0/27 [110/65] via 195.228.6.10, 00:08:42, Serial0/0/1
+     195.228.6.0/24 is variably subnetted, 6 subnets, 2 masks
 C       195.228.6.0/30 is directly connected, Serial0/0/0
 L       195.228.6.2/32 is directly connected, Serial0/0/0
+O       195.228.6.4/30 [110/128] via 195.228.6.1, 00:08:42, Serial0/0/0
 C       195.228.6.8/30 is directly connected, Serial0/0/1
 L       195.228.6.9/32 is directly connected, Serial0/0/1
+O       195.228.6.12/30 [110/128] via 195.228.6.10, 00:08:42, Serial0/0/1
+     195.228.7.0/27 is subnetted, 1 subnets
+O       195.228.7.0/27 [110/65] via 195.228.6.1, 00:08:42, Serial0/0/0
 ```
 
 
@@ -545,20 +566,17 @@ rtr-kol-01#show ip route
 
 [...]
 
-Gateway of last resort is not set
+Gateway of last resort is 195.228.3.1 to network 0.0.0.0
 
-     10.0.0.0/8 is variably subnetted, 8 subnets, 2 masks
+     10.0.0.0/8 is variably subnetted, 4 subnets, 2 masks
 C       10.3.0.0/24 is directly connected, GigabitEthernet0/1.300
 L       10.3.0.1/32 is directly connected, GigabitEthernet0/1.300
-C       10.3.1.0/24 is directly connected, GigabitEthernet0/1.301
-L       10.3.1.1/32 is directly connected, GigabitEthernet0/1.301
 C       10.3.30.0/24 is directly connected, GigabitEthernet0/1.330
 L       10.3.30.1/32 is directly connected, GigabitEthernet0/1.330
-C       10.3.40.0/24 is directly connected, GigabitEthernet0/1.340
-L       10.3.40.1/32 is directly connected, GigabitEthernet0/1.340
      195.228.3.0/24 is variably subnetted, 2 subnets, 2 masks
 C       195.228.3.0/27 is directly connected, GigabitEthernet0/0
 L       195.228.3.16/32 is directly connected, GigabitEthernet0/0
+S*   0.0.0.0/0 [1/0] via 195.228.3.1
 ```
 
 ```
@@ -570,13 +588,6 @@ GigabitEthernet0/1.300 is up, line protocol is up (connected)
   Encapsulation 802.1Q Virtual LAN, Vlan ID 300
     [...]   
 
-rtr-kol-01#show interfaces gigabitEthernet 0/1.301
-GigabitEthernet0/1.301 is up, line protocol is up (connected)
-    [...]
-  Internet address is 10.3.1.1/24
-    [...]
-  Encapsulation 802.1Q Virtual LAN, Vlan ID 301
-    [...]
 
 rtr-kol-01#show interfaces gigabitEthernet 0/1.330
 GigabitEthernet0/1.330 is up, line protocol is up (connected)
@@ -584,14 +595,6 @@ GigabitEthernet0/1.330 is up, line protocol is up (connected)
   Internet address is 10.3.30.1/24
     [...]
   Encapsulation 802.1Q Virtual LAN, Vlan ID 330
-    [...]
-
-rtr-kol-01#show interfaces gigabitEthernet 0/1.340
-GigabitEthernet0/1.340 is up, line protocol is up (connected)
-    [...]
-  Internet address is 10.3.40.1/24
-    [...]
-  Encapsulation 802.1Q Virtual LAN, Vlan ID 340
     [...]
 
 rtr-kol-01#show interfaces gigabitEthernet 0/0
@@ -680,15 +683,19 @@ sw-kol-01#show vlan brief
 
 VLAN Name                             Status    Ports
 ---- -------------------------------- --------- -------------------------------
-1    default                          active    Gig2/1, Gig3/1, Gig4/1
-300  %KOL_TANAR%                      active    Gig1/1
-301  %KOL_DIAK%                       active    
+1    default                          active    Fa0/5, Fa0/6, Fa0/7, Fa0/8
+                                                Fa0/9, Fa0/10, Fa0/11, Fa0/12
+                                                Fa0/13, Fa0/14, Fa0/15, Fa0/16
+                                                Fa0/17, Fa0/18, Fa0/19, Fa0/20
+                                                Fa0/21, Fa0/22, Fa0/23, Fa0/24
+                                                Gig0/2
+300  %KOL_DIAK%                       active    Fa0/1, Fa0/2, Fa0/3, Fa0/4
 330  %KOL_SWMAN%                      active    
 340  %KOL_NAT%                        active    
 1002 fddi-default                     active    
 1003 token-ring-default               active    
 1004 fddinet-default                  active    
-1005 trnet-default                    active 
+1005 trnet-default                    active    
 ```
 
 
@@ -769,14 +776,25 @@ rtr-telekom-core-03#show ip route
 
 Gateway of last resort is not set
 
+    195.228.1.0/27 is subnetted, 1 subnets
+O       195.228.1.0/27 [110/65] via 195.228.6.14, 00:13:31, Serial0/0/0
      195.228.2.0/24 is variably subnetted, 2 subnets, 2 masks
 C       195.228.2.0/27 is directly connected, GigabitEthernet0/0
 L       195.228.2.1/32 is directly connected, GigabitEthernet0/0
-     195.228.6.0/24 is variably subnetted, 4 subnets, 2 masks
+     195.228.3.0/27 is subnetted, 1 subnets
+O       195.228.3.0/27 [110/129] via 195.228.6.5, 00:13:31, Serial0/0/1
+                       [110/129] via 195.228.6.14, 00:13:31, Serial0/0/0
+     195.228.5.0/27 is subnetted, 1 subnets
+O       195.228.5.0/27 [110/65] via 195.228.6.14, 00:13:31, Serial0/0/0
+     195.228.6.0/24 is variably subnetted, 6 subnets, 2 masks
+O       195.228.6.0/30 [110/128] via 195.228.6.5, 00:13:31, Serial0/0/1
 C       195.228.6.4/30 is directly connected, Serial0/0/1
 L       195.228.6.6/32 is directly connected, Serial0/0/1
+O       195.228.6.8/30 [110/128] via 195.228.6.14, 00:13:31, Serial0/0/0
 C       195.228.6.12/30 is directly connected, Serial0/0/0
 L       195.228.6.13/32 is directly connected, Serial0/0/0
+     195.228.7.0/27 is subnetted, 1 subnets
+O       195.228.7.0/27 [110/65] via 195.228.6.5, 00:13:31, Serial0/0/1
 
 ```
 
@@ -945,11 +963,35 @@ rtr-gim-01#show ip route
 
 [...]
 
-Gateway of last resort is not set
+Gateway of last resort is 195.228.2.1 to network 0.0.0.0
 
+     10.0.0.0/8 is variably subnetted, 13 subnets, 3 masks
+O       10.2.0.0/24 [110/2] via 10.2.255.6, 00:13:24, GigabitEthernet0/2
+                    [110/2] via 10.2.255.2, 00:13:24, GigabitEthernet0/1
+O       10.2.1.0/24 [110/2] via 10.2.255.6, 00:13:24, GigabitEthernet0/2
+                    [110/2] via 10.2.255.2, 00:13:24, GigabitEthernet0/1
+O       10.2.3.0/24 [110/2] via 10.2.255.6, 00:13:24, GigabitEthernet0/2
+                    [110/2] via 10.2.255.2, 00:13:24, GigabitEthernet0/1
+O       10.2.4.0/24 [110/2] via 10.2.255.6, 00:13:24, GigabitEthernet0/2
+                    [110/2] via 10.2.255.2, 00:13:24, GigabitEthernet0/1
+O       10.2.5.0/24 [110/2] via 10.2.255.6, 00:13:24, GigabitEthernet0/2
+                    [110/2] via 10.2.255.2, 00:13:24, GigabitEthernet0/1
+O       10.2.10.0/24 [110/2] via 10.2.255.6, 00:13:24, GigabitEthernet0/2
+                     [110/2] via 10.2.255.2, 00:13:24, GigabitEthernet0/1
+O       10.2.20.0/24 [110/2] via 10.2.255.6, 00:13:24, GigabitEthernet0/2
+                     [110/2] via 10.2.255.2, 00:13:24, GigabitEthernet0/1
+O       10.2.21.0/24 [110/2] via 10.2.255.6, 00:13:24, GigabitEthernet0/2
+                     [110/2] via 10.2.255.2, 00:13:24, GigabitEthernet0/1
+C       10.2.255.0/30 is directly connected, GigabitEthernet0/1
+L       10.2.255.1/32 is directly connected, GigabitEthernet0/1
+C       10.2.255.4/30 is directly connected, GigabitEthernet0/2
+L       10.2.255.5/32 is directly connected, GigabitEthernet0/2
+O       10.2.255.8/30 [110/2] via 10.2.255.6, 00:13:24, GigabitEthernet0/2
+                      [110/2] via 10.2.255.2, 00:13:24, GigabitEthernet0/1
      195.228.2.0/24 is variably subnetted, 2 subnets, 2 masks
 C       195.228.2.0/27 is directly connected, GigabitEthernet0/0
 L       195.228.2.16/32 is directly connected, GigabitEthernet0/0
+S*   0.0.0.0/0 [1/0] via 195.228.2.1
 ```
 
 # rtr-gim-02
@@ -1118,6 +1160,51 @@ logging trap debugging
 !
 ```
 
+### Show parancsok
+
+```
+rtr-gim-02#show ip route
+
+[...]
+
+Gateway of last resort is 10.2.255.1 to network 0.0.0.0
+
+     10.0.0.0/8 is variably subnetted, 21 subnets, 3 masks
+C       10.2.0.0/24 is directly connected, GigabitEthernet0/1.200
+L       10.2.0.2/32 is directly connected, GigabitEthernet0/1.200
+C       10.2.1.0/24 is directly connected, GigabitEthernet0/1.201
+L       10.2.1.2/32 is directly connected, GigabitEthernet0/1.201
+C       10.2.3.0/24 is directly connected, GigabitEthernet0/1.203
+L       10.2.3.2/32 is directly connected, GigabitEthernet0/1.203
+C       10.2.4.0/24 is directly connected, GigabitEthernet0/1.204
+L       10.2.4.2/32 is directly connected, GigabitEthernet0/1.204
+C       10.2.5.0/24 is directly connected, GigabitEthernet0/1.205
+L       10.2.5.2/32 is directly connected, GigabitEthernet0/1.205
+C       10.2.10.0/24 is directly connected, GigabitEthernet0/1.210
+L       10.2.10.2/32 is directly connected, GigabitEthernet0/1.210
+C       10.2.20.0/24 is directly connected, GigabitEthernet0/3/0.220
+L       10.2.20.2/32 is directly connected, GigabitEthernet0/3/0.220
+C       10.2.21.0/24 is directly connected, GigabitEthernet0/3/0.221
+L       10.2.21.2/32 is directly connected, GigabitEthernet0/3/0.221
+C       10.2.255.0/30 is directly connected, GigabitEthernet0/0
+L       10.2.255.2/32 is directly connected, GigabitEthernet0/0
+O       10.2.255.4/30 [110/2] via 10.2.0.3, 00:14:40, GigabitEthernet0/1.200
+                      [110/2] via 10.2.1.3, 00:14:40, GigabitEthernet0/1.201
+                      [110/2] via 10.2.3.3, 00:14:40, GigabitEthernet0/1.203
+                      [110/2] via 10.2.4.3, 00:14:40, GigabitEthernet0/1.204
+                      [110/2] via 10.2.5.3, 00:14:40, GigabitEthernet0/1.205
+                      [110/2] via 10.2.10.3, 00:14:40, GigabitEthernet0/1.210
+                      [110/2] via 10.2.255.10, 00:14:40, GigabitEthernet0/2
+                      [110/2] via 10.2.20.3, 00:14:40, GigabitEthernet0/3/0.220
+                      [110/2] via 10.2.21.3, 00:14:40, GigabitEthernet0/3/0.221
+                      [110/2] via 10.2.255.1, 00:14:40, GigabitEthernet0/0
+C       10.2.255.8/30 is directly connected, GigabitEthernet0/2
+L       10.2.255.9/32 is directly connected, GigabitEthernet0/2
+     195.228.2.0/27 is subnetted, 1 subnets
+O       195.228.2.0/27 [110/2] via 10.2.255.1, 00:14:50, GigabitEthernet0/0
+O*E2 0.0.0.0/0 [110/1] via 10.2.255.1, 00:14:50, GigabitEthernet0/0
+```
+
 
 
 # rtr-gim-03
@@ -1273,6 +1360,51 @@ logging trap debugging
 !
 ```
 
+
+```
+rtr-gim-03#show ip route
+
+[...]
+
+Gateway of last resort is 10.2.255.5 to network 0.0.0.0
+
+     10.0.0.0/8 is variably subnetted, 21 subnets, 3 masks
+C       10.2.0.0/24 is directly connected, GigabitEthernet0/1.200
+L       10.2.0.3/32 is directly connected, GigabitEthernet0/1.200
+C       10.2.1.0/24 is directly connected, GigabitEthernet0/1.201
+L       10.2.1.3/32 is directly connected, GigabitEthernet0/1.201
+C       10.2.3.0/24 is directly connected, GigabitEthernet0/1.203
+L       10.2.3.3/32 is directly connected, GigabitEthernet0/1.203
+C       10.2.4.0/24 is directly connected, GigabitEthernet0/1.204
+L       10.2.4.3/32 is directly connected, GigabitEthernet0/1.204
+C       10.2.5.0/24 is directly connected, GigabitEthernet0/1.205
+L       10.2.5.3/32 is directly connected, GigabitEthernet0/1.205
+C       10.2.10.0/24 is directly connected, GigabitEthernet0/1.210
+L       10.2.10.3/32 is directly connected, GigabitEthernet0/1.210
+C       10.2.20.0/24 is directly connected, GigabitEthernet0/3/0.220
+L       10.2.20.3/32 is directly connected, GigabitEthernet0/3/0.220
+C       10.2.21.0/24 is directly connected, GigabitEthernet0/3/0.221
+L       10.2.21.3/32 is directly connected, GigabitEthernet0/3/0.221
+O       10.2.255.0/30 [110/2] via 10.2.0.2, 00:15:52, GigabitEthernet0/1.200
+                      [110/2] via 10.2.1.2, 00:15:52, GigabitEthernet0/1.201
+                      [110/2] via 10.2.3.2, 00:15:52, GigabitEthernet0/1.203
+                      [110/2] via 10.2.4.2, 00:15:52, GigabitEthernet0/1.204
+                      [110/2] via 10.2.5.2, 00:15:52, GigabitEthernet0/1.205
+                      [110/2] via 10.2.10.2, 00:15:52, GigabitEthernet0/1.210
+                      [110/2] via 10.2.255.9, 00:15:52, GigabitEthernet0/2
+                      [110/2] via 10.2.20.2, 00:15:52, GigabitEthernet0/3/0.220
+                      [110/2] via 10.2.21.2, 00:15:52, GigabitEthernet0/3/0.221
+                      [110/2] via 10.2.255.5, 00:15:52, GigabitEthernet0/0
+C       10.2.255.4/30 is directly connected, GigabitEthernet0/0
+L       10.2.255.6/32 is directly connected, GigabitEthernet0/0
+C       10.2.255.8/30 is directly connected, GigabitEthernet0/2
+L       10.2.255.10/32 is directly connected, GigabitEthernet0/2
+     195.228.2.0/27 is subnetted, 1 subnets
+O       195.228.2.0/27 [110/2] via 10.2.255.5, 00:16:02, GigabitEthernet0/0
+O*E2 0.0.0.0/0 [110/1] via 10.2.255.5, 00:16:02, GigabitEthernet0/0
+```
+
+
 # sw-gim-01
 ```
 en 
@@ -1398,7 +1530,32 @@ ip ssh authentication-retries 3
 !
 ```
 
+### Show parancs
+```
+sw-gim-01#show vlan brief
 
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/13, Fa0/14, Fa0/15, Fa0/16
+                                                Fa0/17, Fa0/22, Fa0/23, Fa0/24
+                                                Gig0/2
+200  GIM_RG                           active    
+201  GIM_VEZ                          active    Fa0/12
+202  GIM_TEL                          active    Fa0/2, Fa0/3, Fa0/4, Fa0/5
+                                                Fa0/6, Fa0/7, Fa0/8, Fa0/9
+                                                Fa0/10, Fa0/11, Fa0/12
+203  GIM_TANAR                        active    Fa0/2, Fa0/3, Fa0/4, Fa0/5
+                                                Fa0/6, Fa0/7, Fa0/8, Fa0/9
+                                                Fa0/10, Fa0/11
+204  GIM_PORTA                        active    
+205  GIM_GO                           active    
+210  GIM_WIFI                         active    Fa0/1
+240  GIM_NAT                          active    
+1002 fddi-default                     active    
+1003 token-ring-default               active    
+1004 fddinet-default                  active    
+1005 trnet-default                    active    
+```
 
 # sw-gim-02
 ```
@@ -1507,8 +1664,29 @@ ip ssh authentication-retries 3
 !
 ```
 
+### Show parancs
+```
+sw-gim-02#show vlan brief
 
-
+1    default                          active    Fa0/17, Fa0/20, Fa0/21, Fa0/22
+                                                Gig0/1, Gig0/2
+200  GIM_RG                           active    
+201  GIM_VEZ                          active    Fa0/13, Fa0/14
+202  GIM_TEL                          active    Fa0/3, Fa0/4, Fa0/5, Fa0/6
+                                                Fa0/7, Fa0/8, Fa0/9, Fa0/10
+                                                Fa0/11, Fa0/12, Fa0/13, Fa0/16
+203  GIM_TANAR                        active    Fa0/2, Fa0/3, Fa0/4, Fa0/5
+                                                Fa0/6, Fa0/7, Fa0/8, Fa0/9
+                                                Fa0/10, Fa0/11, Fa0/12
+204  GIM_PORTA                        active    Fa0/16
+205  GIM_GO                           active    
+210  GIM_WIFI                         active    Fa0/1, Fa0/15
+240  GIM_NAT                          active    
+1002 fddi-default                     active    
+1003 token-ring-default               active    
+1004 fddinet-default                  active    
+1005 trnet-default                    active    
+```
 
 # sw-gim-03
 ```
@@ -1629,6 +1807,34 @@ ip ssh authentication-retries 3
 !
 ```
 
+### Show parancs
+```
+sw-gim-03#show vlan brief
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Gig0/2
+200  GIM_RG                           active    Fa0/2
+201  GIM_VEZ                          active    
+202  GIM_TEL                          active    Fa0/2, Fa0/3, Fa0/4, Fa0/5
+                                                Fa0/6, Fa0/7, Fa0/8, Fa0/9
+                                                Fa0/11, Fa0/12, Fa0/13, Fa0/14
+                                                Fa0/15, Fa0/16, Fa0/17, Fa0/18
+                                                Fa0/19, Fa0/20
+203  GIM_TANAR                        active    Fa0/11, Fa0/12, Fa0/13, Fa0/14
+                                                Fa0/15, Fa0/16, Fa0/17, Fa0/18
+                                                Fa0/19, Fa0/20
+204  GIM_PORTA                        active    
+205  GIM_GO                           active    Fa0/4, Fa0/5, Fa0/6, Fa0/7
+                                                Fa0/8, Fa0/9, Fa0/10
+210  GIM_WIFI                         active    Fa0/1
+240  GIM_NAT                          active    
+1002 fddi-default                     active    
+1003 token-ring-default               active    
+1004 fddinet-default                  active    
+1005 trnet-default                    active    
+```
+
 
 # sw-gim-04
 
@@ -1695,6 +1901,21 @@ ip ssh version 2
 ip ssh time-out 60
 ip ssh authentication-retries 3
 !
+```
+
+### Show parancs
+```
+sw-gim-04#show vlan brief
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    
+220  GIM_SERVER                       active    Gig2/1
+221  GIM_SERVER_MGMT                  active    
+241  GIM_SERVER_NAT                   active    
+1002 fddi-default                     active    
+1003 token-ring-default               active    
+1004 fddinet-default                  active    
+1005 trnet-default                    active    
 ```
 
 # ssw-gim-01
@@ -1835,6 +2056,66 @@ ip ssh authentication-retries 3
 
 
 
+### Show parancsok
+```
+ssw-gim-01#show ephone 
+
+ephone-1 Mac:0001.9790.26E2 TCP socket:[1] activeLine:0 REGISTERED in SCCP ver 12 and Server in ver 8
+mediaActive:0 offhook:0 ringing:0 reset:0 reset_sent:0 paging 0 debug:0 caps:8
+IP:10.2.2.72 1025 7960   keepalive 43 max_line 2
+ button 1: dn 1  number 52201 CH1   IDLE
+
+ephone-2 Mac:0060.47DD.B446 TCP socket:[1] activeLine:0 REGISTERED in SCCP ver 12 and Server in ver 8
+mediaActive:0 offhook:0 ringing:0 reset:0 reset_sent:0 paging 0 debug:0 caps:8
+IP:10.2.2.73 1025 7960   keepalive 43 max_line 2
+ button 1: dn 2  number 52202 CH1   IDLE
+
+ephone-3 Mac:00D0.971C.E2E3 TCP socket:[1] activeLine:0 REGISTERED in SCCP ver 12 and Server in ver 8
+mediaActive:0 offhook:0 ringing:0 reset:0 reset_sent:0 paging 0 debug:0 caps:8
+IP:10.2.2.64 1025 7960   keepalive 43 max_line 2
+ button 1: dn 3  number 52203 CH1   IDLE
+
+ephone-4 Mac:0090.2141.BD4E TCP socket:[1] activeLine:0 REGISTERED in SCCP ver 12 and Server in ver 8
+mediaActive:0 offhook:0 ringing:0 reset:0 reset_sent:0 paging 0 debug:0 caps:8
+IP:10.2.2.66 1025 7960   keepalive 43 max_line 2
+ button 1: dn 4  number 52204 CH1   IDLE
+
+ephone-5 Mac:0001.63B6.9270 TCP socket:[1] activeLine:0 REGISTERED in SCCP ver 12 and Server in ver 8
+mediaActive:0 offhook:0 ringing:0 reset:0 reset_sent:0 paging 0 debug:0 caps:8
+IP:10.2.2.74 1025 7960   keepalive 43 max_line 2
+ button 1: dn 5  number 52205 CH1   IDLE
+
+ephone-6 Mac:0040.0B19.2054 TCP socket:[1] activeLine:0 REGISTERED in SCCP ver 12 and Server in ver 8
+mediaActive:0 offhook:0 ringing:0 reset:0 reset_sent:0 paging 0 debug:0 caps:8
+IP:10.2.2.68 1025 7960   keepalive 43 max_line 2
+ button 1: dn 6  number 52206 CH1   IDLE
+
+ephone-7 Mac:0001.4331.00CB TCP socket:[1] activeLine:0 REGISTERED in SCCP ver 12 and Server in ver 8
+mediaActive:0 offhook:0 ringing:0 reset:0 reset_sent:0 paging 0 debug:0 caps:8
+IP:10.2.2.67 1025 7960   keepalive 43 max_line 2
+ button 1: dn 7  number 52207 CH1   IDLE
+
+ephone-8 Mac:00D0.BA3B.39CA TCP socket:[1] activeLine:0 REGISTERED in SCCP ver 12 and Server in ver 8
+mediaActive:0 offhook:0 ringing:0 reset:0 reset_sent:0 paging 0 debug:0 caps:8
+IP:10.2.2.71 1025 7960   keepalive 43 max_line 2
+ button 1: dn 8  number 52208 CH1   IDLE
+
+ephone-9 Mac:0060.474A.D309 TCP socket:[1] activeLine:0 REGISTERED in SCCP ver 12 and Server in ver 8
+mediaActive:0 offhook:0 ringing:0 reset:0 reset_sent:0 paging 0 debug:0 caps:8
+IP:10.2.2.65 1025 7960   keepalive 43 max_line 2
+ button 1: dn 9  number 52209 CH1   IDLE
+
+ephone-10 Mac:00E0.B0BC.A388 TCP socket:[1] activeLine:0 REGISTERED in SCCP ver 12 and Server in ver 8
+mediaActive:0 offhook:0 ringing:0 reset:0 reset_sent:0 paging 0 debug:0 caps:8
+IP:10.2.2.69 1025 7960   keepalive 43 max_line 2
+ button 1: dn 10  number 52210 CH1   IDLE
+
+ephone-11 Mac:00E0.F76E.D00C TCP socket:[1] activeLine:0 REGISTERED in SCCP ver 12 and Server in ver 8
+mediaActive:0 offhook:0 ringing:0 reset:0 reset_sent:0 paging 0 debug:0 caps:8
+IP:10.2.2.70 1025 7960   keepalive 43 max_line 2
+ button 1: dn 11  number 52211 CH1   IDLE
+```
+
 # srv-gim-01
 ```
 ip cím: 10.2.20.16
@@ -1845,16 +2126,16 @@ dns address: 10.5.20.16
 
 DHCP
 
-| Pool Name              | Default Gateway | DNS server | Start IP Address | Subnet Mask | Maximum Users | TFTP server |
+| Pool Name  | Default Gateway | DNS server | Start IP Address | Subnet Mask | Maximum Users | TFTP server |
 | :---------------- | :------: | :------: | :------: | :------: | :------: | :------: |
-| GIM_RG | 10.2.0.1 | 10.5.20.16 | 10.2.0.64 | 255.255.255.0 | 64 | 10.2.20.16 |
-| GIM_VEZ | 10.2.1.1 | 10.5.20.16 | 10.2.1.64 | 255.255.255.0 | 64 | 10.2.20.16 |
-| GIM_TANAR | 10.2.3.1 | 10.5.20.16 | 10.2.3.64 | 255.255.255.0 | 64 | 10.2.20.16 |
-| GIM_PORTA | 10.2.4.1 | 10.5.20.16 | 10.2.4.64 | 255.255.255.0 | 64 | 10.2.20.16 |
-| GIM_GO | 10.2.5.1 | 10.5.20.16 | 10.2.5.64 | 255.255.255.0 | 64 | 10.2.20.16 |
-| GIM_WIFI | 10.2.10.1 | 10.5.20.16 | 10.2.10.64 | 255.255.255.0 | 64 | 10.2.20.16 |
+| GIM_RG | 10.2.0.1 | 10.5.20.16 | 10.2.0.64 | 255.255.255.0 | 64 | 10.5.20.16 |
+| GIM_VEZ | 10.2.1.1 | 10.5.20.16 | 10.2.1.64 | 255.255.255.0 | 64 | 10.5.20.16 |
+| GIM_TANAR | 10.2.3.1 | 10.5.20.16 | 10.2.3.64 | 255.255.255.0 | 64 | 10.5.20.16 |
+| GIM_PORTA | 10.2.4.1 | 10.5.20.16 | 10.2.4.64 | 255.255.255.0 | 64 | 10.5.20.16 |
+| GIM_GO | 10.2.5.1 | 10.5.20.16 | 10.2.5.64 | 255.255.255.0 | 64 | 10.5.20.16 |
+| GIM_WIFI | 10.2.10.1 | 10.5.20.16 | 10.2.10.64 | 255.255.255.0 | 64 | 10.5.20.16 |
 
-TFTP, DNS
+
 
 
 
@@ -1931,6 +2212,35 @@ ip ssh authentication-retries 3
 
 ```
 
+### Show 
+
+```
+
+rtr-telekom-core-04#show ip route
+Gateway of last resort is not set
+
+     195.228.1.0/24 is variably subnetted, 2 subnets, 2 masks
+C       195.228.1.0/27 is directly connected, GigabitEthernet0/1
+L       195.228.1.1/32 is directly connected, GigabitEthernet0/1
+     195.228.2.0/27 is subnetted, 1 subnets
+O       195.228.2.0/27 [110/65] via 195.228.6.13, 00:29:44, Serial0/0/0
+     195.228.3.0/27 is subnetted, 1 subnets
+O       195.228.3.0/27 [110/65] via 195.228.6.9, 00:29:44, Serial0/0/1
+     195.228.5.0/24 is variably subnetted, 2 subnets, 2 masks
+C       195.228.5.0/27 is directly connected, GigabitEthernet0/0
+L       195.228.5.1/32 is directly connected, GigabitEthernet0/0
+     195.228.6.0/24 is variably subnetted, 6 subnets, 2 masks
+O       195.228.6.0/30 [110/128] via 195.228.6.9, 00:29:44, Serial0/0/1
+O       195.228.6.4/30 [110/128] via 195.228.6.13, 00:29:44, Serial0/0/0
+C       195.228.6.8/30 is directly connected, Serial0/0/1
+L       195.228.6.10/32 is directly connected, Serial0/0/1
+C       195.228.6.12/30 is directly connected, Serial0/0/0
+L       195.228.6.14/32 is directly connected, Serial0/0/0
+     195.228.7.0/27 is subnetted, 1 subnets
+O       195.228.7.0/27 [110/129] via 195.228.6.13, 00:29:34, Serial0/0/0
+                       [110/129] via 195.228.6.9, 00:29:34, Serial0/0/1
+
+```
 
 # fw-dc-01
 ```
@@ -2181,6 +2491,31 @@ enable password cisco
 !
 ```
 
+### Ez a kódrész tűnik el mindig
+```
+crypto ipsec ikev1 transform-set IKEV1_TRSET esp-aes-256 esp-sha-hmac
+
+crypto map CMAP 1 match address IPSEC_TANK_ACL
+crypto map CMAP 1 set peer 195.228.1.16 
+crypto map CMAP 1 set ikev1 transform-set IKEV1_TRSET 
+! Gimnázium
+crypto map CMAP 2 match address IPSEC_GIM_ACL
+crypto map CMAP 2 set peer 195.228.2.16 
+crypto map CMAP 2 set ikev1 transform-set IKEV1_TRSET 
+! Kollégium
+crypto map CMAP 3 match address IPSEC_KOL_ACL
+crypto map CMAP 3 set peer 195.228.3.16 
+crypto map CMAP 3 set ikev1 transform-set IKEV1_TRSET
+! Sportpálya
+crypto map CMAP 7 match address IPSEC_SP_ACL
+crypto map CMAP 7 set peer 195.228.7.16 
+crypto map CMAP 7 set ikev1 transform-set IKEV1_TRSET
+
+```
+
+
+
+
 # sw-dc-01
 ```
 enable
@@ -2248,6 +2583,30 @@ ip ssh time-out 60
 ip ssh authentication-retries 3
 !
 ```
+
+### Show parancsok
+
+```
+sw-dc-01#show vlan brief
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/5, Fa0/6, Fa0/7, Fa0/8
+                                                Fa0/9, Fa0/10, Fa0/11, Fa0/12
+                                                Fa0/13, Fa0/14, Fa0/15, Fa0/16
+                                                Fa0/17, Fa0/18, Fa0/19, Fa0/20
+                                                Fa0/21, Fa0/22, Fa0/23, Fa0/24
+                                                Gig0/1, Gig0/2
+520  DC_SERVER                        active    Fa0/1, Fa0/2, Fa0/3
+530  DC_SWMAN                         active    Fa0/4
+540  DC_NATIV                         active    
+1002 fddi-default                     active    
+1003 token-ring-default               active    
+1004 fddinet-default                  active    
+1005 trnet-default                    active
+
+```
+
 
 
 
@@ -2479,6 +2838,30 @@ ip flow-export version 9
 !
 ```
 
+### Show parancsok
+
+```
+rtr-tank-01#show ip route
+
+Gateway of last resort is 195.228.1.1 to network 0.0.0.0
+
+     10.0.0.0/8 is variably subnetted, 9 subnets, 3 masks
+O       10.1.0.0/24 [110/2] via 10.1.255.2, 00:38:44, GigabitEthernet0/2
+O       10.1.1.0/24 [110/2] via 10.1.255.2, 00:38:44, GigabitEthernet0/2
+O       10.1.3.0/24 [110/2] via 10.1.255.2, 00:38:29, GigabitEthernet0/2
+O       10.1.10.0/24 [110/2] via 10.1.255.2, 00:38:29, GigabitEthernet0/2
+O       10.1.20.0/24 [110/2] via 10.1.255.2, 00:38:44, GigabitEthernet0/2
+O       10.1.30.0/24 [110/2] via 10.1.255.2, 00:38:29, GigabitEthernet0/2
+C       10.1.255.0/30 is directly connected, GigabitEthernet0/2
+L       10.1.255.1/32 is directly connected, GigabitEthernet0/2
+O       10.1.255.4/30 [110/2] via 10.1.255.2, 00:38:44, GigabitEthernet0/2
+     195.228.1.0/24 is variably subnetted, 2 subnets, 2 masks
+C       195.228.1.0/27 is directly connected, GigabitEthernet0/1
+L       195.228.1.16/32 is directly connected, GigabitEthernet0/1
+S*   0.0.0.0/0 [1/0] via 195.228.1.1
+```
+
+
 
 # rtr-tank-02
 ```
@@ -2614,6 +2997,50 @@ logging trap debugging
 !
 ```
 
+### Show parancsok
+
+```
+rtr-tank-02#show ip route
+
+Gateway of last resort is 10.1.255.1 to network 0.0.0.0
+
+     10.0.0.0/8 is variably subnetted, 16 subnets, 3 masks
+C       10.1.0.0/24 is directly connected, GigabitEthernet0/0.100
+L       10.1.0.2/32 is directly connected, GigabitEthernet0/0.100
+C       10.1.1.0/24 is directly connected, GigabitEthernet0/0.101
+L       10.1.1.2/32 is directly connected, GigabitEthernet0/0.101
+C       10.1.3.0/24 is directly connected, GigabitEthernet0/1.103
+L       10.1.3.2/32 is directly connected, GigabitEthernet0/1.103
+C       10.1.10.0/24 is directly connected, GigabitEthernet0/1.110
+L       10.1.10.2/32 is directly connected, GigabitEthernet0/1.110
+C       10.1.20.0/24 is directly connected, GigabitEthernet0/0.120
+L       10.1.20.2/32 is directly connected, GigabitEthernet0/0.120
+C       10.1.30.0/24 is directly connected, GigabitEthernet0/1.130
+L       10.1.30.2/32 is directly connected, GigabitEthernet0/1.130
+C       10.1.255.0/30 is directly connected, GigabitEthernet0/2
+L       10.1.255.2/32 is directly connected, GigabitEthernet0/2
+C       10.1.255.4/30 is directly connected, GigabitEthernet0/3/0
+L       10.1.255.5/32 is directly connected, GigabitEthernet0/3/0
+     195.228.1.0/27 is subnetted, 1 subnets
+O       195.228.1.0/27 [110/2] via 10.1.255.1, 00:40:13, GigabitEthernet0/2
+O*E2 0.0.0.0/0 [110/1] via 10.1.255.1, 00:40:13, GigabitEthernet0/2
+
+
+rtr-tank-02#show ip ospf neighbor 
+
+
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+1.1.1.3           1   FULL/DR         00:00:38    10.1.10.3       GigabitEthernet0/1.110
+1.1.1.3           1   FULL/DR         00:00:38    10.1.20.3       GigabitEthernet0/0.120
+1.1.1.3           1   FULL/DR         00:00:38    10.1.1.3        GigabitEthernet0/0.101
+1.1.1.3           1   FULL/DR         00:00:38    10.1.3.3        GigabitEthernet0/1.103
+1.1.1.3           1   FULL/DR         00:00:38    10.1.0.3        GigabitEthernet0/0.100
+1.1.1.3           1   FULL/DR         00:00:38    10.1.255.6      GigabitEthernet0/3/0
+1.1.1.1           1   FULL/BDR        00:00:38    10.1.255.1      GigabitEthernet0/2
+1.1.1.3           1   FULL/DR         00:00:38    10.1.30.3       GigabitEthernet0/1.130
+
+```
+
 
 # rtr-tank-03
 ```
@@ -2739,6 +3166,52 @@ logging trap debugging
 !
 ```
 
+### Show parancsok
+
+```
+rtr-tank-03#show ip route
+
+Gateway of last resort is 10.1.0.2 to network 0.0.0.0
+
+     10.0.0.0/8 is variably subnetted, 15 subnets, 3 masks
+C       10.1.0.0/24 is directly connected, GigabitEthernet0/0.100
+L       10.1.0.3/32 is directly connected, GigabitEthernet0/0.100
+C       10.1.1.0/24 is directly connected, GigabitEthernet0/0.101
+L       10.1.1.3/32 is directly connected, GigabitEthernet0/0.101
+C       10.1.3.0/24 is directly connected, GigabitEthernet0/1.103
+L       10.1.3.3/32 is directly connected, GigabitEthernet0/1.103
+C       10.1.10.0/24 is directly connected, GigabitEthernet0/1.110
+L       10.1.10.3/32 is directly connected, GigabitEthernet0/1.110
+C       10.1.20.0/24 is directly connected, GigabitEthernet0/0.120
+L       10.1.20.3/32 is directly connected, GigabitEthernet0/0.120
+C       10.1.30.0/24 is directly connected, GigabitEthernet0/1.130
+L       10.1.30.3/32 is directly connected, GigabitEthernet0/1.130
+O       10.1.255.0/30 [110/2] via 10.1.0.2, 00:40:38, GigabitEthernet0/0.100
+                      [110/2] via 10.1.1.2, 00:40:38, GigabitEthernet0/0.101
+                      [110/2] via 10.1.20.2, 00:40:38, GigabitEthernet0/0.120
+                      [110/2] via 10.1.3.2, 00:40:38, GigabitEthernet0/1.103
+                      [110/2] via 10.1.10.2, 00:40:38, GigabitEthernet0/1.110
+                      [110/2] via 10.1.30.2, 00:40:38, GigabitEthernet0/1.130
+                      [110/2] via 10.1.255.5, 00:40:38, GigabitEthernet0/3/0
+C       10.1.255.4/30 is directly connected, GigabitEthernet0/3/0
+L       10.1.255.6/32 is directly connected, GigabitEthernet0/3/0
+     195.228.1.0/27 is subnetted, 1 subnets
+O       195.228.1.0/27 [110/3] via 10.1.0.2, 00:40:38, GigabitEthernet0/0.100
+                       [110/3] via 10.1.1.2, 00:40:38, GigabitEthernet0/0.101
+                       [110/3] via 10.1.20.2, 00:40:38, GigabitEthernet0/0.120
+                       [110/3] via 10.1.3.2, 00:40:38, GigabitEthernet0/1.103
+                       [110/3] via 10.1.10.2, 00:40:38, GigabitEthernet0/1.110
+                       [110/3] via 10.1.30.2, 00:40:38, GigabitEthernet0/1.130
+                       [110/3] via 10.1.255.5, 00:40:38, GigabitEthernet0/3/0
+O*E2 0.0.0.0/0 [110/1] via 10.1.0.2, 00:40:38, GigabitEthernet0/0.100
+               [110/1] via 10.1.1.2, 00:40:38, GigabitEthernet0/0.101
+               [110/1] via 10.1.20.2, 00:40:38, GigabitEthernet0/0.120
+               [110/1] via 10.1.3.2, 00:40:38, GigabitEthernet0/1.103
+               [110/1] via 10.1.10.2, 00:40:38, GigabitEthernet0/1.110
+               [110/1] via 10.1.30.2, 00:40:38, GigabitEthernet0/1.130
+               [110/1] via 10.1.255.5, 00:40:38, GigabitEthernet0/3/0
+
+```
 
 # ssw-tank-01 
 ```
@@ -2804,6 +3277,36 @@ ip ssh authentication-retries 3
 !
 ```
 
+### Show parancsok
+```
+ssw-tank-01#show ephone
+%IPPHONE-6-REGISTER: ephone-1 IP:10.1.4.65 Socket:2 DeviceType:Phone has registered.
+
+%IPPHONE-6-REGISTER: ephone-3 IP:10.1.4.66 Socket:2 DeviceType:Phone has registered.
+
+
+ephone-1 Mac:0030.A317.2863 TCP socket:[1] activeLine:0 REGISTERED in SCCP ver 12 and Server in ver 8
+mediaActive:0 offhook:0 ringing:0 reset:0 reset_sent:0 paging 0 debug:0 caps:8
+IP:10.1.4.65 1025 7960   keepalive 43 max_line 2
+ button 1: dn 1  number 51401 CH1   IDLE
+
+ephone-2 Mac:0030.A3BB.1D12 TCP socket:[1] activeLine:0 REGISTERED in SCCP ver 12 and Server in ver 8
+mediaActive:0 offhook:0 ringing:0 reset:0 reset_sent:0 paging 0 debug:0 caps:8
+IP:10.1.4.64 1025 7960   keepalive 43 max_line 2
+ button 1: dn 2  number 51402 CH1   IDLE
+
+ephone-3 Mac:0090.0C50.6C22 TCP socket:[1] activeLine:0 REGISTERED in SCCP ver 12 and Server in ver 8
+mediaActive:0 offhook:0 ringing:0 reset:0 reset_sent:0 paging 0 debug:0 caps:8
+IP:10.1.4.66 1025 7960   keepalive 43 max_line 2
+ button 1: dn 3  number 51403 CH1   IDLE
+
+ephone-4 Mac:0060.705D.E2EC TCP socket:[1] activeLine:0 REGISTERED in SCCP ver 12 and Server in ver 8
+mediaActive:0 offhook:0 ringing:0 reset:0 reset_sent:0 paging 0 debug:0 caps:8
+IP:10.1.4.67 1025 7960   keepalive 43 max_line 2
+ button 1: dn 4  number 51404 CH1   IDLE
+```
+
+
 # ssw-tank-02
 ```
 en 
@@ -2865,7 +3368,25 @@ ip ssh authentication-retries 3
 !
 ```
 
+### Show parancsok
+```
+ssw-gim-02#show ephone
 
+ephone-1 Mac:0002.1710.51DA TCP socket:[1] activeLine:0 REGISTERED in SCCP ver 12 and Server in ver 8
+mediaActive:0 offhook:0 ringing:0 reset:0 reset_sent:0 paging 0 debug:0 caps:8
+IP:10.1.2.65 1025 7960   keepalive 43 max_line 2
+ button 1: dn 1  number 51201 CH1   IDLE
+
+ephone-2 Mac:000C.85B8.4269 TCP socket:[1] activeLine:0 REGISTERED in SCCP ver 12 and Server in ver 8
+mediaActive:0 offhook:0 ringing:0 reset:0 reset_sent:0 paging 0 debug:0 caps:8
+IP:10.1.2.64 1025 7960   keepalive 43 max_line 2
+ button 1: dn 2  number 51202 CH1   IDLE
+
+ephone-3 Mac:000D.BD6D.10C2 TCP socket:[1] activeLine:0 REGISTERED in SCCP ver 12 and Server in ver 8
+mediaActive:0 offhook:0 ringing:0 reset:0 reset_sent:0 paging 0 debug:0 caps:8
+IP:10.1.2.66 1025 7960   keepalive 43 max_line 2
+ button 1: dn 3  number 51203 CH1   IDLE
+```
 
 # sw-tank-01
 ```
@@ -2971,7 +3492,27 @@ ip ssh authentication-retries 3
 !
 ```
 
+### Show 
+```
+sw-tank-01#show vlan brief
 
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/16, Fa0/17, Fa0/18, Fa0/19
+                                                Fa0/20, Fa0/21, Fa0/22, Fa0/23
+                                                Fa0/24, Gig0/1, Gig0/2
+103  TANK_ALK                         active    Fa0/5, Fa0/6, Fa0/7, Fa0/8
+                                                Fa0/9, Fa0/10, Fa0/11, Fa0/12
+                                                Fa0/13, Fa0/14, Fa0/15
+104  TANK_ALKTEL                      active    Fa0/6
+110  TANK_WIFI                        active    Fa0/4
+130  TANK_SWMAN                       active    
+140  TANK_NATALK                      active    
+1002 fddi-default                     active    
+1003 token-ring-default               active    
+1004 fddinet-default                  active    
+1005 trnet-default                    active    
+```
 
 # sw-tank-02
 ```
@@ -3053,6 +3594,31 @@ ip ssh authentication-retries 3
 !
 ```
 
+Show parancs
+```
+sw-tank-02#show vlan brief
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/6, Fa0/7, Fa0/8, Fa0/9
+                                                Fa0/10, Fa0/11, Fa0/12, Fa0/13
+                                                Fa0/14, Fa0/15, Fa0/16, Fa0/17
+                                                Fa0/18, Fa0/19, Fa0/20, Fa0/21
+                                                Fa0/22, Fa0/23, Fa0/24, Gig0/1
+                                                Gig0/2
+103  TANK_ALK                         active    Fa0/4
+104  TANK_ALKTEL                      active    Fa0/4
+110  TANK_WIFI                        active    Fa0/5
+130  TANK_SWMAN                       active    
+140  TANK_NATALK                      active    
+1002 fddi-default                     active    
+1003 token-ring-default               active    
+1004 fddinet-default                  active    
+1005 trnet-default                    active    
+
+```
+
+
 
 # sw-tank-03
 ```
@@ -3133,6 +3699,27 @@ ip ssh authentication-retries 3
 !
 ```
 
+### Show parancs
+```
+sw-tank-03#show vlan brief
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/15, Fa0/16, Fa0/17, Fa0/18
+                                                Fa0/19, Fa0/20, Fa0/21, Fa0/22
+                                                Fa0/23, Fa0/24, Gig0/2
+103  TANK_ALK                         active    Fa0/4, Fa0/5, Fa0/6, Fa0/7
+                                                Fa0/8, Fa0/9, Fa0/10, Fa0/11
+                                                Fa0/12, Fa0/13, Fa0/14
+104  TANK_ALKTEL                      active    Fa0/4
+110  TANK_WIFI                        active    
+130  TANK_SWMAN                       active    
+140  TANK_NATALK                      active    
+1002 fddi-default                     active    
+1003 token-ring-default               active    
+1004 fddinet-default                  active    
+1005 trnet-default                    active    
+```
 
 # sw-tank-04
 ```
@@ -3225,6 +3812,28 @@ ip ssh version 2
 ip ssh time-out 60
 ip ssh authentication-retries 3
 !
+```
+
+### Show parancs
+```
+sw-tank-04#show vlan brief
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/15, Fa0/16, Fa0/17, Fa0/18
+                                                Fa0/19, Fa0/20, Fa0/21, Fa0/22
+                                                Fa0/23, Fa0/24
+103  TANK_ALK                         active    Fa0/5, Fa0/6, Fa0/7, Fa0/8
+                                                Fa0/9, Fa0/10, Fa0/11, Fa0/12
+                                                Fa0/13, Fa0/14
+104  TANK_ALKTEL                      active    Fa0/5, Gig0/2
+110  TANK_WIFI                        active    Fa0/4
+130  TANK_SWMAN                       active    
+140  TANK_NATALK                      active    
+1002 fddi-default                     active    
+1003 token-ring-default               active    
+1004 fddinet-default                  active    
+1005 trnet-default                    active
 ```
 
 
@@ -3332,6 +3941,30 @@ ip ssh authentication-retries 3
 !
 ```
 
+### Show parancs
+```
+sw-tank-05#show vlan brief
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/3, Fa0/4, Fa0/5, Fa0/6
+                                                Fa0/7, Fa0/8, Fa0/9, Fa0/10
+                                                Fa0/11, Fa0/12, Fa0/13, Fa0/14
+                                                Fa0/15, Fa0/16, Fa0/17, Fa0/18
+                                                Fa0/19, Fa0/20, Fa0/21, Fa0/22
+                                                Fa0/23, Fa0/24
+100  TANK_RG                          active    Fa0/2
+101  TANK_VEZ                         active    
+102  TANK_VRTEL                       active    Fa0/2
+120  TANK_SERVER                      active    Gig0/2
+150  TANK_NATVEZRG                    active    
+1002 fddi-default                     active    
+1003 token-ring-default               active    
+1004 fddinet-default                  active    
+1005 trnet-default                    active    
+```
+
+
 # sw-tank-06
 ```
 en 
@@ -3416,6 +4049,28 @@ ip ssh authentication-retries 3
 !
 ```
 
+Show parancs
+```
+sw-tank-06#show vlan brief
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active    Fa0/4, Fa0/5, Fa0/6, Fa0/7
+                                                Fa0/8, Fa0/9, Fa0/10, Fa0/11
+                                                Fa0/12, Fa0/13, Fa0/14, Fa0/15
+                                                Fa0/16, Fa0/17, Fa0/18, Fa0/19
+                                                Fa0/20, Fa0/21, Fa0/22, Fa0/23
+                                                Fa0/24
+100  TANK_RG                          active    
+101  TANK_VEZ                         active    Fa0/2, Fa0/3
+102  TANK_VRTEL                       active    Fa0/2, Fa0/3, Gig0/2
+120  TANK_SERVER                      active    
+150  TANK_NATVEZRG                    active    
+1002 fddi-default                     active    
+1003 token-ring-default               active    
+1004 fddinet-default                  active    
+1005 trnet-default                    active    
+```
 
 # srv-tank-01
 ```
@@ -3427,10 +4082,10 @@ dns address: 10.5.20.16
 
 | Pool Name              | Default Gateway | DNS server | Start IP Address | Subnet Mask | Maximum Users | TFTP server |
 | :---------------- | :------: | :------: | :------: | :------: | :------: | :------: |
-| TANK_RG | 10.1.0.1 | 10.5.20.16 | 10.1.0.64 | 255.255.255.0 | 64 | 10.1.20.16 |
-| TANK_VEZ | 10.1.1.1 | 10.5.20.16| 10.1.1.64 | 255.255.255.0 | 64 | 10.1.20.16 |
-| TANK_ALK | 10.1.3.1 | 10.5.20.16 | 10.1.3.64 | 255.255.255.0 | 64 | 10.1.20.16 |
-| TANK_WIFI | 10.1.10.1 | 10.5.20.16 | 10.1.10.64 | 255.255.255.0 | 64 | 10.1.20.16 |
+| TANK_RG | 10.1.0.1 | 10.5.20.16 | 10.1.0.64 | 255.255.255.0 | 64 | 10.5.20.16 |
+| TANK_VEZ | 10.1.1.1 | 10.5.20.16| 10.1.1.64 | 255.255.255.0 | 64 | 10.5.20.16 |
+| TANK_ALK | 10.1.3.1 | 10.5.20.16 | 10.1.3.64 | 255.255.255.0 | 64 | 10.5.20.16 |
+| TANK_WIFI | 10.1.10.1 | 10.5.20.16 | 10.1.10.64 | 255.255.255.0 | 64 | 10.5.20.16 |
 
 
 
